@@ -8,9 +8,6 @@
 | Nome | Matrícula |
 |---|---|
 | Alany Gabrielly | 202105018 |
-| *(preencher)* | |
-| *(preencher)* | |
-| *(preencher)* | |
 
 ## Cenário escolhido
 

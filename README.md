@@ -18,9 +18,6 @@ Prof. Dr. Otávio Calaça Xavier
 | Nome | Matrícula |
 |---|---|
 | Alany Gabrielly | 202105018 |
-| *(preencher)* | |
-| *(preencher)* | |
-| *(preencher)* | |
 
 ## A ideia em uma frase
 
