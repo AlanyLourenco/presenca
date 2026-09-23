@@ -81,7 +81,8 @@ maximizar a ubiquidade.
 
 | Arquivo | Conteúdo |
 |---|---|
-| [`atividade-01.md`](atividade-01.md) | Análise inicial completa — os 9 itens da Atividade em Grupo 01 |
+| [`atividade-01.md`](atividade-01.md) | Análise inicial — os 9 itens da Atividade em Grupo 01 |
+| [`atividade-02.md`](atividade-02.md) | Processamento e distribuição — os 13 itens da Atividade em Grupo 02: contratos de evento, janelas, semântica temporal, eventos atrasados e distribuição dispositivo–borda–nuvem |
 
 ## Estado atual
 
