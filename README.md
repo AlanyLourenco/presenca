@@ -83,11 +83,12 @@ maximizar a ubiquidade.
 |---|---|
 | [`atividade-01.md`](atividade-01.md) | Análise inicial — os 9 itens da Atividade em Grupo 01 |
 | [`atividade-02.md`](atividade-02.md) | Processamento e distribuição — os 13 itens da Atividade em Grupo 02: contratos de evento, janelas, semântica temporal, eventos atrasados e distribuição dispositivo–borda–nuvem |
+| [`marco-02/README.md`](marco-02/README.md) | Marco 2 — fronteira de comunicação âncora ↔ gateway por MQTT: produtor ESP32, consumidor Python, contrato versionado e condições de falha |
 
 ## Estado atual
 
-Análise inicial concluída. Sem implementação — conforme o enunciado da Atividade 01, que
-dispensa código nesta etapa.
+Análise concluída (Atividades 01 e 02). Primeiro protótipo executável entregue no
+Marco 2: fronteira âncora ↔ gateway funcionando por MQTT.
 
 Próximos passos previstos:
 
