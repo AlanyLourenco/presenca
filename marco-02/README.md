@@ -13,6 +13,9 @@ que alimenta a regra executada na âncora.
 | **Consumidor** | Gateway da sala — Python ([`consumidor/`](consumidor/)) |
 | **Contrato** | [`contrato/v1/`](contrato/v1/) — `sala.ambiente.v1` e `gateway.contagem.v1` |
 
+> 📘 **Novo por aqui?** O [`GUIA.md`](GUIA.md) explica cada pasta, cada arquivo e cada
+> componente do circuito em detalhe, com fotos — feito para estudar e apresentar.
+
 ---
 
 ## 1. O que esta fronteira resolve
