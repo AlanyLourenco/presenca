@@ -1,0 +1,15 @@
+{
+  "eventType": "sala.ambiente.v1",
+  "eventId": "anc-204-A#44",
+  "deviceId": "anc-204-A",
+  "entityId": "sala-204",
+  "eventTimeMs": 52180,
+  "sequence": 44,
+  "value": 883.0,
+  "unit": "ppm",
+  "state": "COERENTE",
+  "ocupacaoCo2": "OCUPADA",
+  "contagemRadio": 26,
+  "amostrasInvalidas": 0,
+  "bufferizado": true
+}

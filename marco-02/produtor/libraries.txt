@@ -1,0 +1,4 @@
+# Bibliotecas adicionais usadas pelo produtor (Wokwi resolve automaticamente)
+PubSubClient
+Adafruit GFX Library
+Adafruit SSD1306

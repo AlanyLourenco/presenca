@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/gateway.contagem.v1.schema.json",
+  "title": "gateway.contagem.v1",
+  "description": "Comando do gateway para a âncora. Informa quantos estudantes o subsistema de rádio declara presentes na sala. É a segunda entrada da regra de verificação cruzada executada na âncora.",
+  "type": "object",
+  "required": ["commandType", "commandId", "entityId", "contagem", "issuedAtMs"],
+  "additionalProperties": false,
+  "properties": {
+    "commandType": {
+      "const": "gateway.contagem.v1"
+    },
+    "commandId": {
+      "type": "string",
+      "description": "Identificação única do comando. A âncora ignora um commandId já aplicado, tornando a entrega idempotente.",
+      "examples": ["gw-204#41"]
+    },
+    "entityId": {
+      "type": "string",
+      "description": "Sala à qual a contagem se refere."
+    },
+    "contagem": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 200,
+      "description": "Número de estudantes declarados presentes pelo rádio."
+    },
+    "issuedAtMs": {
+      "type": "integer",
+      "description": "Instante de emissão, em milissegundos epoch. Relógio do gateway, que é a fonte de verdade temporal do sistema."
+    }
+  }
+}
