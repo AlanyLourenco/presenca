@@ -1,4 +1,4 @@
-  <div class="parte" id="parte1" style="page-break-before:auto">
+  <div class="parte" id="parte1">
     <div class="pn">Parte I · fronteira principal</div>
     <div class="pt">Aparelho do estudante ↔ servidor de permanência</div>
     <p>O núcleo do sistema Presença rodando de verdade: um ESP32 que ouve as três âncoras e um
@@ -831,24 +831,10 @@ else if (melhor &lt; LIMIAR_SAIDA)     nova = REG_FORA;      // -85 dBm
   <!-- ============ 12 ============ -->
   <section id="p12">
     <div class="sec-head"><span class="sec-n">12</span><h2>Roteiro para a apresentação ao vivo</h2></div>
-    <ol class="trace">
-      <li><span class="s">1</span><div><span class="who">Antes</span>Rede com a porta 1883 liberada (na faculdade ela é bloqueada; use rede móvel). <code>python servidor.py</code> rodando. Wokwi aberto e <strong>em primeiro plano</strong>.</div></li>
-      <li><span class="s">2</span><div><span class="who">Contexto, 1 min</span>Seção 02: quem mede, quem decide, o que atravessa a fronteira.</div></li>
-      <li><span class="s">3</span><div><span class="who">Play</span>Em ~10 s o OLED mostra <code>PRESENTE</code> e o LED verde acende. Aponte o <code>eventId</code> no serial e a mesma linha no servidor.</div></li>
-      <li><span class="s">4</span><div><span class="who">Sala vizinha</span>Gire os potenciômetros para 481 / 652 / 531. Mostre que a região continua <code>DENTRO_ALCANCE</code> e o servidor diz <em>fora</em>: é o polígono.</div></li>
-      <li><span class="s">5</span><div><span class="who">Avisos</span>Espere o buzzer (20 s de ausência). Volte ao centro depois do segundo aviso. O LED verde volta.</div></li>
-      <li><span class="s">6</span><div><span class="who">Adversarial</span>Botão azul três vezes, esperando uns segundos entre elas. Mostre <code>DUPLICADO</code>, <code>FORA DE ORDEM</code> e <code>SALTO</code> no servidor.</div></li>
-      <li><span class="s">7</span><div><span class="who">Rede</span>Botão vermelho, espere o <code>SILENCIO</code> no servidor, aperte de novo e mostre as linhas <code>ATRASADO</code>.</div></li>
-      <li><span class="s">8</span><div><span class="who">Alteração ao vivo</span>Uma destas, cada uma de uma linha: mudar <code>escala</code> no config; mudar <code>LIMIAR_ENTRADA</code> no sketch; ou acrescentar <code>"bateria":63</code> ao heartbeat e mostrar o servidor rejeitando pelo contrato.</div></li>
-    </ol>
-    <div class="tw"><table>
-      <tr><th>Cenário</th><th>A</th><th>B</th><th>C</th><th>Resultado</th></tr>
-      <tr><td>Centro da sala</td><td>628</td><td>628</td><td>667</td><td>(6,0; 4,4), dentro</td></tr>
-      <tr><td>Sala vizinha</td><td>481</td><td>652</td><td>531</td><td>(17,1; 4,4), fora com −60 dBm</td></tr>
-      <tr><td>Fora do prédio</td><td>0</td><td>0</td><td>0</td><td>nenhuma âncora ouvida</td></tr>
-    </table></div>
-    <p>Teclas do servidor: <code>p</code> painel · <code>n</code> nova sessão (use antes de cada
-    demonstração) · <code>q</code> sair.</p>
+    <p>O roteiro completo, com comandos, posições dos potenciômetros pelo teclado, o que aparece e o
+    que falar em cada teste, está no <a href="#g9">Guia do dia, G9</a>. Os valores usados na execução
+    registrada acima (628/628/667 e 481/652/531) foram aplicados por automação; para operar à mão,
+    use as receitas de teclado do <a href="#g6">G6</a>.</p>
   </section>
 
   <!-- ============ 13 ============ -->

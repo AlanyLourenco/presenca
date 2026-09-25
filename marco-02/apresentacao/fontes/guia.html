@@ -1,0 +1,353 @@
+  <div class="parte" id="parte0" style="page-break-before:auto">
+    <div class="pn">Guia do dia · para você apresentar sozinha</div>
+    <div class="pt">Do computador ligado até a última pergunta</div>
+    <p>Sem slides. Você vai mostrar as pastas no VS Code, o circuito e o código no Wokwi, rodar
+    o servidor no terminal e fazer cada teste ao vivo. Este guia diz, em ordem, o que abrir, o
+    que digitar, o que apertar, o que vai aparecer e o que falar.</p>
+  </div>
+
+  <!-- ============ G1 ============ -->
+  <section id="g1">
+    <div class="sec-head"><span class="sec-n">G1</span><h2>Checklist do dia</h2></div>
+    <div class="tw"><table>
+      <tr><th></th><th>O quê</th><th>Como conferir</th></tr>
+      <tr><td>☐</td><td>Rede que libera a porta 1883</td><td>No terminal: <code>Test-NetConnection broker.hivemq.com -Port 1883</code> tem que dizer <code>TcpTestSucceeded : True</code>. <strong>Na rede da faculdade dá False</strong>: use o 4G do celular (roteador).</td></tr>
+      <tr><td>☐</td><td>Python com as bibliotecas</td><td><code>pip install -r requirements.txt</code> dentro de <code>servidor/</code> (seção G3)</td></tr>
+      <tr><td>☐</td><td>VS Code aberto em <code>projeto-presenca</code></td><td>Explorador mostrando <code>marco-02</code></td></tr>
+      <tr><td>☐</td><td>Dois terminais no VS Code</td><td>Um para o servidor, outro para o validador, os testes e o gateway de CO₂</td></tr>
+      <tr><td>☐</td><td>Aba do Wokwi do aparelho</td><td><b>wokwi.com/projects/476110187626906625</b></td></tr>
+      <tr><td>☐</td><td>Aba do Wokwi do CO₂ (se for mostrar a Parte II)</td><td><b>wokwi.com/projects/476001394839038977</b></td></tr>
+      <tr><td>☐</td><td>Janela do navegador <strong>visível</strong></td><td>Se o Wokwi ficar atrás de outra janela ou numa aba escondida, a simulação <strong>congela</strong>. Deixe o navegador e o VS Code lado a lado.</td></tr>
+      <tr><td>☐</td><td>Som ligado</td><td>O buzzer do aviso toca pelo alto-falante do computador</td></tr>
+    </table></div>
+
+    <h3>A ordem da apresentação</h3>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">2 min</span>O problema e a fronteira (G2): permanência, não presença; quem mede e quem decide.</div></li>
+      <li><span class="s">2</span><div><span class="who">3 min</span>As pastas no VS Code (G4).</div></li>
+      <li><span class="s">3</span><div><span class="who">3 min</span>O circuito e o código no Wokwi (G6 e G7).</div></li>
+      <li><span class="s">4</span><div><span class="who">8–10 min</span>Os testes ao vivo (G9): normal, sala vizinha com avisos, adversarial, rede, orçamento esgotado.</div></li>
+      <li><span class="s">5</span><div><span class="who">2 min</span>Contrato e testes automáticos (G10 e G11).</div></li>
+      <li><span class="s">6</span><div><span class="who">opcional</span>A fronteira de CO₂ (G12).</div></li>
+      <li><span class="s">7</span><div><span class="who">resto</span>Perguntas (seção 13 da Parte I) e uma alteração ao vivo, se pedirem.</div></li>
+    </ol>
+  </section>
+
+  <!-- ============ G2 ============ -->
+  <section id="g2">
+    <div class="sec-head"><span class="sec-n">G2</span><h2>O que foi feito, passo a passo</h2></div>
+    <p>É a história que você conta. Cada passo tem o motivo.</p>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">Escolha da fronteira</span>O Marco 2 pede dois componentes reais conversando. Escolhi o <strong>celular do estudante</strong> e o <strong>servidor</strong>, porque é por aí que passa a regra central do projeto: permanência medida. A âncora não entra, porque ela só transmite e nunca escuta ninguém (decisão fechada nº 3).</div></li>
+      <li><span class="s">2</span><div><span class="who">O contrato primeiro</span>Antes do código, escrevi em <code>contrato/v1/</code> o formato de cada mensagem: <code>presenca.heartbeat.v1</code> (ida), <code>presenca.estado.v1</code> e <code>presenca.aviso.v1</code> (volta).</div></li>
+      <li><span class="s">3</span><div><span class="who">A regra, sem rede</span><code>servidor/permanencia.py</code> tem a trilateração, o polígono e a máquina de estados do <code>projeto-tecnico.md</code> §6, com 23 testes. Os tempos reais (30 s, 15 min…) são divididos por uma escala de 30 para caber numa demonstração.</div></li>
+      <li><span class="s">4</span><div><span class="who">O servidor</span><code>servidor/servidor.py</code> liga a regra ao MQTT: valida, deduplica, detecta fora de ordem e salto, refaz a sessão a cada heartbeat, devolve estado e avisos e acusa silêncio. Mais 11 testes.</div></li>
+      <li><span class="s">5</span><div><span class="who">O aparelho</span><code>aparelho/sketch.ino</code> no Wokwi: três potenciômetros como RSSI das âncoras, média, histerese −70/−85 dBm, heartbeat, fila para queda de rede, botões para as falhas, LEDs, OLED e buzzer.</div></li>
+      <li><span class="s">6</span><div><span class="who">Rodei tudo junto</span>Sete cenários no Wokwi com o servidor de verdade (Parte I, seção 8). Os prints e logs estão em <code>evidencias/presenca/</code>.</div></li>
+      <li><span class="s">7</span><div><span class="who">Consertei o que apareceu</span>Um atrasado contava como perdido; o “fora de ordem” do protótipo de CO₂ era, na verdade, uma duplicata; o acumulado oscilava meio segundo. Tudo corrigido e testado.</div></li>
+      <li><span class="s">8</span><div><span class="who">A segunda fronteira</span>A âncora de CO₂ (feita antes) continua: é a defesa contra a turma deixar os celulares na sala e ir embora.</div></li>
+    </ol>
+  </section>
+
+  <!-- ============ G3 ============ -->
+  <section id="g3">
+    <div class="sec-head"><span class="sec-n">G3</span><h2>Preparar o computador (uma vez)</h2></div>
+    <p>No VS Code: menu <b>Terminal → New Terminal</b>. Ele abre um PowerShell embaixo. Digite:</p>
+<div class="term"><span class="h">terminal 1 · instalar</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+pip install -r requirements.txt</div>
+    <p>Isso instala <code>paho-mqtt</code> (fala MQTT) e <code>jsonschema</code> (valida o contrato).
+    O gateway de CO₂ usa as mesmas duas.</p>
+    <p>Confira a rede:</p>
+<div class="term"><span class="h">terminal 1 · rede</span>Test-NetConnection broker.hivemq.com -Port 1883</div>
+    <p>Tem que aparecer <code>TcpTestSucceeded : True</code>. Se aparecer <code>False</code>, a rede bloqueia o MQTT: troque para o 4G do celular.</p>
+  </section>
+
+  <!-- ============ G4 ============ -->
+  <section id="g4">
+    <div class="sec-head"><span class="sec-n">G4</span><h2>As pastas e os arquivos, no VS Code</h2></div>
+    <p>Mostre na ordem abaixo, abrindo cada pasta no explorador. Cada número aponta para o que falar.</p>
+    {{anot:vs-raiz}}
+    {{anot:vs-marco02}}
+    <div class="callout">
+      <span class="tag">A frase para esta parte</span>
+      <p>“O <code>aparelho</code> é o produtor, roda no Wokwi. O <code>servidor</code> é o consumidor,
+      roda aqui. O <code>contrato</code> é o que os dois combinaram. <code>evidencias</code> é a prova
+      de que rodou.”</p>
+    </div>
+    {{anot:vs-aparelho}}
+    {{anot:vs-servidor}}
+    {{anot:vs-contrato}}
+    {{anot:vs-co2}}
+    {{anot:vs-evidencias}}
+    {{anot:vs-apresentacao}}
+  </section>
+
+  <!-- ============ G5 ============ -->
+  <section id="g5">
+    <div class="sec-head"><span class="sec-n">G5</span><h2>Ligar o servidor</h2></div>
+    <p>No terminal 1:</p>
+<div class="term"><span class="h">terminal 1 · servidor</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+python servidor.py</div>
+    <p>Tem que aparecer (saída real):</p>
+<div class="term"><span class="h">o que aparece</span><span class="k">configuracao: config.exemplo.json</span>
+
+<span class="c">=== Presenca / servidor de permanencia ===</span>
+<span class="k">p painel | n nova sessao | q sair</span>
+<span class="g">[MQTT] conectado a broker.hivemq.com:1883</span>
+<span class="k">[MQTT] assinando ufg/ssu/presenca/alany/sala-204/heartbeat</span>
+
+<span class="c">=== sessao s31a2 aberta ===</span>
+<span class="k">escala 1:30  aula 100 s  persistencia 1 s  orcamento 30 s  avisos em 20 s e 26 s  requalificacao 60 s</span></div>
+    <div class="tw"><table>
+      <tr><th>Tecla + Enter</th><th>O que faz</th><th>Quando usar</th></tr>
+      <tr><td><code>n</code></td><td>Abre uma <strong>sessão nova</strong> (aula nova, do zero)</td><td>Antes de cada demonstração, logo depois de dar ▶ no Wokwi</td></tr>
+      <tr><td><code>p</code></td><td>Mostra o painel: estado, acumulado, contadores, transições</td><td>Quando quiser resumir o que aconteceu</td></tr>
+      <tr><td><code>q</code></td><td>Encerra</td><td>No fim (ou <kbd>Ctrl</kbd>+<kbd>C</kbd>)</td></tr>
+    </table></div>
+    <p>Cada heartbeat vira uma linha. Como ler uma:</p>
+<div class="term"><span class="h">uma linha do servidor, parte por parte</span>01:31:02 <span class="g">t=   5.5s</span>      seq=10   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; <span class="g">PRESENTE</span>          acum   4.1s ( 4.1%) orc 30.0s
+<span class="k">│        │               │        │                      │               │             │            │                             │
+hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  posição (x,y)  classe      estado decidido      acumulado e orçamento</span></div>
+    <p>A cada 30 s ele imprime o painel sozinho. Quando o estado muda, aparece uma linha
+    <code>&gt;&gt;&gt; X -&gt; Y em t=… (motivo)</code>. Avisos aparecem numa faixa vermelha.</p>
+  </section>
+
+  <!-- ============ G6 ============ -->
+  <section id="g6">
+    <div class="sec-head"><span class="sec-n">G6</span><h2>Ligar o Wokwi e se localizar na tela</h2></div>
+    <p>Abra <b>wokwi.com/projects/476110187626906625</b>. Não precisa estar logada para rodar.</p>
+    {{anot:wk-tela}}
+    <p>Clique no <b>▶ Play</b> (8). Na primeira vez aparece “Compiling project…” e às vezes uma
+    fila (“Build Servers Busy”): <strong>não é erro</strong>, espere. Em cerca de 10 s de simulação o
+    Wi-Fi conecta, o servidor responde e o OLED mostra <code>PRESENTE</code>.</p>
+    {{anot:wk-rodando}}
+
+    <h3>Como mexer nos potenciômetros e nos botões</h3>
+    <div class="tw"><table>
+      <tr><th>Peça</th><th>Como</th></tr>
+      <tr><td>Potenciômetro</td><td><strong>Clique nele</strong> e use o teclado: <kbd>Home</kbd> = 0 (tudo à esquerda), <kbd>End</kbd> = 1023, <kbd>PageUp</kbd>/<kbd>PageDown</kbd> = ±102, setas = ±1. Também dá para arrastar o botão com o mouse, mas o teclado é exato. O RSSI aparece no OLED (linha <code>A-56 B-56 C-56</code>).</td></tr>
+      <tr><td>Botão</td><td>Clique e <strong>segure por 1 segundo</strong>. A simulação anda mais devagar que o real; um clique rápido pode não ser visto.</td></tr>
+    </table></div>
+    <div class="tw"><table>
+      <tr><th>Cenário</th><th>A</th><th>B</th><th>C</th><th>OLED mostra</th><th>Servidor decide</th></tr>
+      <tr><td><strong>Dentro da sala</strong> (posição inicial)</td><td>Home, PgUp ×7</td><td>Home, PgUp ×7</td><td>Home, PgUp ×7</td><td>A-56 B-56 C-56</td><td>(6,0; 2,8) → <span class="pill v">dentro</span></td></tr>
+      <tr><td><strong>Corredor, colado à sala</strong></td><td>Home, PgUp ×5</td><td>Home, PgUp ×8</td><td>Home, PgUp ×7</td><td>A-70 B-49 C-56</td><td>(13,9; 12,4) → <span class="pill r">fora</span>, com sinal forte</td></tr>
+      <tr><td><strong>Fora do prédio</strong></td><td>Home</td><td>Home</td><td>Home</td><td>A-- B-- C--</td><td>nenhuma âncora ouvida → <span class="pill r">fora</span></td></tr>
+    </table></div>
+    <div class="callout warn">
+      <span class="tag">Duas pegadinhas</span>
+      <p>1. O ↻ Reiniciar <strong>não</strong> devolve os potenciômetros à posição inicial. Para voltar,
+      use a receita “dentro da sala” ou recarregue a página (F5).<br>
+      2. Se você trocar de aba ou minimizar o navegador, a simulação congela e o servidor escreve
+      <code>SILENCIO</code>. Isso não é defeito: é a detecção de silêncio funcionando.</p>
+    </div>
+  </section>
+
+  <!-- ============ G7 ============ -->
+  <section id="g7">
+    <div class="sec-head"><span class="sec-n">G7</span><h2>O circuito no Wokwi</h2></div>
+    <p>Para mostrar o circuito grande, arraste a divisória (13 da figura da tela) para a esquerda e
+    use a roda do mouse sobre o circuito.</p>
+    {{anot:wk-circuito}}
+  </section>
+
+  <!-- ============ G8 ============ -->
+  <section id="g8">
+    <div class="sec-head"><span class="sec-n">G8</span><h2>O código no Wokwi, parte por parte</h2></div>
+    <p>Clique em <b>sketch.ino</b> e role. Cada print abaixo é uma tela; os números marcam os
+    trechos e as linhas estão à esquerda. Para ir direto a uma linha: clique no código e aperte
+    <kbd>Ctrl</kbd>+<kbd>G</kbd>… (ou <kbd>Ctrl</kbd>+<kbd>F</kbd> e procure o nome da função).</p>
+    <div class="tw"><table>
+      <tr><th>Para explicar…</th><th>Procure</th><th>Linha</th></tr>
+      <tr><td>Parâmetros e histerese</td><td><code>LIMIAR_ENTRADA</code></td><td>70</td></tr>
+      <tr><td>Âncora não ouvida</td><td><code>void amostrar</code></td><td>151</td></tr>
+      <tr><td>Regra local (histerese)</td><td><code>atualizarRegiao</code></td><td>195</td></tr>
+      <tr><td>O heartbeat (contrato)</td><td><code>montarJson</code></td><td>218</td></tr>
+      <tr><td>Teste adversarial</td><td><code>publicarHeartbeat</code></td><td>281</td></tr>
+      <tr><td>Fila da queda de rede</td><td><code>enfileirar</code></td><td>247</td></tr>
+      <tr><td>Aviso idempotente</td><td><code>aoReceberAviso</code></td><td>367</td></tr>
+      <tr><td>Comportamento seguro</td><td><code>void atuar</code></td><td>396</td></tr>
+      <tr><td>bootId</td><td><code>esp_random</code></td><td>497</td></tr>
+    </table></div>
+    {{anot:k01}} {{anot:k02}} {{anot:k03}} {{anot:k04}} {{anot:k05}} {{anot:k06}} {{anot:k07}}
+    {{anot:k08}} {{anot:k09}} {{anot:k10}} {{anot:k11}} {{anot:k12}} {{anot:k13}} {{anot:k14}}
+    {{anot:k15}} {{anot:k16}} {{anot:k17}}
+
+    <h3>O código do servidor, no VS Code</h3>
+    <p>Abra os arquivos pelo explorador. As legendas citam as linhas do print.</p>
+    {{anot:py-config}} {{anot:py-validacao}} {{anot:py-anomalias}} {{anot:py-calculo}}
+    {{anot:py-publicar}} {{anot:py-silencio}} {{anot:py-trilaterar}} {{anot:py-classificar}}
+    {{anot:py-orcamento}} {{anot:py-maquina}} {{anot:py-fechamento}}
+  </section>
+
+  <!-- ============ G9 ============ -->
+  <section id="g9">
+    <div class="sec-head"><span class="sec-n">G9</span><h2>Os testes ao vivo, um por um</h2></div>
+    <p>A aula dura 100 s <em>simulados</em>, o que dá uns 4 a 8 minutos reais. Faça os testes 1 a 4
+    numa sessão só, na ordem. O teste 5 usa uma sessão nova.</p>
+    <div class="callout">
+      <span class="tag">Antes do teste 1</span>
+      <p>Potenciômetros na posição “dentro da sala”. ▶ no Wokwi. Quando o serial mostrar
+      <code>[MQTT] conectado</code>, digite <code>n</code> + Enter no servidor.</p>
+    </div>
+
+    <div class="teste">
+      <div class="teste-h"><span class="id">1</span><span class="t">Estado normal</span></div>
+      <div class="teste-b"><dl>
+        <dt>Faça</dt><dd>Nada. Só espere 3 ou 4 heartbeats.</dd>
+        <dt>No Wokwi</dt><dd>OLED <code>PRESENTE</code>, LED verde, <code>A-56 B-56 C-56</code>, <code>DENTRO_ALCANCE</code>. No serial, os heartbeats em JSON e <code>[ESTADO] servidor decidiu: FORA -&gt; PRESENTE</code>.</dd>
+        <dt>No servidor</dt><dd><code>&gt;&gt;&gt; FORA -&gt; PRESENTE em t=… (sinal na sala sustentado)</code> e o acumulado subindo.</dd>
+        <dt>Fale</dt><dd>“O aparelho mede as três âncoras e decide a região com histerese. O servidor trilatera, vê que o ponto está dentro do polígono e confirma a presença depois da persistência. A presença conta desde o começo da condição, não desde a confirmação: o cálculo é retroativo.” Aponte o <code>eventId</code> no serial e a mesma sequência no servidor.</dd>
+      </dl></div>
+    </div>
+
+    <div class="teste">
+      <div class="teste-h"><span class="id">2</span><span class="t">Decisão e atuação: corredor, avisos e volta</span></div>
+      <div class="teste-b"><dl>
+        <dt>Faça</dt><dd>Potenciômetros na posição <strong>corredor</strong>: A = Home + PgUp×5, B = Home + PgUp×8, C = Home + PgUp×7. Espere o buzzer duas vezes (≈20 s e ≈26 s de ausência). <strong>Logo depois do segundo aviso</strong>, volte os três para “dentro” (Home + PgUp×7).</dd>
+        <dt>No Wokwi</dt><dd>A região continua <code>DENTRO_ALCANCE</code> (sinal forte!), mas o estado vira <code>AUSENCIA</code> com LED amarelo. Nos avisos, buzzer, LED amarelo piscando e o texto no OLED. Na volta, LED verde.</dd>
+        <dt>No servidor</dt><dd>Posição <code>(13.9, 12.4) fora</code>; <code>PRESENTE -&gt; AUSENCIA_TOLERADA</code>; as faixas vermelhas <code>AVISO_10_MIN</code> e <code>AVISO_13_MIN</code>; depois <code>AUSENCIA_TOLERADA -&gt; PRESENTE (retornou dentro do orcamento)</code>. O orçamento para de cair.</dd>
+        <dt>Fale</dt><dd>“O sinal é forte, então um sistema com raio em metros contaria presença. Mas os três círculos se cruzam do lado de fora da parede: o polígono diz não. O aviso chega enquanto ainda dá para voltar. Eu voltei, então não fui punida. É isso que fecha o laço ciber-físico: a notificação muda a posição, que é o que o sistema mede.”</dd>
+        <dt>Se passar do tempo</dt><dd>Se não voltar a tempo, vira o teste 5 (orçamento esgotado). Tudo bem: explique o estorno.</dd>
+      </dl></div>
+    </div>
+    {{anot:wk-vizinha}}
+
+    <div class="teste">
+      <div class="teste-h"><span class="id">3</span><span class="t">Adversarial (matrícula final 8): repetido, fora de ordem, salto</span></div>
+      <div class="teste-b"><dl>
+        <dt>Faça</dt><dd>Botão <strong>azul</strong>, segurando 1 s. Espere uns 5 s. De novo. Espere. De novo. (Três apertos.)</dd>
+        <dt>No serial</dt><dd><code>### anomalia armada: duplicata</code> → <code>&gt;&gt;&gt; ADVERSARIAL: reenviando o ultimo heartbeat</code>; depois <code>fora-de-ordem</code> → <code>segurando seq=N</code> e <code>entregando agora o heartbeat retido</code>; depois <code>salto</code> → <code>salto de N para N+6</code>.</dd>
+        <dt>No servidor</dt><dd><code>DUPLICADO … descartado, nada recalculado</code>; <code>FORA DE ORDEM … inserido na posicao original … preenche a lacuna</code>; <code>SALTO … 5 heartbeat(s) perdido(s)</code>. O estado não muda.</dd>
+        <dt>Fale</dt><dd>As três perguntas da atividade: <strong>por que o ingênuo erra</strong> (somaria a duplicata duas vezes, voltaria no tempo com o atrasado, trataria o buraco como observado); <strong>o mecanismo</strong> (identidade <code>aparelho#boot#sequência</code>, lacunas e recálculo sobre o log ordenado); <strong>o que foi observado</strong> (as três linhas acima, sem mudar o estado).</dd>
+      </dl></div>
+    </div>
+
+    <div class="teste">
+      <div class="teste-h"><span class="id">4</span><span class="t">Queda de rede</span></div>
+      <div class="teste-b"><dl>
+        <dt>Faça</dt><dd>Botão <strong>vermelho</strong> (1 s). Espere o servidor escrever <code>SILENCIO</code> e mais uns 10 s. Botão vermelho de novo.</dd>
+        <dt>No Wokwi</dt><dd>OLED <code>REDE OFF</code> e <code>fila N/60 retidos</code>; <strong>todos os LEDs apagam</strong>. No serial, <code>[REDE] indisponivel: heartbeat seq=… retido</code>. Na volta, <code>[RETRY] N heartbeat(s) retidos entregues com atraso</code>.</dd>
+        <dt>No servidor</dt><dd><code>SILENCIO … Nada e decidido sem dado</code>; depois <code>RETOMADO</code> e várias linhas <code>ATRASADO … entra no passado e a sessao e recalculada</code>. O acumulado continua sem buraco.</dd>
+        <dt>Fale</dt><dd>“Silêncio não é ausência: pode ser rede, bateria ou o app. O servidor não decide nada sem dado. O aparelho guarda tudo com o horário original e, quando a rede volta, o servidor encaixa no passado e refaz a sessão. E os LEDs apagam porque mostrar um ‘presente’ velho seria mentir.”</dd>
+      </dl></div>
+    </div>
+
+    <div class="teste">
+      <div class="teste-h"><span class="id">5</span><span class="t">Orçamento esgotado (sessão nova)</span></div>
+      <div class="teste-b"><dl>
+        <dt>Faça</dt><dd>Potenciômetros “dentro”, <code>n</code> no servidor, espere o <code>PRESENTE</code>. Depois os três em <strong>Home</strong> (fora do prédio) e deixe assim por mais de 30 s de simulação.</dd>
+        <dt>No Wokwi</dt><dd><code>A-- B-- C--</code>, <code>FORA_ALCANCE</code>, <code>AUSENCIA</code>; os dois avisos; depois <code>FORA</code>, LED vermelho e “O tempo parou de ser contabilizado em t=…”.</dd>
+        <dt>No servidor</dt><dd><code>LIMITE_ESGOTADO</code>, <code>orc 0.0s</code> e o acumulado <strong>igual ao que era antes de sair</strong>.</dd>
+        <dt>Fale</dt><dd>“O orçamento é de 15 minutos por aula, não por saída. Acabou sem volta: a ausência inteira é estornada, e o aviso diz a hora em que o tempo parou de contar, que é quando a pessoa saiu. É esse horário que o estudante usaria para contestar.”</dd>
+      </dl></div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">No fim da aula (t = 100 s)</span>
+      <p>O aparelho mostra “Voce acumulou N% desta aula.” e o servidor imprime o
+      <strong>RELATÓRIO FINAL</strong>, com presença, ausência creditada, aprovado ou não, e o contador
+      ingênuo para comparar. Use <code>p</code> a qualquer momento para mostrar o painel.</p>
+    </div>
+  </section>
+
+  <!-- ============ G10 ============ -->
+  <section id="g10">
+    <div class="sec-head"><span class="sec-n">G10</span><h2>Mostrar o contrato funcionando</h2></div>
+    <p>No terminal 2:</p>
+<div class="term"><span class="h">terminal 2</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\contrato"
+python validar.py</div>
+<div class="term"><span class="h">o que aparece (saída real)</span>Validando 10 mensagem(ns) contra contrato/v1/
+
+  <span class="g">OK</span>  ambiente-bufferizado.json          sala.ambiente.v1
+  <span class="g">OK</span>  ambiente-coerente.json             sala.ambiente.v1
+  <span class="g">OK</span>  ambiente-incoerente.json           sala.ambiente.v1
+  <span class="g">OK</span>  aviso-10min.json                   presenca.aviso.v1
+  <span class="g">OK</span>  contagem-comando.json              gateway.contagem.v1
+  <span class="g">OK</span>  estado-ausencia.json               presenca.estado.v1
+  <span class="g">OK</span>  heartbeat-bufferizado.json         presenca.heartbeat.v1
+  <span class="g">OK</span>  heartbeat-dentro.json              presenca.heartbeat.v1
+  <span class="g">OK</span>  heartbeat-fora-do-alcance.json     presenca.heartbeat.v1
+  <span class="g">OK</span>  heartbeat-sala-vizinha.json        presenca.heartbeat.v1
+
+Agora de proposito: o mesmo heartbeat com um campo que o contrato nao preve
+
+  <span class="r">NAO</span> heartbeat-com-bateria (inventado)  presenca.heartbeat.v1 -&gt; (raiz): Additional properties are not allowed ('bateria' was unexpected)
+
+  -&gt; o servidor faz o mesmo: responde INVALIDO e descarta. Para aceitar
+     'bateria' seria preciso criar presenca.heartbeat.v2.</div>
+    <p>Fale: “O contrato não é documentação: o servidor lê este arquivo e rejeita o que não
+    bate. Uma mudança incompatível vira v2.” Abra <code>presenca.heartbeat.v1.schema.json</code> e
+    mostre <code>additionalProperties: false</code> e o <code>pattern</code> do <code>eventId</code>.</p>
+  </section>
+
+  <!-- ============ G11 ============ -->
+  <section id="g11">
+    <div class="sec-head"><span class="sec-n">G11</span><h2>Mostrar os testes automáticos</h2></div>
+<div class="term"><span class="h">terminal 2</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+python -m pytest testes -v</div>
+    <p>Aparecem os 34 nomes com <code>PASSED</code> e, no fim, <code>34 passed</code>. Com <code>-q</code> no
+    lugar de <code>-v</code> sai só o resumo. Destaque três nomes: <code>test_ordem_de_chegada_nao_altera_o_resultado</code>
+    (embaralha o log inteiro e dá o mesmo resultado), <code>test_sinal_forte_na_sala_vizinha_nao_conta</code>
+    e <code>test_orcamento_e_por_sessao_nao_por_evento</code>.</p>
+  </section>
+
+  <!-- ============ G12 ============ -->
+  <section id="g12">
+    <div class="sec-head"><span class="sec-n">G12</span><h2>A fronteira de CO₂ (o “gateway”)</h2></div>
+    <p>Pode rodar ao mesmo tempo que o servidor de presença: usam tópicos diferentes.</p>
+<div class="term"><span class="h">terminal 2 · gateway de CO₂</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\co2-gateway"
+python consumidor.py</div>
+    <p>Abra <b>wokwi.com/projects/476001394839038977</b> e dê ▶.</p>
+    {{anot:wk-co2}}
+    <div class="tw"><table>
+      <tr><th>No gateway, digite</th><th>Efeito</th></tr>
+      <tr><td>um número (ex. <code>0</code> ou <code>25</code>) + Enter</td><td>Quantos estudantes o rádio declara. Vai para a âncora.</td></tr>
+      <tr><td><code>p</code></td><td>Painel</td></tr>
+      <tr><td><code>r</code></td><td>Zera os contadores (use depois de reiniciar a simulação)</td></tr>
+      <tr><td><code>q</code></td><td>Sai</td></tr>
+    </table></div>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">Normal</span>Digite <code>0</code>. Potenciômetro em qualquer posição: LED verde, <code>COERENTE</code>.</div></li>
+      <li><span class="s">2</span><div><span class="who">Decisão</span>Digite <code>25</code> e deixe o potenciômetro baixo (CO₂ de sala vazia). Em ~10 s: LED vermelho e o <strong>ALERTA DE INCOERÊNCIA</strong> no gateway.</div></li>
+      <li><span class="s">3</span><div><span class="who">Adversarial</span>Botão azul duas vezes: <code>DUPLICADO</code> e <code>FORA DE ORDEM</code>.</div></li>
+    </ol>
+<div class="term"><span class="h">gateway de CO₂ · saída real de 25/09/2026</span>02:19:26 <span class="y">DUPLICADO</span>      anc-204-A#4 ja processado - descartado sem efeito no estado
+02:19:42 <span class="r">SALTO</span>          esperado 6, recebido 7 - 1 evento(s) perdido(s)
+02:19:43 <span class="y">FORA DE ORDEM</span>  seq=6 chegou depois de 7 (1 atras) - aceito, nao retrocede o estado
+02:19:59 seq=10           468.9 ppm  co2=VAZIA         radio=25  <span class="r">INCOERENTE</span>
+<span class="r">======================================================================
+  ALERTA DE INCOERENCIA DE OCUPACAO
+  O radio declara 25 estudantes,
+  mas o CO2 em 469 ppm indica sala VAZIA.
+  Sessao marcada para revisao do professor.
+======================================================================</span></div>
+    <p>Esta saída é de antes da última correção. Agora, quando o atrasado chega, o gateway também
+    escreve <code>preenche a lacuna, nao estava perdido</code>.</p>
+  </section>
+
+  <!-- ============ G13 ============ -->
+  <section id="g13">
+    <div class="sec-head"><span class="sec-n">G13</span><h2>Se algo der errado</h2></div>
+    <div class="tw"><table>
+      <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
+      <tr><td>Servidor não mostra <code>[MQTT] conectado</code></td><td>Porta 1883 bloqueada</td><td>4G do celular. Confira com <code>Test-NetConnection</code>.</td></tr>
+      <tr><td>Wokwi mostra “Build Servers Busy” ou fica em “Compiling”</td><td>Fila do plano gratuito</td><td>Espere até 1–2 min. Não é erro de código.</td></tr>
+      <tr><td>Relógio do Wokwi parado</td><td>Janela ou aba escondida</td><td>Traga o navegador para frente. O servidor terá escrito <code>SILENCIO</code>, e está certo.</td></tr>
+      <tr><td>OLED mostra <code>SEM RESP.</code> e LEDs apagados</td><td>Servidor parado ou sem rede</td><td>Rode <code>python servidor.py</code>. É o comportamento seguro em ação.</td></tr>
+      <tr><td>Clique no botão não fez nada</td><td>Clique rápido demais para o tempo simulado</td><td>Segure 1 s.</td></tr>
+      <tr><td>Estado não é o esperado depois de reiniciar</td><td>Potenciômetros ficaram onde estavam; sessão antiga</td><td>Refaça a receita “dentro da sala” e digite <code>n</code> no servidor.</td></tr>
+      <tr><td><code>ModuleNotFoundError: paho</code></td><td>Bibliotecas não instaladas</td><td><code>pip install -r requirements.txt</code></td></tr>
+      <tr><td>A aula acabou no meio da demonstração</td><td>100 s de simulação passaram</td><td>Digite <code>n</code>: sessão nova.</td></tr>
+    </table></div>
+
+    <h3>Alterações ao vivo, se a banca pedir</h3>
+    <div class="tw"><table>
+      <tr><th>Pedido</th><th>Onde</th><th>O que acontece</th></tr>
+      <tr><td>“Deixe a tolerância maior”</td><td><code>servidor/config.exemplo.json</code>, <code>"escala": 30</code> → <code>15</code>; reinicie o servidor</td><td>Todos os tempos dobram (orçamento 60 s, avisos em 40 s e 52 s)</td></tr>
+      <tr><td>“Mude a histerese”</td><td><code>sketch.ino</code> linha 70, <code>LIMIAR_ENTRADA = -70.0</code> → <code>-60.0</code>; ▶ de novo</td><td>O corredor (B −49) continua dentro do alcance; a posição “dentro” (−56) também</td></tr>
+      <tr><td>“Mostre o contrato rejeitando”</td><td><code>python validar.py</code></td><td>A mensagem com <code>bateria</code> é recusada</td></tr>
+      <tr><td>“E se a sala fosse maior?”</td><td><code>config.exemplo.json</code>, <code>"poligono"</code></td><td>O corredor pode passar a ser dentro</td></tr>
+    </table></div>
+    <p><strong>Não clique em SAVE no Wokwi</strong> depois de uma alteração ao vivo, a menos que queira que ela fique no projeto público.</p>
+  </section>

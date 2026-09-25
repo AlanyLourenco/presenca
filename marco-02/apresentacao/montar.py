@@ -23,6 +23,9 @@ import subprocess
 import sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(AQUI, "fontes"))
+from anotacoes import DEFS, figura  # noqa: E402
+from figuras import F  # noqa: E402
 MARCO = os.path.dirname(AQUI)
 SAIDA_HTML = os.path.join(AQUI, "apresentacao-marco-02.html")
 SAIDA_PDF = os.path.join(AQUI, "apresentacao-marco-02.pdf")
@@ -123,10 +126,27 @@ def montar():
                     .replace("├── GUIA.md                ← a versão deste guia em Markdown\n", "├── GUIA.md                ← este guia em Markdown\n"))
 
     parte1 = ler("presenca.html").replace("{{grafico}}", grafico())
+    guia = re.sub(r"\{\{anot:([\w-]+)\}\}", lambda m: figura(F[m.group(1)]), ler("guia.html"))
 
     toc = """
   <nav class="toc">
-    <div class="toc-h">Parte I · presença</div>
+    <div class="toc-h">Guia do dia</div>
+    <ol>
+      <li><a href="#g1"><span class="n">G1</span> Checklist</a></li>
+      <li><a href="#g2"><span class="n">G2</span> O que foi feito</a></li>
+      <li><a href="#g3"><span class="n">G3</span> Preparar o PC</a></li>
+      <li><a href="#g4"><span class="n">G4</span> As pastas</a></li>
+      <li><a href="#g5"><span class="n">G5</span> Ligar o servidor</a></li>
+      <li><a href="#g6"><span class="n">G6</span> Ligar o Wokwi</a></li>
+      <li><a href="#g7"><span class="n">G7</span> O circuito</a></li>
+      <li><a href="#g8"><span class="n">G8</span> O código</a></li>
+      <li><a href="#g9"><span class="n">G9</span> Testes ao vivo</a></li>
+      <li><a href="#g10"><span class="n">G10</span> O contrato</a></li>
+      <li><a href="#g11"><span class="n">G11</span> Testes automáticos</a></li>
+      <li><a href="#g12"><span class="n">G12</span> Gateway de CO₂</a></li>
+      <li><a href="#g13"><span class="n">G13</span> Se der errado</a></li>
+    </ol>
+    <div class="toc-h" style="margin-top:22px">Parte I · presença</div>
     <ol>
       <li><a href="#p1"><span class="n">1</span> O que entrega</a></li>
       <li><a href="#p2"><span class="n">2</span> A fronteira</a></li>
@@ -158,7 +178,7 @@ def montar():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Presença · Marco 2</title>
+<title>Guia do Marco 2</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>{estilo}
@@ -166,31 +186,34 @@ def montar():
 </style>
 </head>
 <body>
+{DEFS}
 <div class="topbar"><div class="topbar-in">
   <span class="brand">Presença <span>/ Marco 2</span></span>
   <span class="spacer"></span>
-  <a href="#p8">Testes</a>
+  <a href="#g9">Testes ao vivo</a>
+  <a href="https://wokwi.com/projects/476110187626906625">Wokwi do aparelho</a>
   <a href="https://github.com/AlanyLourenco/presenca">Repositório</a>
 </div></div>
 
 <header class="hero">
   <div class="kicker"><b>Software para Sistemas Ubíquos</b> · Instituto de Informática, UFG · Prof. Dr. Otávio Calaça Xavier</div>
-  <h1>Permanência medida, não presença num instante</h1>
-  <p class="dek">O Marco 2 do sistema Presença: um ESP32 no papel do celular do estudante, que ouve
-  as três âncoras da sala, e um servidor que transforma esses heartbeats em minutos de permanência,
-  avisa antes de punir e devolve a decisão ao aparelho. Cada arquivo, cada peça, cada regra e cada
-  teste executado no Wokwi, com as capturas e os logs reais.</p>
+  <h1>Guia para apresentar o Marco 2</h1>
+  <p class="dek">Permanência medida, não presença num instante. Um ESP32 no papel do celular do
+  estudante ouve as três âncoras da sala; um servidor transforma esses heartbeats em minutos de
+  permanência, avisa antes de punir e devolve a decisão ao aparelho. Primeiro o roteiro do dia,
+  passo a passo e com prints anotados; depois a referência técnica completa.</p>
   <div class="meta">
     <span><span class="lbl">Aluna</span> <b>Alany Gabrielly</b> · 202105018</span>
     <span><span class="lbl">Responsabilidade</span> <b>comunicação e resiliência</b></span>
     <span><span class="lbl">Teste adversarial</span> <b>sequência</b>, matrícula terminada em 8</span>
-    <span><span class="lbl">Executado em</span> <b>25/09/2026</b></span>
+    <span><span class="lbl">Wokwi</span> <a href="https://wokwi.com/projects/476110187626906625">aparelho ↗</a> · <a href="https://wokwi.com/projects/476001394839038977">CO₂ ↗</a></span>
   </div>
 </header>
 
 <div class="shell">
 {toc}
   <main>
+{guia}
 {parte1}
 {parte2}
   </main>

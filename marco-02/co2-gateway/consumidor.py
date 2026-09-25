@@ -83,6 +83,7 @@ class Estado:
     def reiniciar(self):
         self.vistos = OrderedDict()      # eventId -> carimbo de recepcao
         self.maior_sequencia = 0
+        self.lacunas = set()             # sequencias que faltam
         self.total_aceitos = 0
         self.total_invalidos = 0
         self.total_duplicados = 0
@@ -202,9 +203,15 @@ class Gateway:
         if seq < e.maior_sequencia:
             e.total_fora_de_ordem += 1
             atraso = e.maior_sequencia - seq
+            extra = ""
+            if seq in e.lacunas:
+                # o salto anterior contou este como perdido; so chegou atrasado
+                e.lacunas.discard(seq)
+                e.total_perdidos -= 1
+                extra = " - preenche a lacuna, nao estava perdido"
             self._linha(AMARELO, "FORA DE ORDEM",
                         f"seq={seq} chegou depois de {e.maior_sequencia} "
-                        f"({atraso} atras) - aceito, nao retrocede o estado")
+                        f"({atraso} atras) - aceito, nao retrocede o estado{extra}")
             e.registrar(event_id)
             self._gravar(dado, recebido_em, "fora-de-ordem")
             return
@@ -212,6 +219,7 @@ class Gateway:
         # ---- 3. SALTO: lacuna na sequencia ----
         if e.maior_sequencia and seq > e.maior_sequencia + 1:
             faltando = seq - e.maior_sequencia - 1
+            e.lacunas.update(range(e.maior_sequencia + 1, seq))
             e.total_saltos += 1
             e.total_perdidos += faltando
             self._linha(VERMELHO, "SALTO",

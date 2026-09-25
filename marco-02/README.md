@@ -150,16 +150,17 @@ Teclas: `p` painel · `n` nova sessão · `q` sair.
 3. **Mantenha a janela do Wokwi visível.** Com a janela oculta, o navegador congela a
    simulação — o relógio para.
 
-### Onde deixar os potenciômetros
+### Como posicionar os potenciômetros com exatidão
 
-O Wokwi não deixa digitar o valor de um potenciômetro, então gire **olhando o RSSI no OLED**
-(linha `A-55 B-55 C-55`). Os alvos foram escolhidos para tolerar erro de giro.
+Clique no potenciômetro e use o teclado: **Home** leva a 0, **End** a 1023, **PageUp/PageDown**
+somam/subtraem 102 e as **setas** ajustam de 1 em 1. O OLED mostra o RSSI resultante.
+Reiniciar a simulação **não** devolve os potenciômetros à posição inicial; recarregar a página devolve.
 
-| Cenário | A | B | C | Tolerância | Resultado |
+| Cenário | A | B | C | RSSI (A, B, C) | Resultado |
 |---|---|---|---|---|---|
-| Dentro da sala (posição inicial) | −55 | −55 | −55 | ±5 dB | dentro do polígono |
-| Sala vizinha | −72 | −47 | −68 | ±2 dB | (17,8; 5,0): sinal forte, **fora** do polígono |
-| Fora do prédio | todo à esquerda | todo à esquerda | todo à esquerda | — | nenhuma âncora ouvida |
+| Dentro da sala (posição inicial) | Home + 7×PgUp | Home + 7×PgUp | Home + 7×PgUp | −56, −56, −56 | (6,0; 2,8), dentro |
+| Corredor, junto à sala | Home + 5×PgUp | Home + 8×PgUp | Home + 7×PgUp | −70, −49, −56 | (13,9; 12,4): sinal forte, **fora** do polígono |
+| Fora do prédio | Home | Home | Home | nenhuma ouvida | fora |
 
 ## 7. O que foi validado e o que não foi
 

@@ -1,0 +1,98 @@
+configuracao: config.json
+
+=== Presenca / gateway da sala - consumidor ===
+digite um numero para mudar a contagem do radio, p para painel, q para sair
+
+[MQTT] conectado a broker.hivemq.com:1883
+[MQTT] assinando ufg/ssu/presenca/alany/sala-204/ambiente
+
+[COMANDO] gw-204#1 -> contagem do radio = 25
+[COMANDO] gw-204#2 -> contagem do radio = 25
+[COMANDO] gw-204#3 -> contagem do radio = 25
+
+----------------------------------------------------------------------
+  estado da sala: -    ultimo CO2: None
+  contagem declarada pelo radio: 25
+  aceitos=0  duplicados=0  fora de ordem=0
+  saltos=0 (0 eventos perdidos)  atrasados=0  invalidos=0
+  alertas de incoerencia: 0   maior sequencia vista: 0
+----------------------------------------------------------------------
+
+[COMANDO] gw-204#4 -> contagem do radio = 25
+[COMANDO] gw-204#5 -> contagem do radio = 25
+[COMANDO] gw-204#6 -> contagem do radio = 25
+
+----------------------------------------------------------------------
+  estado da sala: -    ultimo CO2: None
+  contagem declarada pelo radio: 25
+  aceitos=0  duplicados=0  fora de ordem=0
+  saltos=0 (0 eventos perdidos)  atrasados=0  invalidos=0
+  alertas de incoerencia: 0   maior sequencia vista: 0
+----------------------------------------------------------------------
+
+[COMANDO] gw-204#7 -> contagem do radio = 25
+[COMANDO] gw-204#8 -> contagem do radio = 25
+02:19:04 seq=1            468.9 ppm  co2=INDETERMINADA radio=0   COERENTE
+02:19:10 seq=2            468.9 ppm  co2=INDETERMINADA radio=0   COERENTE
+[COMANDO] gw-204#9 -> contagem do radio = 25
+02:19:15 seq=3            468.9 ppm  co2=INDETERMINADA radio=25  ATENCAO
+02:19:20 seq=4            468.9 ppm  co2=INDETERMINADA radio=25  ATENCAO
+
+----------------------------------------------------------------------
+  estado da sala: ATENCAO    ultimo CO2: 469 ppm
+  contagem declarada pelo radio: 25
+  aceitos=4  duplicados=0  fora de ordem=0
+  saltos=0 (0 eventos perdidos)  atrasados=0  invalidos=0
+  alertas de incoerencia: 0   maior sequencia vista: 4
+----------------------------------------------------------------------
+
+[COMANDO] gw-204#10 -> contagem do radio = 25
+02:19:26 DUPLICADO      anc-204-A#4 ja processado - descartado sem efeito no estado
+02:19:31 seq=5            468.9 ppm  co2=VAZIA         radio=25  ATENCAO
+[COMANDO] gw-204#11 -> contagem do radio = 25
+02:19:42 SALTO          esperado 6, recebido 7 - 1 evento(s) perdido(s)
+02:19:42 seq=7            468.9 ppm  co2=VAZIA         radio=25  ATENCAO
+[COMANDO] gw-204#12 -> contagem do radio = 25
+02:19:43 FORA DE ORDEM  seq=6 chegou depois de 7 (1 atras) - aceito, nao retrocede o estado
+02:19:48 seq=8            468.9 ppm  co2=VAZIA         radio=25  ATENCAO
+
+----------------------------------------------------------------------
+  estado da sala: ATENCAO    ultimo CO2: 469 ppm
+  contagem declarada pelo radio: 25
+  aceitos=7  duplicados=1  fora de ordem=1
+  saltos=1 (1 eventos perdidos)  atrasados=0  invalidos=0
+  alertas de incoerencia: 0   maior sequencia vista: 8
+----------------------------------------------------------------------
+
+[COMANDO] gw-204#13 -> contagem do radio = 25
+02:19:53 seq=9            468.9 ppm  co2=VAZIA         radio=25  ATENCAO
+02:19:59 seq=10           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+
+======================================================================
+  ALERTA DE INCOERENCIA DE OCUPACAO
+  O radio declara 25 estudantes,
+  mas o CO2 em 469 ppm indica sala VAZIA.
+  Sessao marcada para revisao do professor.
+======================================================================
+
+[COMANDO] gw-204#14 -> contagem do radio = 25
+02:20:04 seq=11           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+02:20:10 seq=12           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+[COMANDO] gw-204#15 -> contagem do radio = 25
+02:20:16 seq=13           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+02:20:21 seq=14           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+
+----------------------------------------------------------------------
+  estado da sala: INCOERENTE    ultimo CO2: 469 ppm
+  contagem declarada pelo radio: 25
+  aceitos=13  duplicados=1  fora de ordem=1
+  saltos=1 (1 eventos perdidos)  atrasados=0  invalidos=0
+  alertas de incoerencia: 1   maior sequencia vista: 14
+----------------------------------------------------------------------
+
+[COMANDO] gw-204#16 -> contagem do radio = 25
+02:20:27 seq=15           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+02:20:32 seq=16           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+[COMANDO] gw-204#17 -> contagem do radio = 25
+02:20:37 seq=17           468.9 ppm  co2=VAZIA         radio=25  INCOERENTE
+[COMANDO] gw-204#18 -> contagem do radio = 25
