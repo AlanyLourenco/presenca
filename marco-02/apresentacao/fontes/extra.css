@@ -26,7 +26,7 @@ figcaption b{color:var(--ink-2)}
 .term{
   background:#11181a; color:#d4e1de; border:1px solid #243031; border-radius:10px;
   padding:13px 15px; overflow-x:auto; font-size:12.5px; line-height:1.55; margin:14px 0;
-  white-space:pre;
+  white-space:pre; font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 .term .h{display:block; font-family:Archivo,sans-serif; font-size:11.5px; color:#8b9d9f; margin-bottom:6px; white-space:normal}
 .term .g{color:#6fcf87} .term .y{color:#e9b64f} .term .r{color:#f08a88} .term .c{color:#63cfdd} .term .m{color:#d59be6} .term .k{color:#7d8f92}
@@ -125,4 +125,11 @@ kbd{
   .anot-wrap.lado{grid-template-columns:330px minmax(0,1fr) !important}
   .an-leg li{font-size:12.5px}
 }
+/* ---------- quadros de passo do guia ---------- */
+.teste.passo{margin:18px 0}
+.teste.passo .teste-h .t{font-size:16px}
+.teste.passo dd ol, .teste.passo dd ul{margin:6px 0 0}
+.teste.passo dd .term, .teste.passo dd .tw{margin:8px 0}
+.teste.passo dd p{margin:0 0 8px}
+@media print{ .teste.passo{page-break-before:auto !important; page-break-inside:avoid} .term{white-space:pre-wrap; overflow:visible; word-break:break-word} }
 @page{size:A4; margin:14mm 13mm}

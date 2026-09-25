@@ -118,9 +118,9 @@ def montar():
     parte2 = co2[ini:fim]
     # renumera a Parte II e ajusta os nomes das pastas
     for n in range(1, 9):
-        parte2 = parte2.replace(f'<section id="s{n}">', f'<section id="c{n}">')
-        parte2 = parte2.replace(f'<span class="sec-n">0{n}</span>', f'<span class="sec-n">C{n}</span>')
-        parte2 = parte2.replace(f'href="#s{n}"', f'href="#c{n}"')
+        parte2 = parte2.replace(f'<section id="s{n}">', f'<section id="co2-{n}">')
+        parte2 = parte2.replace(f'<span class="sec-n">0{n}</span>', f'<span class="sec-n">II.{n}</span>')
+        parte2 = parte2.replace(f'href="#s{n}"', f'href="#co2-{n}"')
     parte2 = (parte2.replace("produtor/", "co2-ancora/").replace("consumidor/", "co2-gateway/")
                     .replace("├── README.md              ← a entrega: documentação da fronteira\n", "")
                     .replace("├── GUIA.md                ← a versão deste guia em Markdown\n", "├── GUIA.md                ← este guia em Markdown\n"))
@@ -132,19 +132,17 @@ def montar():
   <nav class="toc">
     <div class="toc-h">Guia do dia</div>
     <ol>
-      <li><a href="#g1"><span class="n">G1</span> Checklist</a></li>
-      <li><a href="#g2"><span class="n">G2</span> O que foi feito</a></li>
-      <li><a href="#g3"><span class="n">G3</span> Preparar o PC</a></li>
-      <li><a href="#g4"><span class="n">G4</span> As pastas</a></li>
-      <li><a href="#g5"><span class="n">G5</span> Ligar o servidor</a></li>
-      <li><a href="#g6"><span class="n">G6</span> Ligar o Wokwi</a></li>
-      <li><a href="#g7"><span class="n">G7</span> O circuito</a></li>
-      <li><a href="#g8"><span class="n">G8</span> O código</a></li>
-      <li><a href="#g9"><span class="n">G9</span> Testes ao vivo</a></li>
-      <li><a href="#g10"><span class="n">G10</span> O contrato</a></li>
-      <li><a href="#g11"><span class="n">G11</span> Testes automáticos</a></li>
-      <li><a href="#g12"><span class="n">G12</span> Gateway de CO₂</a></li>
-      <li><a href="#g13"><span class="n">G13</span> Se der errado</a></li>
+      <li><a href="#g0"><span class="n">0</span> Como ler</a></li>
+      <li><a href="#ea"><span class="n">A</span> Preparar o PC</a></li>
+      <li><a href="#eb"><span class="n">B</span> No dia, antes</a></li>
+      <li><a href="#ec"><span class="n">C</span> A apresentação</a></li>
+      <li><a href="#c3"><span class="n">C3</span> As pastas</a></li>
+      <li><a href="#c4"><span class="n">C4</span> Circuito e código</a></li>
+      <li><a href="#mexer"><span class="n">·</span> Potenciômetros</a></li>
+      <li><a href="#c5"><span class="n">C5</span> Testes ao vivo</a></li>
+      <li><a href="#c10"><span class="n">C10</span> Contrato</a></li>
+      <li><a href="#c12"><span class="n">C12</span> Gateway de CO₂</a></li>
+      <li><a href="#ed"><span class="n">D</span> Se der errado</a></li>
       <li><a href="#g14"><span class="n">G14</span> Rede e WebSocket</a></li>
     </ol>
     <div class="toc-h" style="margin-top:22px">Parte I · presença</div>
@@ -165,12 +163,12 @@ def montar():
     </ol>
     <div class="toc-h" style="margin-top:22px">Parte II · CO₂</div>
     <ol>
-      <li><a href="#c1"><span class="n">C1</span> O problema</a></li>
-      <li><a href="#c2"><span class="n">C2</span> A fronteira</a></li>
-      <li><a href="#c4"><span class="n">C4</span> O circuito</a></li>
-      <li><a href="#c5"><span class="n">C5</span> O programa</a></li>
-      <li><a href="#c6"><span class="n">C6</span> O gateway</a></li>
-      <li><a href="#c8"><span class="n">C8</span> Perguntas</a></li>
+      <li><a href="#co2-1"><span class="n">II.1</span> O problema</a></li>
+      <li><a href="#co2-2"><span class="n">II.2</span> A fronteira</a></li>
+      <li><a href="#co2-4"><span class="n">II.4</span> O circuito</a></li>
+      <li><a href="#co2-5"><span class="n">II.5</span> O programa</a></li>
+      <li><a href="#co2-6"><span class="n">II.6</span> O gateway</a></li>
+      <li><a href="#co2-8"><span class="n">II.8</span> Perguntas</a></li>
     </ol>
   </nav>"""
 
@@ -191,7 +189,7 @@ def montar():
 <div class="topbar"><div class="topbar-in">
   <span class="brand">Presença <span>/ Marco 2</span></span>
   <span class="spacer"></span>
-  <a href="#g9">Testes ao vivo</a>
+  <a href="#c5">Testes ao vivo</a>
   <a href="https://wokwi.com/projects/476110187626906625">Wokwi do aparelho</a>
   <a href="https://github.com/AlanyLourenco/presenca">Repositório</a>
 </div></div>
