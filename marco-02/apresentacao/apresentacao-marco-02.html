@@ -682,32 +682,56 @@ cd projeto-presenca\marco-02\servidor</div></dd>
         <code>--ws</code> faz o servidor ir ao broker por outro caminho (WebSocket, porta 8884), que passa
         em redes que bloqueiam a 1883 (<a href="#g14">G14</a>).</dd>
         <dt>Tem que aparecer</dt><dd>
-<div class="term"><span class="k">configuracao: config.exemplo.json</span>
+<div class="term"><span class="c">══ Presença · servidor de permanência ══</span>
+<span class="k">Teclas: n = aula nova · p = resumo · q = sair (sempre com Enter)</span>
+<span class="g">Conectado ao broker.hivemq.com, porta 1883 (MQTT comum).</span>
+<span class="k">Esperando as mensagens do aparelho (o ESP32 no Wokwi).</span>
 
-<span class="c">=== Presenca / servidor de permanencia ===</span>
-<span class="k">p painel | n nova sessao | q sair</span>
-<span class="g">[MQTT] conectado a broker.hivemq.com:1883 (MQTT sobre TCP)</span>
-<span class="k">[MQTT] assinando ufg/ssu/presenca/alany/sala-204/heartbeat</span>
+<span class="c">── AULA s8255 COMEÇOU ──────────────────────────────</span>
+<span class="k">  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
 
-<span class="c">=== sessao s31a2 aberta ===</span>
-<span class="k">escala 1:30  aula 100 s  persistencia 1 s  orcamento 30 s  avisos em 20 s e 26 s  requalificacao 60 s</span></div>
-        Com <code>--ws</code>, a linha verde é
-        <code>[MQTT] conectado a broker.hivemq.com:8884 (MQTT sobre WebSocket seguro)</code>. O código da
-        sessão (<code>s31a2</code>) muda a cada vez.</dd>
-        <dt>Se der errado</dt><dd>Se a linha <code>[MQTT] conectado</code> não aparecer em uns 10 s: aperte
+   tempo  mensagem  onde          situação                tempo que contou</span></div>
+        Com <code>--ws</code>, a terceira linha diz <code>porta 8884 (WebSocket seguro)</code>. O código da aula
+        (<code>s8255</code>) muda a cada vez. A última linha é o cabeçalho das colunas: as mensagens do
+        aparelho vão aparecer embaixo dela.</dd>
+        <dt>Se der errado</dt><dd>Se a linha <code>Conectado ao broker…</code> não aparecer em uns 10 s: aperte
         <kbd>Ctrl</kbd>+<kbd>C</kbd> para parar e rode com <code>--ws</code>. Se nem assim conectar, conecte o
         notebook no 4G do celular (roteador) e comece de novo no B1.</dd>
       </dl></div>
     </div>
 
-    <p>Como ler as linhas que o servidor escreve quando os heartbeats começarem a chegar:</p>
-<div class="term"><span class="h">uma linha do servidor, parte por parte</span>01:31:02 <span class="g">t=   5.5s</span>      seq=10   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; <span class="g">PRESENTE</span>          acum   4.1s ( 4.1%) orc 30.0s
-<span class="k">│        │               │        │                      │               │             │            │                             │
-hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  posição (x,y)  classe      estado decidido      acumulado e orçamento</span></div>
+    <p>Como ler o que o servidor escreve quando as mensagens do aparelho começarem a chegar (uma a
+    cada meio segundo):</p>
+<div class="term"><span class="h">exemplo, com a explicação de cada coluna embaixo</span>   tempo  mensagem  onde          situação                tempo que contou
+   1,5 s  nº 4      na sala       <span class="g">PRESENTE</span>                1,5 s
+   3,0 s  nº 7      fora da sala  <span class="y">SAIU - restam 29,0 s</span>    2,0 s
+<span class="g">  &gt;&gt;&gt; 2,0 s: saiu da sala → começou a usar a tolerância</span></div>
+    <div class="tw"><table>
+      <tr><th>Coluna</th><th>O que quer dizer</th></tr>
+      <tr><td>tempo</td><td>Em que momento da aula está (a aula da demonstração tem 100 s).</td></tr>
+      <tr><td>mensagem</td><td>O número da mensagem que o aparelho mandou. É o mesmo número que aparece no monitor serial do Wokwi (<code>"sequence"</code>).</td></tr>
+      <tr><td>onde</td><td>Onde o servidor calculou que o estudante está: <code>na sala</code>, <code>fora da sala</code>, <code>sem sinal</code> (não ouve nenhuma âncora) ou <code>incerto</code> (falta informação).</td></tr>
+      <tr><td>situação</td><td><code>PRESENTE</code> (conta tempo); <code>SAIU - restam N s</code> (saiu, está usando a tolerância e ainda sobram N s); <code>FORA - não conta</code> (não está contando).</td></tr>
+      <tr><td>tempo que contou</td><td>Quanto da aula já está garantido para o estudante.</td></tr>
+      <tr><td>linha com &gt;&gt;&gt;</td><td>A situação mudou, e a frase diz o porquê.</td></tr>
+    </table></div>
+    <p>Quando acontece algo fora do normal, aparece uma linha com um rótulo à esquerda:</p>
+    <div class="tw"><table>
+      <tr><th>Rótulo</th><th>Quer dizer</th></tr>
+      <tr><td><code>! REPETIDA</code></td><td>Chegou uma mensagem que já tinha chegado. É ignorada.</td></tr>
+      <tr><td><code>! FORA DE ORDEM</code></td><td>Uma mensagem chegou depois da seguinte. É posta no lugar certo.</td></tr>
+      <tr><td><code>! SALTO</code></td><td>Faltaram mensagens no meio. Diz quantas se perderam.</td></tr>
+      <tr><td><code>~ ATRASADA</code></td><td>Mensagem que ficou guardada no aparelho enquanto estava sem rede e chegou depois.</td></tr>
+      <tr><td><code>… SILÊNCIO</code></td><td>Nenhuma mensagem há 6 s. O servidor espera, não decide nada.</td></tr>
+      <tr><td><code>+ VOLTOU</code></td><td>As mensagens voltaram a chegar.</td></tr>
+      <tr><td><code>x INVÁLIDA</code></td><td>Mensagem fora do contrato. É descartada.</td></tr>
+      <tr><td>quadro <code>AVISO ENVIADO AO ESTUDANTE</code></td><td>O servidor mandou um aviso para o celular (o buzzer do Wokwi toca).</td></tr>
+    </table></div>
     <div class="tw"><table>
       <tr><th>Tecla no terminal do servidor + <kbd>Enter</kbd></th><th>O que faz</th><th>Por que existe</th></tr>
       <tr><td><code>n</code></td><td>Começa uma aula nova (sessão nova), zerada</td><td>A aula dura 100 s simulados. Antes de cada demonstração, começa do zero para os números fazerem sentido.</td></tr>
-      <tr><td><code>p</code></td><td>Mostra o painel: estado, acumulado, contadores, transições</td><td>Para resumir o que aconteceu até agora</td></tr>
+      <tr><td><code>p</code></td><td>Mostra o resumo da aula: situação, tempo que contou, tolerância usada, o que aconteceu e quantas mensagens chegaram</td><td>O resumo só aparece quando você pede, para não atrapalhar a leitura</td></tr>
       <tr><td><code>q</code> (ou <kbd>Ctrl</kbd>+<kbd>C</kbd>)</td><td>Desliga o servidor</td><td>No fim, ou para religar com <code>--ws</code></td></tr>
     </table></div>
 
@@ -747,7 +771,7 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         <dt>Como fazer</dt><dd>Deixe o navegador (Wokwi) e o VS Code (servidor) <strong>lado a lado</strong>,
         os dois visíveis. Não minimize o navegador nem troque de aba no meio de um teste.</dd>
         <dt>Por quê</dt><dd>Quando a aba do Wokwi fica escondida, o navegador congela a simulação: o
-        relógio para, o ESP32 para de mandar heartbeats e o servidor escreve <code>SILENCIO</code>. Não
+        relógio para, o ESP32 para de mandar mensagens e o servidor escreve <code>… SILÊNCIO</code>. Não
         estraga nada, mas atrapalha o teste que estiver em andamento.</dd>
         <dt>Tem que aparecer</dt><dd>O relógio do Wokwi (canto superior direito) andando.</dd>
         <dt>Se der errado</dt><dd>Relógio parado: traga a janela para frente.</dd>
@@ -956,8 +980,8 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         sala, o sistema confirma a presença e não faz nada de estranho.</dd>
         <dt>Tem que aparecer</dt><dd><strong>Wokwi:</strong> OLED <code>PRESENTE</code>, LED verde,
         <code>A-56 B-56 C-56</code>, <code>DENTRO_ALCANCE</code>. No serial, os heartbeats em JSON.<br>
-        <strong>Servidor:</strong> <code>&gt;&gt;&gt; FORA -&gt; PRESENTE em t=… (sinal na sala sustentado)</code> e o
-        <code>acum</code> subindo a cada linha.</dd>
+        <strong>Servidor:</strong> a linha <code>&gt;&gt;&gt; … s: entrou na sala</code>, depois linhas com
+        <code>na sala</code> e <code>PRESENTE</code>, e a coluna “tempo que contou” subindo meio segundo por linha.</dd>
         <dt>O que falar</dt><dd>“O aparelho mede as três âncoras, tira a média e decide se está no
         alcance. O servidor calcula a posição, vê que ela está dentro do polígono da sala e confirma a
         presença depois de um tempo sustentado. A presença conta desde o começo, não desde a
@@ -985,9 +1009,11 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         (o sinal é forte!), mas o estado vira <code>AUSENCIA</code> e acende o LED amarelo. Em cada aviso:
         buzzer, LED amarelo piscando e o texto no OLED (“Fora da sala ha 20 s…”, “Faltam 4 s…”). Na volta,
         LED verde.<br>
-        <strong>Servidor:</strong> posição <code>(13.9, 12.4) fora</code>;
-        <code>PRESENTE -&gt; AUSENCIA_TOLERADA</code>; as faixas vermelhas <code>AVISO_10_MIN</code> e
-        <code>AVISO_13_MIN</code>; depois <code>AUSENCIA_TOLERADA -&gt; PRESENTE (retornou dentro do orcamento)</code>.</dd>
+        <strong>Servidor:</strong> a coluna “onde” passa a dizer <code>fora da sala</code>, <strong>mesmo com o sinal
+        forte</strong>. Logo depois, <code>&gt;&gt;&gt; … s: saiu da sala → começou a usar a tolerância</code>, e a
+        situação vira <code>SAIU - restam 29,0 s</code>, contando para baixo. Aparecem dois quadros
+        <code>AVISO ENVIADO AO ESTUDANTE</code> (“Fora da sala ha 20 s…” e “Faltam 4 s…”). Quando você volta:
+        <code>&gt;&gt;&gt; … s: voltou a tempo → nada foi descontado</code> e a situação volta a <code>PRESENTE</code>.</dd>
         <dt>O que falar</dt><dd>“O sinal é forte, então um sistema que usasse distância em metros
         contaria presença. Mas os três círculos se cruzam do lado de fora da parede: o polígono diz não.
         O aviso chega enquanto ainda dá para voltar; eu voltei e não fui punida. É isso que fecha o laço
@@ -1011,9 +1037,11 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         <code>&gt;&gt;&gt; ADVERSARIAL: reenviando o ultimo heartbeat</code>; depois <code>fora-de-ordem</code>,
         <code>segurando seq=N</code> e <code>entregando agora o heartbeat retido</code>; depois
         <code>salto de N para N+6</code>.<br>
-        <strong>Servidor:</strong> <code>DUPLICADO … descartado, nada recalculado</code>;
-        <code>FORA DE ORDEM … inserido na posicao original … preenche a lacuna</code>;
-        <code>SALTO … 5 heartbeat(s) perdido(s)</code>. O estado continua o mesmo.</dd>
+        <strong>Servidor:</strong> três linhas, uma por aperto:
+<div class="term"><span class="y">  ! REPETIDA</span>      a nº 92 já tinha chegado; ignorada
+<span class="y">  ! FORA DE ORDEM</span> a nº 100 chegou depois da nº 101; posta no lugar certo (não estava perdida)
+<span class="r">  ! SALTO</span>         esperava a nº 107, veio a nº 112: 5 perdida(s)</div>
+        (os números vão ser outros). A situação continua a mesma: nenhuma dessas mensagens muda a conta.</dd>
         <dt>O que falar</dt><dd>As três respostas que a atividade pede:
         <strong>por que um sistema ingênuo erraria</strong> (contaria o repetido duas vezes, voltaria no
         tempo com o atrasado, trataria o buraco como se tivesse sido observado);
@@ -1029,16 +1057,21 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       <div class="teste-h"><span class="id">C8</span><span class="t">Teste 4 · Queda de rede</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>Aperte o botão <strong>vermelho</strong> (REDE OFF) segurando 1 s. Espere o
-        servidor escrever <code>SILENCIO</code> e mais uns 10 s. Aperte o vermelho de novo.</dd>
+        servidor escrever <code>… SILÊNCIO</code> e mais uns 10 s. Aperte o vermelho de novo.</dd>
         <dt>Por quê</dt><dd>Simula o celular perdendo a rede. Mostra que o sistema não confunde
         silêncio com ausência e que nenhum dado se perde.</dd>
         <dt>Tem que aparecer</dt><dd><strong>Wokwi:</strong> OLED <code>REDE OFF</code> e
         <code>fila N/60 retidos</code>; <strong>todos os LEDs apagam</strong>. No serial,
         <code>[REDE] indisponivel: heartbeat seq=… retido</code>. Na volta,
         <code>[RETRY] N heartbeat(s) retidos entregues com atraso</code>.<br>
-        <strong>Servidor:</strong> <code>SILENCIO … Nada e decidido sem dado</code>; depois
-        <code>RETOMADO</code> e várias linhas <code>ATRASADO … entra no passado e a sessao e recalculada</code>.
-        O acumulado segue sem buraco.</dd>
+        <strong>Servidor:</strong>
+<div class="term"><span class="m">  … SILÊNCIO</span>      nada chega há 6 s (rede, bateria ou app); nada é decidido sem mensagem
+<span class="c">  + VOLTOU</span>        as mensagens voltaram a chegar
+<span class="c">  ~ ATRASADA</span>      a nº 133 ficou guardada sem rede; entrou no passado
+<span class="c">  ~ ATRASADA</span>      a nº 134 ficou guardada sem rede; entrou no passado
+  …</div>
+        Uma linha <code>~ ATRASADA</code> para cada mensagem guardada. O “tempo que contou” continua sem buraco:
+        o tempo sem rede também contou, porque as mensagens mostram que o estudante estava na sala.</dd>
         <dt>O que falar</dt><dd>“Silêncio não é ausência: pode ser rede, bateria ou o app. O servidor não
         decide nada sem dado. O aparelho guarda tudo com o horário original e, quando a rede volta, o
         servidor encaixa no passado e refaz a conta. E os LEDs apagam porque mostrar um ‘presente’
@@ -1057,21 +1090,27 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         que, no sistema real, vai para a lista do professor.</dd>
         <dt>Tem que aparecer</dt><dd><strong>Wokwi:</strong> buzzer e o OLED com “Voce acumulou N% desta
         aula.”, com <code>FIM</code> na linha do acumulado.<br>
-        <strong>Servidor:</strong> o <strong>RELATÓRIO FINAL DA SESSAO</strong>, assim (saída real da execução
-        registrada):
-<div class="term"><span class="c">  RELATORIO FINAL DA SESSAO s31a2
-  estado: PRESENTE   t=100.0 s de 100 s
-  acumulado garantido: 98.6 s (98.6%)   provisorio: 0.0 s   -&gt; APROVADO na aula (minimo 75%)
-  presenca confirmada 71.1 s + ausencia creditada 27.5 s   orcamento usado 27.5 de 30 s
-  contador ingenuo (ao vivo, sem dedup): 67.0 s
-    t=   1.4s  FORA -&gt; PRESENTE  (sinal na sala sustentado)
-    t=   8.8s  PRESENTE -&gt; AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
-    t=  36.3s  AUSENCIA_TOLERADA -&gt; PRESENTE  (retornou dentro do orcamento)
-  aceitos=188 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=41 invalidos=0</span></div>
+        <strong>Servidor:</strong> o <strong>RESULTADO FINAL DA AULA</strong>. Com os números da execução
+        registrada, ele fica assim:
+<div class="term"><span class="c">  ══ RESULTADO FINAL DA AULA s31a2 ══════════════════════════
+  Situação:          PRESENTE
+  Tempo de aula:     100,0 s de 100 s
+  Tempo que contou:  98,6 s  = 99 % da aula
+     dentro da sala: 71,1 s
+     saídas perdoadas: 27,5 s
+  Tolerância usada:  27,5 s de 30 s
+  Resultado:         APROVADO nesta aula (precisa de 75 %)
+  O que aconteceu:
+       1,4 s  entrou na sala
+       8,8 s  saiu da sala → começou a usar a tolerância
+      36,3 s  voltou a tempo → nada foi descontado
+  Mensagens:  recebidas: 188 · repetidas: 1 · fora de ordem: 1
+              perdidas: 5 · atrasadas: 41 · inválidas: 0
+  Um contador simples, sem estas regras, teria somado 67,0 s.</span></div>
         Os números do seu dia vão ser parecidos, não iguais: dependem de quando você mexeu em cada coisa.
         Depois do fim, o servidor ignora os heartbeats seguintes até você digitar <code>n</code>.</dd>
         <dt>O que falar</dt><dd>“A ausência do corredor foi creditada porque eu voltei a tempo e fiquei
-        o tempo de requalificação. O ‘contador ingênuo’, que só soma meio segundo por heartbeat, daria
+        o tempo de requalificação. O “contador simples” da última linha, que só soma meio segundo por mensagem, daria
         bem menos e reprovaria quem saiu com tolerância. Por isso a conta é refeita sobre o registro
         inteiro.”</dd>
         <dt>Se demorar</dt><dd>A aula tem 100 s simulados; com o Wokwi lento, isso pode levar uns 5 minutos
@@ -1102,8 +1141,9 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         <dt>Tem que aparecer</dt><dd><strong>Wokwi:</strong> <code>A-- B-- C--</code>, <code>AUSENCIA</code>,
         os dois avisos e, no fim, <code>FORA</code>, LED vermelho e “O tempo parou de ser contabilizado em
         t=…”.<br>
-        <strong>Servidor:</strong> <code>LIMITE_ESGOTADO</code>, <code>orc 0.0s</code> e o acumulado
-        <strong>igual ao de antes de sair</strong>.</dd>
+        <strong>Servidor:</strong> os dois quadros de aviso, depois um terceiro (“O tempo parou de ser
+        contabilizado…”), a linha <code>&gt;&gt;&gt; … s: a tolerância acabou → o tempo fora não conta</code> e a
+        situação <code>FORA - não conta</code>. O “tempo que contou” fica <strong>igual ao de antes de sair</strong>.</dd>
         <dt>O que falar</dt><dd>“A tolerância é de 15 minutos por aula, somando todas as saídas. Acabou
         sem volta: a ausência inteira é descontada, e o aviso diz a hora em que o tempo parou de contar,
         que é quando a pessoa saiu. É esse horário que o estudante usaria para contestar.”</dd>
@@ -1128,20 +1168,20 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
         <dt>Tem que aparecer</dt><dd><strong>Wokwi (serial):</strong> de novo o começo
         (<code>=== Presenca / aparelho do estudante ===</code>), com um <code>boot=</code> diferente do anterior,
         e depois heartbeats com <code>sequence</code> recomeçando em 1.<br>
-        <strong>Servidor:</strong> enquanto o ESP32 religa, <code>SILENCIO</code>; depois <code>RETOMADO</code> e
-        linhas com <code>seq=1</code>, <code>seq=2</code>… <strong>sem nenhum <code>DUPLICADO</code></strong>. O estado volta a
-        <code>PRESENTE</code> (a presença volta a contar, mas o orçamento continua esgotado: a aula é a mesma).</dd>
+        <strong>Servidor:</strong> enquanto o ESP32 religa, <code>… SILÊNCIO</code>; depois <code>+ VOLTOU</code> e
+        mensagens <code>nº 1</code>, <code>nº 2</code>… <strong>sem nenhum <code>! REPETIDA</code></strong>. A situação volta a
+        <code>PRESENTE</code> (a presença volta a contar, mas a tolerância continua esgotada: a aula é a mesma).</dd>
         <dt>O que falar</dt><dd>“Reiniciar o celular não pode fazer o sistema achar que é tudo cópia. Por
         isso a identidade do heartbeat tem o boot. Esse problema eu só descobri rodando: num protótipo
         anterior, cada reinício deixava o aparelho mudo.”</dd>
-        <dt>Se der errado</dt><dd>Aparece <code>DUPLICADO</code> em sequência: me avise (não deveria
+        <dt>Se der errado</dt><dd>Aparece <code>! REPETIDA</code> em sequência: me avise (não deveria
         acontecer). O OLED fica em <code>SEM RESP.</code> por uns segundos: normal enquanto reconecta.</dd>
       </dl></div>
     </div>
 
     <div class="callout">
       <span class="tag">Painel a qualquer momento</span>
-      <p>No terminal do servidor, <code>p</code> e <kbd>Enter</kbd> mostram o resumo da aula: estado, acumulado,
+      <p>No terminal do servidor, <code>p</code> e <kbd>Enter</kbd> mostram o resumo da aula: situação, tempo que contou,
       orçamento, contadores (repetidos, fora de ordem, saltos, atrasados) e cada mudança de estado com o
       horário.</p>
     </div>
@@ -1242,10 +1282,10 @@ python consumidor.py</div></li>
       <tr><td><code>cd</code>: <code>Não é possível localizar um parâmetro posicional que aceite o argumento 'PARA'</code></td><td>O caminho foi digitado sem aspas; o PowerShell corta no primeiro espaço</td><td>Cole o comando do guia, com as aspas</td></tr>
       <tr><td><code>cd</code>: <code>PathNotFound</code> / <code>não existe</code></td><td>Nome da pasta digitado errado (ex. <code>projetopresenca</code> sem hífen)</td><td>Cole o comando do guia em vez de digitar</td></tr>
       <tr><td><code>ModuleNotFoundError: No module named 'paho'</code></td><td>Bibliotecas não instaladas</td><td>A4</td></tr>
-      <tr><td>O servidor não mostra <code>[MQTT] conectado</code></td><td>A rede bloqueia a porta 1883</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> e <code>python servidor.py --ws</code>; se ainda não conectar, 4G do celular</td></tr>
+      <tr><td>O servidor não mostra <code>Conectado ao broker…</code></td><td>A rede bloqueia a porta 1883</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> e <code>python servidor.py --ws</code>; se ainda não conectar, 4G do celular</td></tr>
       <tr><td>Com <code>--ws</code>, a primeira resposta demora uns segundos</td><td>O WebSocket tem mais etapas para abrir</td><td>Normal; depois fica rápido</td></tr>
       <tr><td>Wokwi em “Compiling…” ou “Build Servers Busy”</td><td>Fila do plano gratuito</td><td>Espere até 1–2 min</td></tr>
-      <tr><td>Relógio do Wokwi parado e servidor escrevendo <code>SILENCIO</code></td><td>A janela ou aba do Wokwi ficou escondida e o navegador congelou a simulação</td><td>Traga o navegador para frente (B6)</td></tr>
+      <tr><td>Relógio do Wokwi parado e servidor escrevendo <code>… SILÊNCIO</code></td><td>A janela ou aba do Wokwi ficou escondida e o navegador congelou a simulação</td><td>Traga o navegador para frente (B6)</td></tr>
       <tr><td>OLED com <code>SEM RESP.</code> e LEDs apagados</td><td>O servidor não está rodando ou não conectou. É o comportamento seguro funcionando</td><td>B3</td></tr>
       <tr><td>Apertei o botão e nada aconteceu</td><td>Clique rápido demais para o tempo simulado</td><td>Segure 1 s</td></tr>
       <tr><td>Depois de reiniciar, o estado não é o esperado</td><td>O ↻ não volta os potenciômetros ao lugar, e a aula antiga continua no servidor</td><td>Refaça a posição “dentro da sala” e digite <code>n</code> no servidor</td></tr>
@@ -1912,6 +1952,13 @@ else if (melhor &lt; LIMIAR_SAIDA)     nova = REG_FORA;      // -85 dBm
   <section id="p8">
     <div class="sec-head"><span class="sec-n">08</span><h2>Testes executados no Wokwi</h2></div>
 
+    <div class="callout">
+      <span class="tag">Sobre o formato dos logs desta seção</span>
+      <p>Os trechos de terminal abaixo são da execução registrada, quando o servidor ainda escrevia as
+      mensagens em formato técnico (<code>DUPLICADO</code>, <code>t=</code>, <code>acum</code>…). Depois disso, as
+      mensagens da tela foram reescritas em português simples, sem mudar nenhuma regra. O que você vai
+      ver no dia está no Guia do dia, passo B3 e passos C5 a C9b.</p>
+    </div>
     <p>Tudo abaixo foi executado em 25/09/2026, com o aparelho no Wokwi e o servidor no notebook
     falando pelo <code>broker.hivemq.com:1883</code>. Não há simulação de resultado: as capturas são
     da tela do Wokwi, e os trechos de terminal foram copiados dos logs em

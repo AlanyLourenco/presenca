@@ -139,7 +139,7 @@ python servidor.py          # usa config.json, ou config.exemplo.json
 python -m pytest testes -q  # 34 testes
 ```
 
-Teclas: `p` painel · `n` nova sessão · `q` sair.
+Teclas: `n` aula nova · `p` resumo · `q` sair (sempre com Enter). As mensagens da tela são em português simples, para a banca acompanhar.
 
 **Rede que bloqueia a porta 1883** (a da faculdade): `python servidor.py --ws`. O servidor
 passa a falar MQTT dentro de um WebSocket seguro (`wss://broker.hivemq.com:8884/mqtt`), que

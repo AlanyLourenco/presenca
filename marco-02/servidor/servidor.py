@@ -59,13 +59,27 @@ VERDE, AMARELO, VERMELHO, CIANO, MAGENTA, CINZA, NEGRITO, RESET = (
 )
 COR_ESTADO = {"PRESENTE": VERDE, "AUSENCIA_TOLERADA": AMARELO, "FORA": VERMELHO}
 
+# O que aparece na tela e para ser lido por quem nao e da area.
+MUDANCA = {
+    "sinal na sala sustentado": "entrou na sala",
+    "sinal fora da sala sustentado": "saiu da sala → começou a usar a tolerância",
+    "retornou dentro do orcamento": "voltou a tempo → nada foi descontado",
+    "orcamento de ausencia esgotado": "a tolerância acabou → o tempo fora não conta",
+    "saiu sem orcamento restante": "saiu, e a tolerância já tinha acabado",
+}
+ONDE = {"dentro": "na sala", "fora": "fora da sala", "neutro": "incerto"}
+
+
+def num(x, casas=1):
+    """12.3 -> '12,3' (numero em portugues)."""
+    return f"{x:.{casas}f}".replace(".", ",")
+
 
 def carregar_config():
     for nome in ("config.json", "config.exemplo.json"):
         caminho = os.path.join(AQUI, nome)
         if os.path.exists(caminho):
             with open(caminho, encoding="utf-8") as f:
-                print(f"{CINZA}configuracao: {nome}{RESET}")
                 return json.load(f)
     raise SystemExit("Nenhum config.json ou config.exemplo.json encontrado.")
 
@@ -168,10 +182,10 @@ class Servidor:
 
     # -- MQTT ----------------------------------------------------------------
     def _ao_conectar(self, cliente, userdata, flags, rc, properties=None):
-        print(f"{VERDE}[MQTT] conectado a {self.cfg['broker']}:{self.porta} "
-              f"({descrever_transporte(self.cfg)}){RESET}")
         cliente.subscribe(self.cfg["topico_heartbeat"], qos=1)
-        print(f"{CINZA}[MQTT] assinando {self.cfg['topico_heartbeat']}{RESET}")
+        print(f"{VERDE}Conectado ao {self.cfg['broker']}, porta {self.porta} "
+              f"({'WebSocket seguro' if usar_websocket(self.cfg) else 'MQTT comum'}).{RESET}")
+        print(f"{CINZA}Esperando as mensagens do aparelho (o ESP32 no Wokwi).{RESET}")
         self._cabecalho_sessao()
 
     def _ao_receber(self, cliente, userdata, msg):
@@ -180,7 +194,7 @@ class Servidor:
             self.ultimo_hb_real = time.time()
             if self.em_silencio:
                 self.em_silencio = False
-                self._linha(CIANO, "RETOMADO", "heartbeats voltaram a chegar")
+                self._aviso_linha(CIANO, "+ VOLTOU", "as mensagens voltaram a chegar")
             self._processar(msg.payload, recebido_em)
 
     # -- nucleo --------------------------------------------------------------
@@ -206,13 +220,13 @@ class Servidor:
             dado = json.loads(payload.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as erro:
             s.contagem["invalidos"] += 1
-            self._linha(VERMELHO, "INVALIDO", f"payload ilegivel: {erro}")
+            self._aviso_linha(VERMELHO, "x INVÁLIDA", "não é um JSON legível; descartada")
             return
 
         motivo = self._validar(dado)
         if motivo:
             s.contagem["invalidos"] += 1
-            self._linha(VERMELHO, "INVALIDO", f"rejeitado pelo contrato - {motivo}")
+            self._aviso_linha(VERMELHO, "x INVÁLIDA", f"fora do contrato ({motivo}); descartada")
             return
 
         # contador ingenuo: soma 0,5 s a cada heartbeat "dentro", do jeito que
@@ -229,7 +243,7 @@ class Servidor:
         # 1. DUPLICATA - mesma identidade ja processada
         if eid in s.vistos:
             s.contagem["duplicados"] += 1
-            self._linha(AMARELO, "DUPLICADO", f"{eid} ja processado - descartado, nada recalculado")
+            self._aviso_linha(AMARELO, "! REPETIDA", f"a nº {seq} já tinha chegado; ignorada")
             self._gravar(dado, recebido_em, "duplicado", None)
             return
 
@@ -247,10 +261,10 @@ class Servidor:
                 # so chegou atrasado
                 lacunas.discard(seq)
                 s.contagem["perdidos"] -= 1
-                extra = " - preenche a lacuna: nao estava perdido, so atrasado"
-            self._linha(AMARELO, "FORA DE ORDEM",
-                        f"seq={seq} chegou depois de {maior} - inserido na posicao "
-                        f"original e sessao recalculada{extra}")
+                extra = " (não estava perdida)"
+            self._aviso_linha(AMARELO, "! FORA DE ORDEM",
+                              f"a nº {seq} chegou depois da nº {maior}; "
+                              f"posta no lugar certo{extra}")
 
         # 3. SALTO - lacuna na sequencia
         elif maior and seq > maior + 1:
@@ -258,16 +272,15 @@ class Servidor:
             lacunas.update(range(maior + 1, seq))
             s.contagem["saltos"] += 1
             s.contagem["perdidos"] += faltam
-            self._linha(VERMELHO, "SALTO",
-                        f"esperado {maior + 1}, recebido {seq} - {faltam} heartbeat(s) "
-                        f"perdido(s); o intervalo fica sem evidencia")
+            self._aviso_linha(VERMELHO, "! SALTO",
+                              f"esperava a nº {maior + 1}, veio a nº {seq}: "
+                              f"{faltam} perdida(s)")
 
         if dado.get("bufferizado"):
             s.contagem["atrasados"] += 1
             classificacao = "atrasado"
-            self._linha(CIANO, "ATRASADO",
-                        f"seq={seq} retido no aparelho, medido em {dado['eventTimeMs']} ms "
-                        f"- entra no passado e a sessao e recalculada")
+            self._aviso_linha(CIANO, "~ ATRASADA",
+                              f"a nº {seq} ficou guardada sem rede; entrou no passado")
 
         s.vistos.add(eid)
         s.maior_seq[boot] = max(maior, seq)
@@ -339,8 +352,9 @@ class Servidor:
             self.cliente.publish(f"{self.cfg['topico_aviso']}/{aluno}",
                                  json.dumps(msg, separators=(",", ":")), qos=1)
             cor = VERMELHO if aviso.tipo != FIM_DA_AULA else CIANO
-            print(f"\n{cor}{NEGRITO}{'=' * 72}\n  AVISO AO ESTUDANTE  [{aviso.tipo}]  "
-                  f"t={aviso.em:.1f} s\n  \"{texto}\"\n{'=' * 72}{RESET}\n")
+            print(f"\n{cor}{NEGRITO}  ┌─ AVISO ENVIADO AO ESTUDANTE, aos {num(aviso.em)} s ─────────")
+            print(f"  │ {texto}")
+            print(f"  └──────────────────────────────────────────────────{RESET}\n")
 
     # -- silencio ------------------------------------------------------------
     def _vigiar_silencio(self):
@@ -351,29 +365,30 @@ class Servidor:
                         and not self.sessao.encerrada
                         and time.time() - self.ultimo_hb_real > limite):
                     self.em_silencio = True
-                    self._linha(MAGENTA, "SILENCIO",
-                                f"nenhum heartbeat ha {limite} s - rede, bateria ou app. "
-                                f"Nada e decidido sem dado; o que chegar depois entra no passado")
+                    self._aviso_linha(MAGENTA, "… SILÊNCIO",
+                                      f"nada chega há {limite} s (rede, bateria ou app); "
+                                      f"nada é decidido sem mensagem")
 
     # -- saida ---------------------------------------------------------------
-    def _linha(self, cor, rotulo, texto):
-        agora = datetime.now().strftime("%H:%M:%S")
-        print(f"{CINZA}{agora}{RESET} {cor}{rotulo:<14}{RESET} {texto}")
+    def _aviso_linha(self, cor, rotulo, texto):
+        print(f"  {cor}{rotulo:<15}{RESET} {texto}")
 
     def _mostrar(self, dado, t, classe, pos, r, mudou):
-        rssi = " ".join(
-            a["id"][-1] + ("  --" if a["rssi"] is None else f"{a['rssi']:5.0f}")
-            for a in dado["ancoras"])
-        onde = "sem posicao" if pos is None else f"({pos[0]:5.1f},{pos[1]:5.1f})"
+        onde = ONDE.get(classe, classe)
+        if dado.get("state") == "FORA_ALCANCE" and all(a["rssi"] is None for a in dado["ancoras"]):
+            onde = "sem sinal"
+        if r.estado == "AUSENCIA_TOLERADA":
+            situacao = f"SAIU - restam {num(r.orcamento_restante_s)} s"
+        elif r.estado == "FORA":
+            situacao = "FORA - não conta"
+        else:
+            situacao = r.estado
         cor = COR_ESTADO.get(r.estado, RESET)
-        self._linha(cor, f"t={t:6.1f}s",
-                    f"seq={dado['sequence']:<4} {rssi}  {dado['state']:<14} "
-                    f"{onde} {classe:<6} -> {r.estado:<17} "
-                    f"acum {r.acumulado_s:5.1f}s ({r.percentual(self.p):4.1f}%) "
-                    f"orc {r.orcamento_restante_s:4.1f}s")
+        print(f"{CINZA}{num(t) + ' s':>8}  {'nº ' + str(dado['sequence']):<10}{RESET}{onde:<14}"
+              f"{cor}{situacao:<24}{RESET}{num(r.acumulado_s)} s")
         if mudou and r.transicoes:
             tt, de, para, porque = r.transicoes[-1]
-            print(f"{cor}{NEGRITO}      >>> {de} -> {para} em t={tt:.1f} s ({porque}){RESET}")
+            print(f"{cor}{NEGRITO}  >>> {num(tt)} s: {MUDANCA.get(porque, porque)}{RESET}")
 
     def _gravar(self, dado, recebido_em, classificacao, derivado):
         self.log.write(json.dumps({
@@ -387,34 +402,44 @@ class Servidor:
 
     def _cabecalho_sessao(self):
         p = self.p
-        print(f"\n{CIANO}{NEGRITO}=== sessao {self.sessao.id} aberta ==={RESET}")
-        print(f"{CINZA}escala 1:{p.escala:.0f}  aula {p.duracao_aula:.0f} s  "
-              f"persistencia {p.persistencia:.0f} s  orcamento {p.orcamento:.0f} s  "
-              f"avisos em {p.aviso_1:.0f} s e {p.aviso_2:.0f} s  "
-              f"requalificacao {p.requalificacao:.0f} s{RESET}\n")
+        print(f"\n{CIANO}{NEGRITO}── AULA {self.sessao.id} COMEÇOU ──────────────────────────────{RESET}")
+        print(f"{CINZA}  dura {num(p.duracao_aula, 0)} s · pode sair por até {num(p.orcamento, 0)} s no total · "
+              f"avisos aos {num(p.aviso_1, 0)} s e {num(p.aviso_2, 0)} s fora")
+        print(f"  (na demonstração, 1 s = {num(p.escala, 0)} s de uma aula de verdade)")
+        print(f"\n{'tempo':>8}  {'mensagem':<10}{'onde':<14}{'situação':<24}tempo que contou{RESET}")
 
     def painel(self, final=False):
         s, r = self.sessao, self.sessao.ultimo_resultado
         c = s.contagem
-        titulo = "RELATORIO FINAL DA SESSAO" if final else "painel da sessao"
-        print(f"\n{CIANO}{'-' * 72}\n  {titulo} {s.id}")
+        p = self.p
+        titulo = "RESULTADO FINAL DA AULA" if final else "RESUMO DA AULA"
+        print(f"\n{CIANO}{NEGRITO}  ══ {titulo} {s.id} ══════════════════════════{RESET}{CIANO}")
         if r:
-            situacao = ("APROVADO na aula" if r.acumulado_s >= self.p.presenca_minima * self.p.duracao_aula
-                        else "abaixo do minimo")
-            print(f"  estado: {r.estado}   t={r.agora:.1f} s de {self.p.duracao_aula:.0f} s")
-            print(f"  acumulado garantido: {r.acumulado_s:.1f} s ({r.percentual(self.p):.1f}%)"
-                  f"   provisorio: {r.provisorio_s:.1f} s"
-                  + (f"   -> {situacao} (minimo {self.p.presenca_minima:.0%})" if final else ""))
-            print(f"  presenca confirmada {r.presenca_s:.1f} s + ausencia creditada "
-                  f"{r.ausencia_creditada_s:.1f} s   orcamento usado {r.ausencia_usada_s:.1f} "
-                  f"de {self.p.orcamento:.0f} s")
-            print(f"  contador ingenuo (ao vivo, sem dedup): {s.ingenuo_s:.1f} s")
-            for tt, de, para, porque in r.transicoes:
-                print(f"    t={tt:6.1f}s  {de} -> {para}  ({porque})")
-        print(f"  aceitos={c['aceitos']} duplicados={c['duplicados']} "
-              f"fora de ordem={c['fora_de_ordem']} saltos={c['saltos']} "
-              f"({c['perdidos']} perdidos) atrasados={c['atrasados']} invalidos={c['invalidos']}")
-        print(f"{'-' * 72}{RESET}\n")
+            situacao = {"PRESENTE": "PRESENTE", "AUSENCIA_TOLERADA": "FORA, ainda na tolerância",
+                        "FORA": "FORA, sem contar"}.get(r.estado, r.estado)
+            print(f"  Situação:          {situacao}")
+            print(f"  Tempo de aula:     {num(r.agora)} s de {num(p.duracao_aula, 0)} s")
+            print(f"  Tempo que contou:  {num(r.acumulado_s)} s  = {num(r.percentual(p), 0)} % da aula")
+            print(f"     dentro da sala: {num(r.presenca_s)} s")
+            print(f"     saídas perdoadas: {num(r.ausencia_creditada_s)} s")
+            if r.provisorio_s > 0.05:
+                print(f"     ainda em aberto: {num(r.provisorio_s)} s (pode entrar ou sair da conta)")
+            print(f"  Tolerância usada:  {num(r.ausencia_usada_s)} s de {num(p.orcamento, 0)} s")
+            if final:
+                ok = r.acumulado_s >= p.presenca_minima * p.duracao_aula
+                print(f"  {NEGRITO}Resultado:         {'APROVADO' if ok else 'REPROVADO'} nesta aula "
+                      f"(precisa de {num(p.presenca_minima * 100, 0)} %){RESET}{CIANO}")
+            if r.transicoes:
+                print("  O que aconteceu:")
+                for tt, de, para, porque in r.transicoes:
+                    print(f"     {num(tt):>5} s  {MUDANCA.get(porque, porque)}")
+        print(f"  Mensagens:  recebidas: {c['aceitos']} · repetidas: {c['duplicados']} · "
+              f"fora de ordem: {c['fora_de_ordem']}")
+        print(f"              perdidas: {c['perdidos']} · atrasadas: {c['atrasados']} · "
+              f"inválidas: {c['invalidos']}")
+        if r:
+            print(f"  Um contador simples, sem estas regras, teria somado {num(s.ingenuo_s)} s.")
+        print(f"  ══════════════════════════════════════════════════{RESET}\n")
 
     # -- terminal ------------------------------------------------------------
     def _laco_teclado(self):
@@ -430,20 +455,22 @@ class Servidor:
                     self.sessao = Sessao()
                     self._cabecalho_sessao()
                 elif t:
-                    print(f"{CINZA}comandos: p (painel) | n (nova sessao) | q (sair){RESET}")
+                    print(f"{CINZA}Teclas: n = aula nova · p = resumo · q = sair (sempre com Enter){RESET}")
 
     def executar(self):
-        print(f"\n{CIANO}=== Presenca / servidor de permanencia ==={RESET}")
-        print(f"{CINZA}p painel | n nova sessao | q sair{RESET}")
+        print(f"\n{CIANO}{NEGRITO}══ Presença · servidor de permanência ══{RESET}")
+        print(f"{CINZA}Teclas: n = aula nova · p = resumo · q = sair (sempre com Enter){RESET}")
         self.cliente.connect(self.cfg["broker"], self.porta, 60)
         self.cliente.loop_start()
         threading.Thread(target=self._laco_teclado, daemon=True).start()
         threading.Thread(target=self._vigiar_silencio, daemon=True).start()
         try:
-            while not self.parar.wait(self.cfg.get("intervalo_painel_s", 30)):
-                with self.trava:
-                    if self.sessao.log and not self.sessao.encerrada:
-                        self.painel()
+            intervalo = self.cfg.get("intervalo_painel_s", 0)   # 0 = so com a tecla p
+            while not self.parar.wait(intervalo if intervalo > 0 else 3600):
+                if intervalo > 0:
+                    with self.trava:
+                        if self.sessao.log and not self.sessao.encerrada:
+                            self.painel()
         except KeyboardInterrupt:
             pass
         finally:

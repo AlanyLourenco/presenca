@@ -100,14 +100,14 @@ def test_estado_e_retido_e_por_aluno(s):
 
 def test_campo_desconhecido_e_rejeitado_pelo_contrato(s):
     saida = enviar(s, hb(s, 1, bateria=63))
-    assert "INVALIDO" in saida
+    assert "INVÁLIDA" in saida
     assert s.sessao.contagem["invalidos"] == 1 and not s.sessao.log
 
 
 def test_duplicata_nao_entra_no_log(s):
     enviar(s, hb(s, 1))
     saida = enviar(s, hb(s, 1))
-    assert "DUPLICADO" in saida
+    assert "REPETIDA" in saida
     assert len(s.sessao.log) == 1
 
 
@@ -124,7 +124,7 @@ def test_atrasado_que_preenche_lacuna_nao_fica_como_perdido(s):
         enviar(s, hb(s, i))
     assert s.sessao.contagem["perdidos"] == 1
     saida = enviar(s, hb(s, 3))
-    assert "preenche a lacuna" in saida
+    assert "não estava perdida" in saida
     assert s.sessao.contagem["perdidos"] == 0
 
 
@@ -139,7 +139,7 @@ def test_reboot_nao_vira_duplicata(s):
     for i in range(1, 5):
         enviar(s, hb(s, i, boot="a1b2"))
     saida = enviar(s, hb(s, 1, boot="c3d4"))
-    assert "DUPLICADO" not in saida
+    assert "REPETIDA" not in saida
     assert len(s.sessao.log) == 5
     assert max(e["t"] for e in s.sessao.log) > 2.0      # encaixado depois
 
@@ -152,7 +152,7 @@ def test_lote_atrasado_recalcula_o_passado(s):
     antes = s.sessao.ultimo_resultado.acumulado_s
     for i in range(11, 21):
         saida = enviar(s, hb(s, i, bufferizado=True))
-    assert "ATRASADO" in saida
+    assert "ATRASADA" in saida
     assert s.sessao.ultimo_resultado.acumulado_s >= antes
     assert s.sessao.ultimo_resultado.estado == "PRESENTE"
 
