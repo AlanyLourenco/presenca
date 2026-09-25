@@ -760,21 +760,39 @@ python consumidor.py</div></li>
           <li><strong>Normal:</strong> no terminal do gateway digite <code>0</code> e <kbd>Enter</kbd>. LED verde,
           <code>COERENTE</code>.</li>
           <li><strong>Decisão:</strong> digite <code>25</code> e <kbd>Enter</kbd>, com o potenciômetro baixo (pouco
-          CO₂). Em ~10 s: LED vermelho e <strong>ALERTA DE INCOERÊNCIA</strong> no gateway.</li>
-          <li><strong>Adversarial:</strong> botão azul duas vezes: <code>DUPLICADO</code> e <code>FORA DE ORDEM</code>.</li>
+          CO₂). Em ~10 s: LED vermelho e o quadro <strong>ALERTA: O RÁDIO E O CO₂ NÃO BATEM</strong> no gateway.</li>
+          <li><strong>Adversarial:</strong> botão azul duas vezes: <code>! REPETIDA</code> e <code>! FORA DE ORDEM</code>.</li>
         </ol></dd>
         <dt>Por quê</dt><dd>É a defesa contra a fraude que o rádio não pega: a turma deixa os celulares
         na sala e vai embora. Os celulares dizem “25 estudantes”; o CO₂ da sala diz “ninguém respira
         aqui”. O número que você digita é a contagem que o rádio declara.</dd>
-        <dt>Tem que aparecer</dt><dd>
-<div class="term">02:19:26 <span class="y">DUPLICADO</span>      anc-204-A#4 ja processado - descartado sem efeito no estado
-02:19:43 <span class="y">FORA DE ORDEM</span>  seq=6 chegou depois de 7 (1 atras) - aceito, nao retrocede o estado
-02:19:59 seq=10           468.9 ppm  co2=VAZIA         radio=25  <span class="r">INCOERENTE</span>
-<span class="r">  ALERTA DE INCOERENCIA DE OCUPACAO
-  O radio declara 25 estudantes,
-  mas o CO2 em 469 ppm indica sala VAZIA.</span></div></dd>
-        <dt>Teclas do gateway</dt><dd>um número = contagem do rádio · <code>p</code> painel · <code>r</code> zera os
-        contadores (use depois de reiniciar a simulação) · <code>q</code> sai.</dd>
+        <dt>Tem que aparecer</dt><dd>Cada mensagem da âncora vira uma linha com colunas (os números vão
+        ser outros):
+<div class="term">  → enviado à âncora: o rádio declara 25 estudante(s) na sala
+
+  mensagem  CO₂        o CO₂ diz      o rádio diz     situação
+  nº 2       469 ppm   sala vazia     25 estudantes   <span class="y">ATENÇÃO</span>
+<span class="y">  ! REPETIDA</span>       a nº 2 já tinha chegado; ignorada
+<span class="y">  ! FORA DE ORDEM</span>  a nº 3 chegou depois da nº 4; guardada, sem voltar atrás
+  nº 5       469 ppm   sala vazia     25 estudantes   <span class="r">INCOERENTE</span>
+
+<span class="r">  ┌─ ALERTA: O RÁDIO E O CO₂ NÃO BATEM ───────────────
+  │ O rádio diz que há 25 estudantes na sala,
+  │ mas o CO₂ (469 ppm) diz que a sala está vazia.
+  │ Suspeita: os celulares ficaram na sala sem os donos.
+  │ A aula foi marcada para o professor revisar.
+  └────────────────────────────────────────────────────</span></div>
+        <div class="tw"><table>
+          <tr><th>Coluna</th><th>O que quer dizer</th></tr>
+          <tr><td>mensagem</td><td>Número da mensagem que a âncora mandou (a cada 2 s)</td></tr>
+          <tr><td>CO₂</td><td>A concentração medida, em ppm (partes por milhão)</td></tr>
+          <tr><td>o CO₂ diz</td><td>O que a âncora concluiu só pelo ar: <code>sala vazia</code>, <code>sala ocupada</code> ou <code>indefinido</code></td></tr>
+          <tr><td>o rádio diz</td><td>Quantos estudantes o rádio (os celulares) declara, o número que você digitou</td></tr>
+          <tr><td>situação</td><td><code>COERENTE</code> (os dois concordam), <code>ATENÇÃO</code> (ainda não dá para dizer), <code>INCOERENTE</code> (discordam)</td></tr>
+        </table></div></dd>
+        <dt>Teclas do gateway</dt><dd>um número + <kbd>Enter</kbd> = quantos estudantes o rádio declara ·
+        <code>p</code> = resumo da sala · <code>r</code> = zera os contadores (use depois de reiniciar a
+        simulação) · <code>q</code> = sai.</dd>
       </dl></div>
     </div>
     {{anot:wk-co2}}

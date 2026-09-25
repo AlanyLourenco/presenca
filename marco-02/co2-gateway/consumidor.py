@@ -46,10 +46,14 @@ except Exception:
     pass
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
+
+# O que aparece na tela e para ser lido por quem nao e da area.
+CO2_DIZ = {"VAZIA": "sala vazia", "OCUPADA": "sala ocupada", "INDETERMINADA": "indefinido"}
+SITUACAO = {"COERENTE": "COERENTE", "ATENCAO": "ATENÇÃO", "INCOERENTE": "INCOERENTE"}
 RAIZ = os.path.dirname(AQUI)
 
-VERDE, AMARELO, VERMELHO, CIANO, CINZA, RESET = (
-    "\033[32m", "\033[33m", "\033[31m", "\033[36m", "\033[90m", "\033[0m",
+VERDE, AMARELO, VERMELHO, CIANO, CINZA, NEGRITO, RESET = (
+    "\033[32m", "\033[33m", "\033[31m", "\033[36m", "\033[90m", "\033[1m", "\033[0m",
 )
 
 
@@ -62,7 +66,6 @@ def carregar_config():
         if os.path.exists(caminho):
             with open(caminho, encoding="utf-8") as f:
                 cfg = json.load(f)
-            print(f"{CINZA}configuracao: {nome}{RESET}")
             return cfg
     raise SystemExit("Nenhum config.json ou config.exemplo.json encontrado.")
 
@@ -193,11 +196,12 @@ class Gateway:
 
     # -- MQTT ---------------------------------------------------------------
     def _ao_conectar(self, cliente, userdata, flags, rc, properties=None):
-        print(f"{VERDE}[MQTT] conectado a {self.cfg['broker']}:{self.porta} "
-              f"({descrever_transporte(self.cfg)}){RESET}")
         cliente.subscribe(self.cfg["topico_ambiente"], qos=1)
-        print(f"{CINZA}[MQTT] assinando {self.cfg['topico_ambiente']}{RESET}\n")
-        self._publicar_contagem()
+        print(f"{VERDE}Conectado ao {self.cfg['broker']}, porta {self.porta} "
+              f"({'WebSocket seguro' if usar_websocket(self.cfg) else 'MQTT comum'}).{RESET}")
+        print(f"{CINZA}Esperando as mensagens da âncora de CO₂ (o ESP32 no Wokwi).{RESET}")
+        self._publicar_contagem(mostrar=True)
+        print(f"\n{CINZA}  {'mensagem':<10}{'CO₂':<11}{'o CO₂ diz':<15}{'o rádio diz':<16}situação{RESET}")
 
     def _ao_receber(self, cliente, userdata, msg):
         recebido_em = datetime.now(timezone.utc)   # CARIMBO AUTORITATIVO
@@ -207,13 +211,13 @@ class Gateway:
             dado = json.loads(msg.payload.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as erro:
             e.total_invalidos += 1
-            self._linha(VERMELHO, "INVALIDO", f"payload ilegivel: {erro}")
+            self._aviso_linha(VERMELHO, "x INVÁLIDA", "não é um JSON legível; descartada")
             return
 
         ok, motivo = self.validador.validar(dado)
         if not ok:
             e.total_invalidos += 1
-            self._linha(VERMELHO, "INVALIDO", motivo)
+            self._aviso_linha(VERMELHO, "x INVÁLIDA", f"fora do contrato ({motivo}); descartada")
             return
 
         event_id = dado["eventId"]
@@ -223,8 +227,7 @@ class Gateway:
         # ---- 1. DUPLICATA: mesma identidade ja processada ----
         if e.ja_visto(event_id):
             e.total_duplicados += 1
-            self._linha(AMARELO, "DUPLICADO",
-                        f"{event_id} ja processado - descartado sem efeito no estado")
+            self._aviso_linha(AMARELO, "! REPETIDA", f"a nº {seq} já tinha chegado; ignorada")
             return
 
         # ---- 2. FORA DE ORDEM: sequencia menor que a maior ja vista ----
@@ -236,10 +239,10 @@ class Gateway:
                 # o salto anterior contou este como perdido; so chegou atrasado
                 e.lacunas.discard(seq)
                 e.total_perdidos -= 1
-                extra = " - preenche a lacuna, nao estava perdido"
-            self._linha(AMARELO, "FORA DE ORDEM",
-                        f"seq={seq} chegou depois de {e.maior_sequencia} "
-                        f"({atraso} atras) - aceito, nao retrocede o estado{extra}")
+                extra = " (não estava perdida)"
+            self._aviso_linha(AMARELO, "! FORA DE ORDEM",
+                              f"a nº {seq} chegou depois da nº {e.maior_sequencia}; "
+                              f"guardada, sem voltar atrás{extra}")
             e.registrar(event_id)
             self._gravar(dado, recebido_em, "fora-de-ordem")
             return
@@ -250,15 +253,14 @@ class Gateway:
             e.lacunas.update(range(e.maior_sequencia + 1, seq))
             e.total_saltos += 1
             e.total_perdidos += faltando
-            self._linha(VERMELHO, "SALTO",
-                        f"esperado {e.maior_sequencia + 1}, recebido {seq} - "
-                        f"{faltando} evento(s) perdido(s)")
+            self._aviso_linha(VERMELHO, "! SALTO",
+                              f"esperava a nº {e.maior_sequencia + 1}, veio a nº {seq}: "
+                              f"{faltando} perdida(s)")
 
         if bufferizado:
             e.total_atrasados += 1
-            self._linha(CIANO, "ATRASADO",
-                        f"{event_id} retido na fila local, "
-                        f"tempo original {dado['eventTimeMs']} ms - recalculando")
+            self._aviso_linha(CIANO, "~ ATRASADA",
+                              f"a nº {seq} ficou guardada sem rede; chegou agora")
 
         # ---- evento aceito ----
         e.registrar(event_id)
@@ -273,26 +275,25 @@ class Gateway:
 
         cor = {"COERENTE": VERDE, "ATENCAO": AMARELO, "INCOERENTE": VERMELHO}.get(
             estado_novo, RESET)
-        self._linha(cor, f"seq={seq:<4}",
-                    f"{dado['value']:7.1f} {dado['unit']}  "
-                    f"co2={dado.get('ocupacaoCo2', '?'):<13} "
-                    f"radio={dado.get('contagemRadio', '?'):<3} "
-                    f"{estado_novo}")
+        co2_diz = CO2_DIZ.get(dado.get("ocupacaoCo2"), "?")
+        radio = dado.get("contagemRadio", "?")
+        print(f"{CINZA}  {'nº ' + str(seq):<10}{dado['value']:>4.0f} ppm   {RESET}{co2_diz:<15}"
+              f"{str(radio) + ' estudantes':<16}{cor}{SITUACAO.get(estado_novo, estado_novo)}{RESET}")
 
         # ---- ATUACAO do consumidor ----
         if estado_novo == "INCOERENTE" and mudou:
             e.alertas += 1
-            print(f"\n{VERMELHO}{'=' * 70}")
-            print("  ALERTA DE INCOERENCIA DE OCUPACAO")
-            print(f"  O radio declara {dado.get('contagemRadio')} estudantes,")
-            print(f"  mas o CO2 em {dado['value']:.0f} ppm indica sala {dado.get('ocupacaoCo2')}.")
-            print("  Sessao marcada para revisao do professor.")
-            print(f"{'=' * 70}{RESET}\n")
+            print(f"\n{VERMELHO}{NEGRITO}  ┌─ ALERTA: O RÁDIO E O CO₂ NÃO BATEM ───────────────")
+            print(f"  │ O rádio diz que há {radio} estudantes na sala,")
+            print(f"  │ mas o CO₂ ({dado['value']:.0f} ppm) diz que a sala está vazia.")
+            print(f"  │ Suspeita: os celulares ficaram na sala sem os donos.")
+            print(f"  │ A aula foi marcada para o professor revisar.")
+            print(f"  └────────────────────────────────────────────────────{RESET}\n")
 
         self._gravar(dado, recebido_em, "aceito")
 
     # -- Comando para a ancora ----------------------------------------------
-    def _publicar_contagem(self):
+    def _publicar_contagem(self, mostrar=False):
         self.sequencia_comando += 1
         comando = {
             "commandType": "gateway.contagem.v1",
@@ -302,17 +303,17 @@ class Gateway:
             "issuedAtMs": int(time.time() * 1000),
         }
         self.cliente.publish(self.cfg["topico_comando"], json.dumps(comando), qos=1)
-        print(f"{CINZA}[COMANDO] {comando['commandId']} -> contagem do radio = "
-              f"{self.contagem_radio}{RESET}")
+        if mostrar:     # o reenvio periodico (a cada 10 s) e silencioso
+            print(f"{CIANO}  → enviado à âncora: o rádio declara {self.contagem_radio} "
+                  f"estudante(s) na sala{RESET}")
 
     def _laco_comando(self):
         while not self.parar.wait(self.cfg.get("intervalo_comando_s", 10)):
             self._publicar_contagem()
 
     # -- Saida --------------------------------------------------------------
-    def _linha(self, cor, rotulo, texto):
-        agora = datetime.now().strftime("%H:%M:%S")
-        print(f"{CINZA}{agora}{RESET} {cor}{rotulo:<14}{RESET} {texto}")
+    def _aviso_linha(self, cor, rotulo, texto):
+        print(f"  {cor}{rotulo:<16}{RESET} {texto}")
 
     def _gravar(self, dado, recebido_em, classificacao):
         self.log.write(json.dumps({
@@ -324,17 +325,20 @@ class Gateway:
 
     def painel(self):
         e = self.estado
-        print(f"\n{CIANO}{'-' * 70}")
-        print(f"  estado da sala: {e.estado_sala}    "
-              f"ultimo CO2: {e.ultimo_ppm if e.ultimo_ppm is None else f'{e.ultimo_ppm:.0f} ppm'}")
-        print(f"  contagem declarada pelo radio: {self.contagem_radio}")
-        print(f"  aceitos={e.total_aceitos}  duplicados={e.total_duplicados}  "
-              f"fora de ordem={e.total_fora_de_ordem}")
-        print(f"  saltos={e.total_saltos} ({e.total_perdidos} eventos perdidos)  "
-              f"atrasados={e.total_atrasados}  invalidos={e.total_invalidos}")
-        print(f"  alertas de incoerencia: {e.alertas}   "
-              f"maior sequencia vista: {e.maior_sequencia}")
-        print(f"{'-' * 70}{RESET}\n")
+        situacao = {"COERENTE": "COERENTE (o rádio e o CO₂ concordam)",
+                    "ATENCAO": "ATENÇÃO (ainda não dá para dizer)",
+                    "INCOERENTE": "INCOERENTE (o rádio e o CO₂ discordam)"}.get(e.estado_sala, "ainda sem mensagens")
+        co2 = "—" if e.ultimo_ppm is None else f"{e.ultimo_ppm:.0f} ppm"
+        print(f"\n{CIANO}{NEGRITO}  ══ RESUMO DA SALA ══════════════════════════{RESET}{CIANO}")
+        print(f"  Situação:          {situacao}")
+        print(f"  Último CO₂:        {co2}")
+        print(f"  O rádio declara:   {self.contagem_radio} estudante(s)")
+        print(f"  Alertas dados:     {e.alertas}")
+        print(f"  Mensagens:  recebidas: {e.total_aceitos} · repetidas: {e.total_duplicados} · "
+              f"fora de ordem: {e.total_fora_de_ordem}")
+        print(f"              perdidas: {e.total_perdidos} · atrasadas: {e.total_atrasados} · "
+              f"inválidas: {e.total_invalidos}")
+        print(f"  ════════════════════════════════════════════{RESET}\n")
 
     # -- Terminal -----------------------------------------------------------
     def _laco_teclado(self):
@@ -345,22 +349,23 @@ class Gateway:
                 break
             if t == "r":
                 self.estado.reiniciar()
-                print(f"{CINZA}contadores reiniciados{RESET}")
+                print(f"{CINZA}  contadores zerados{RESET}")
             elif t == "p":
                 self.painel()
             elif t.isdigit():
                 self.contagem_radio = int(t)
-                self._publicar_contagem()
+                self._publicar_contagem(mostrar=True)
             elif t:
-                print(f"{CINZA}comandos: <numero> | p (painel) | r (reiniciar) | q (sair){RESET}")
+                print(f"{CINZA}Teclas: um número = estudantes que o rádio declara · p = resumo · "
+                      f"r = zerar · q = sair (sempre com Enter){RESET}")
 
     def executar(self):
-        print(f"\n{CIANO}=== Presenca / gateway da sala - consumidor ==={RESET}")
+        print(f"\n{CIANO}{NEGRITO}══ Presença · gateway de CO₂ da sala ══{RESET}")
         if not TEM_JSONSCHEMA:
             print(f"{AMARELO}jsonschema ausente: validacao reduzida. "
                   f"pip install jsonschema{RESET}")
-        print(f"{CINZA}digite um numero para mudar a contagem do radio, "
-              f"p para painel, q para sair{RESET}\n")
+        print(f"{CINZA}Teclas: um número = estudantes que o rádio declara · p = resumo · "
+              f"r = zerar · q = sair (sempre com Enter){RESET}")
 
         self.cliente.connect(self.cfg["broker"], self.porta, 60)
         self.cliente.loop_start()
@@ -369,10 +374,8 @@ class Gateway:
         threading.Thread(target=self._laco_teclado, daemon=True).start()
 
         try:
-            while not self.parar.is_set():
-                time.sleep(self.cfg.get("intervalo_painel_s", 20))
-                if not self.parar.is_set():
-                    self.painel()
+            while not self.parar.wait(1):       # o resumo so aparece com a tecla p
+                pass
         except KeyboardInterrupt:
             pass
         finally:
@@ -381,7 +384,7 @@ class Gateway:
             self.cliente.disconnect()
             self.painel()
             self.log.close()
-            print(f"{CINZA}log gravado em recebidos.log{RESET}")
+            print(f"{CINZA}  registro gravado em recebidos.log{RESET}")
 
 
 if __name__ == "__main__":
