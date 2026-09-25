@@ -409,7 +409,7 @@ kbd{
 .teste.passo dd ol, .teste.passo dd ul{margin:6px 0 0}
 .teste.passo dd .term, .teste.passo dd .tw{margin:8px 0}
 .teste.passo dd p{margin:0 0 8px}
-@media print{ .teste.passo{page-break-before:auto !important; page-break-inside:avoid} .term{white-space:pre-wrap; overflow:visible; word-break:break-word} }
+@media print{ .teste.passo{page-break-before:auto !important; page-break-inside:avoid} .term{white-space:pre-wrap; overflow:visible; hyphens:none} }
 @page{size:A4; margin:14mm 13mm}
 
 </style>
@@ -514,7 +514,10 @@ kbd{
       </dl></div>
     </div>
     <p>O que estiver em <code>fonte assim</code>, dentro de uma caixa escura, é para digitar exatamente
-    como está e apertar <kbd>Enter</kbd>.</p>
+    como está e apertar <kbd>Enter</kbd>. O mais seguro é <strong>copiar e colar uma linha por vez</strong>
+    (no PowerShell, colar é <kbd>Ctrl</kbd>+<kbd>V</kbd> ou botão direito). Se for copiar muita coisa,
+    use o arquivo <code>.html</code> no navegador: ele copia exatamente o que está escrito, enquanto o PDF
+    às vezes altera o texto copiado.</p>
   </section>
 
   <!-- ============ ETAPA A ============ -->
@@ -557,11 +560,14 @@ kbd{
       <div class="teste-h"><span class="id">A3</span><span class="t">Entrar na pasta do servidor</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>No PowerShell:
-<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"</div></dd>
+<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA"
+cd projeto-presenca\marco-02\servidor</div></dd>
         <dt>Por quê</dt><dd><code>cd</code> quer dizer “mudar de pasta”. Os próximos comandos
         (<code>pip install -r requirements.txt</code>, <code>python servidor.py</code>) procuram os arquivos
-        <strong>na pasta em que o terminal está</strong>. As aspas são necessárias porque o caminho tem
-        espaços.</dd>
+        <strong>na pasta em que o terminal está</strong>. São dois <code>cd</code> seguidos: o primeiro vai
+        para a pasta da disciplina (entre aspas, porque o nome tem espaços), o segundo entra no projeto a
+        partir dali. Está dividido em dois para cada linha caber inteira no PDF: quando uma linha longa
+        quebra no hífen de <code>projeto-presenca</code>, o leitor de PDF apaga o hífen ao copiar.</dd>
         <dt>Tem que aparecer</dt><dd>O começo da linha muda para
         <code>PS D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor&gt;</code>.</dd>
         <dt>Se der errado</dt><dd>
@@ -651,7 +657,8 @@ SourceAddress    : 192.168.0.8
       <div class="teste-h"><span class="id">B2</span><span class="t">Entrar na pasta do servidor</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>No mesmo terminal:
-<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"</div></dd>
+<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA"
+cd projeto-presenca\marco-02\servidor</div></dd>
         <dt>Por quê</dt><dd>O <code>python servidor.py</code> do próximo passo procura o arquivo na pasta
         atual (A3).</dd>
         <dt>Tem que aparecer</dt><dd><code>PS D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor&gt;</code></dd>
@@ -1044,7 +1051,8 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       <div class="teste-h"><span class="id">C10</span><span class="t">Mostrar o contrato funcionando</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>No <strong>segundo</strong> terminal (B7):
-<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\contrato"
+<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA"
+cd projeto-presenca\marco-02\contrato
 python validar.py</div>
         Depois abra no VS Code <code>contrato/v1/presenca.heartbeat.v1.schema.json</code> e mostre
         <code>"additionalProperties": false</code> e o <code>"pattern"</code> do <code>eventId</code>.</dd>
@@ -1071,7 +1079,8 @@ Agora de proposito: o mesmo heartbeat com um campo que o contrato nao preve
       <div class="teste-h"><span class="id">C11</span><span class="t">Mostrar os testes automáticos</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>No segundo terminal:
-<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA"
+cd projeto-presenca\marco-02\servidor
 python -m pytest testes -v</div></dd>
         <dt>Por quê</dt><dd>Cada regra do projeto técnico virou um teste que roda em menos de um segundo,
         sem Wokwi. É a garantia de que a regra está certa independente da simulação.</dd>
@@ -1089,7 +1098,8 @@ python -m pytest testes -v</div></dd>
         <dt>Como fazer</dt><dd>
         <ol>
           <li>No segundo terminal (use <code>--ws</code> se o B1 deu <code>False</code>):
-<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\co2-gateway"
+<div class="term">cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA"
+cd projeto-presenca\marco-02\co2-gateway
 python consumidor.py</div></li>
           <li>Numa aba nova do navegador, abra <b>wokwi.com/projects/476001394839038977</b> e clique em ▶.
           Deixe essa aba na frente (a do aparelho pode ficar parada).</li>

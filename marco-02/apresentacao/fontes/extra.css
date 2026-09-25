@@ -131,5 +131,5 @@ kbd{
 .teste.passo dd ol, .teste.passo dd ul{margin:6px 0 0}
 .teste.passo dd .term, .teste.passo dd .tw{margin:8px 0}
 .teste.passo dd p{margin:0 0 8px}
-@media print{ .teste.passo{page-break-before:auto !important; page-break-inside:avoid} .term{white-space:pre-wrap; overflow:visible; word-break:break-word} }
+@media print{ .teste.passo{page-break-before:auto !important; page-break-inside:avoid} .term{white-space:pre-wrap; overflow:visible; hyphens:none} }
 @page{size:A4; margin:14mm 13mm}
