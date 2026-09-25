@@ -78,8 +78,15 @@
         espaços.</dd>
         <dt>Tem que aparecer</dt><dd>O começo da linha muda para
         <code>PS D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor&gt;</code>.</dd>
-        <dt>Se der errado</dt><dd>Se continuar <code>PS C:\WINDOWS\System32&gt;</code> ou outra pasta, o
-        <code>cd</code> não foi feito: copie o comando de novo, com as aspas.</dd>
+        <dt>Se der errado</dt><dd>
+        <strong>Copie e cole</strong> o comando em vez de digitar: no PowerShell, colar é
+        <kbd>Ctrl</kbd>+<kbd>V</kbd> ou botão direito do mouse. Os dois erros mais comuns ao digitar:
+        <div class="tw"><table>
+          <tr><th>Mensagem</th><th>Causa</th></tr>
+          <tr><td><code>Não é possível localizar um parâmetro posicional que aceite o argumento 'PARA'</code></td><td><strong>Faltaram as aspas.</strong> Sem aspas, o PowerShell corta o caminho no primeiro espaço e acha que <code>PARA</code> é outra coisa.</td></tr>
+          <tr><td><code>Não é possível localizar o caminho … porque ele não existe</code> (<code>PathNotFound</code>)</td><td><strong>Nome digitado errado.</strong> Confira letra por letra: é <code>projeto-presenca</code>, com hífen; <code>marco-02</code>, com hífen; <code>COMPUTAÇÃO</code> e <code>UBÍQUA</code>, com acento.</td></tr>
+        </table></div>
+        Se a linha continuar <code>PS C:\WINDOWS\System32&gt;</code>, o <code>cd</code> não funcionou: cole de novo.</dd>
       </dl></div>
     </div>
 
@@ -636,6 +643,8 @@ python consumidor.py</div></li>
       <tr><th>O que aparece</th><th>Por que acontece</th><th>O que fazer</th></tr>
       <tr><td><code>Test-NetConnection: command not found</code></td><td>O terminal é o Git Bash (<code>MINGW64</code>, <code>$</code>), e esse comando só existe no PowerShell</td><td>Abra um PowerShell: setinha <b>˅</b> ao lado do <b>+</b> (A2)</td></tr>
       <tr><td><code>No such file or directory: 'requirements.txt'</code> ou <code>can't open file 'servidor.py'</code></td><td>O terminal está em outra pasta (ex. <code>C:\WINDOWS\System32</code>)</td><td>Faça o <code>cd</code> (B2) e repita</td></tr>
+      <tr><td><code>cd</code>: <code>Não é possível localizar um parâmetro posicional que aceite o argumento 'PARA'</code></td><td>O caminho foi digitado sem aspas; o PowerShell corta no primeiro espaço</td><td>Cole o comando do guia, com as aspas</td></tr>
+      <tr><td><code>cd</code>: <code>PathNotFound</code> / <code>não existe</code></td><td>Nome da pasta digitado errado (ex. <code>projetopresenca</code> sem hífen)</td><td>Cole o comando do guia em vez de digitar</td></tr>
       <tr><td><code>ModuleNotFoundError: No module named 'paho'</code></td><td>Bibliotecas não instaladas</td><td>A4</td></tr>
       <tr><td>O servidor não mostra <code>[MQTT] conectado</code></td><td>A rede bloqueia a porta 1883</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> e <code>python servidor.py --ws</code>; se ainda não conectar, 4G do celular</td></tr>
       <tr><td>Com <code>--ws</code>, a primeira resposta demora uns segundos</td><td>O WebSocket tem mais etapas para abrir</td><td>Normal; depois fica rápido</td></tr>
