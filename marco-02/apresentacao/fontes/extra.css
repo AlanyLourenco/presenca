@@ -1,0 +1,98 @@
+
+/* ---------- acrescimos da parte de presenca ---------- */
+.parte{
+  font-family:Archivo,sans-serif; margin:10px 0 34px; padding:18px 20px;
+  border-radius:12px; background:var(--surface); border:1px solid var(--rule-strong);
+}
+.parte .pn{font-size:12.5px; font-weight:600; color:var(--accent)}
+.parte .pt{font-size:22px; font-weight:700; letter-spacing:-.015em; margin-top:2px}
+.parte p{font-family:"Source Serif 4",Georgia,serif; font-size:15.5px; color:var(--ink-2); margin:8px 0 0}
+
+.stats{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); margin:22px 0}
+.stat{background:var(--surface); border:1px solid var(--rule); border-radius:11px; padding:13px 15px}
+.stat .v{font-family:Archivo,sans-serif; font-weight:700; font-size:26px; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+.stat .l{font-family:Archivo,sans-serif; font-size:12.5px; color:var(--muted); line-height:1.35}
+
+figure{margin:22px 0}
+figure img{max-width:100%; height:auto; display:block; border-radius:9px; border:1px solid var(--rule)}
+figcaption{font-family:Archivo,sans-serif; font-size:13px; color:var(--muted); margin-top:8px; max-width:var(--prose)}
+figcaption b{color:var(--ink-2)}
+.fig-par{display:grid; gap:14px; grid-template-columns:1fr}
+@media (min-width:760px){.fig-par{grid-template-columns:1.55fr 1fr; align-items:start}}
+.fig-par figure{margin:0}
+.oled img{background:#20282b}
+
+/* terminal: saida real, copiada dos logs */
+.term{
+  background:#11181a; color:#d4e1de; border:1px solid #243031; border-radius:10px;
+  padding:13px 15px; overflow-x:auto; font-size:12.5px; line-height:1.55; margin:14px 0;
+  white-space:pre;
+}
+.term .h{display:block; font-family:Archivo,sans-serif; font-size:11.5px; color:#8b9d9f; margin-bottom:6px; white-space:normal}
+.term .g{color:#6fcf87} .term .y{color:#e9b64f} .term .r{color:#f08a88} .term .c{color:#63cfdd} .term .m{color:#d59be6} .term .k{color:#7d8f92}
+
+/* cartoes de teste */
+.teste{
+  background:var(--surface); border:1px solid var(--rule); border-radius:14px;
+  box-shadow:var(--shadow); margin:26px 0; overflow:hidden;
+}
+.teste-h{
+  display:flex; flex-wrap:wrap; gap:6px 14px; align-items:baseline;
+  padding:14px 20px; border-bottom:1px solid var(--rule); background:var(--surface-2);
+  font-family:Archivo,sans-serif;
+}
+.teste-h .id{font-weight:700; color:var(--accent); font-size:13px}
+.teste-h .t{font-weight:700; font-size:17px}
+.teste-h .ok{
+  margin-left:auto; font-size:12.5px; font-weight:600; color:var(--verde);
+  background:var(--verde-soft); border-radius:999px; padding:2px 10px;
+}
+.teste-b{padding:6px 20px 18px}
+.teste dl{display:grid; grid-template-columns:1fr; gap:0; margin:8px 0 4px}
+@media (min-width:720px){.teste dl{grid-template-columns:170px minmax(0,1fr)}}
+.teste dt{font-family:Archivo,sans-serif; font-size:13px; font-weight:600; color:var(--muted); padding:9px 0 0}
+.teste dd{margin:0; padding:9px 0; border-bottom:1px dashed var(--rule); font-size:15px}
+.teste dd:last-of-type{border-bottom:none}
+@media (min-width:720px){.teste dt{border-bottom:1px dashed var(--rule)} .teste dt:last-of-type{border-bottom:none}}
+
+/* diagramas */
+.diag{background:var(--surface); border:1px solid var(--rule); border-radius:12px; padding:14px; margin:20px 0}
+.diag svg{width:100%; height:auto; display:block}
+.diag text{font-family:Archivo,sans-serif}
+.s-ink{fill:var(--ink)} .s-ink2{fill:var(--ink-2)} .s-mut{fill:var(--muted)}
+.s-rule{stroke:var(--rule-strong)} .s-acc{fill:var(--accent)} .st-acc{stroke:var(--accent)}
+.s-verde{fill:var(--verde)} .s-ambar{fill:var(--ambar)} .s-verm{fill:var(--vermelho)}
+.st-verde{stroke:var(--verde)} .st-ambar{stroke:var(--ambar)} .st-verm{stroke:var(--vermelho)}
+.b-verde{fill:var(--verde-soft)} .b-ambar{fill:var(--ambar-soft)} .b-verm{fill:var(--vermelho-soft)}
+.b-surf{fill:var(--surface)} .b-surf2{fill:var(--surface-2)} .b-acc{fill:var(--accent-soft)}
+
+.grafico .linha{fill:none; stroke:var(--accent); stroke-width:2; stroke-linejoin:round}
+.grafico .grade{stroke:var(--rule); stroke-width:1}
+.grafico .eixo{stroke:var(--rule-strong); stroke-width:1}
+.grafico text{font-size:11px; fill:var(--muted)}
+.grafico .rot{font-size:11.5px; fill:var(--ink-2); font-weight:600}
+.grafico .marca{stroke:var(--ink-2); stroke-width:1; stroke-dasharray:3 3}
+.grafico .rede{fill:var(--surface-2); stroke:var(--rule-strong); stroke-dasharray:4 3}
+.grafico circle{fill:var(--accent); stroke:var(--surface); stroke-width:2}
+
+.pill{font-family:Archivo,sans-serif; font-size:12px; font-weight:600; border-radius:999px; padding:1px 8px; white-space:nowrap}
+.pill.v{background:var(--verde-soft); color:var(--verde)}
+.pill.a{background:var(--ambar-soft); color:var(--ambar)}
+.pill.r{background:var(--vermelho-soft); color:var(--vermelho)}
+
+@media print{
+  .diag,figure,.term,.stats,.teste dl{page-break-inside:avoid}
+  .teste{page-break-inside:auto; page-break-before:always; box-shadow:none; margin-top:0}
+  .fig-par{grid-template-columns:1.5fr 1fr !important; align-items:start}
+  .oled img{max-height:230px; width:auto; margin:0 auto}
+  .arch{grid-template-columns:1fr 130px 1fr !important}
+  .comp-top{grid-template-columns:220px minmax(0,1fr) !important}
+  .comp-img{border-bottom:none !important; border-right:1px solid var(--rule)}
+  .teste dl{grid-template-columns:150px minmax(0,1fr) !important}
+  .teste dt{border-bottom:1px dashed var(--rule)}
+  .term{background:#f3f5f5; color:#111; border-color:#ccd}
+  .term .g{color:#1c6b30} .term .y{color:#7a5200} .term .r{color:#9e2b2d} .term .c{color:#0b6371} .term .m{color:#6b2a80} .term .k{color:#555}
+  .parte{page-break-before:always}
+}
+
+@page{size:A4; margin:14mm 13mm}

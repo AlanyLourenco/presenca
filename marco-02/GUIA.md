@@ -1,7 +1,11 @@
-# Guia completo do Marco 2 — para estudar e apresentar
+# Guia da fronteira de CO₂ — âncora ↔ gateway
 
-Este documento explica **tudo** o que existe na pasta `marco-02`: cada diretório, cada
-arquivo, cada componente do circuito, o que faz, como faz, com quem se conecta e por quê.
+> **Este guia cobre a segunda fronteira do Marco 2**, a verificação cruzada por CO₂
+> (pastas `co2-ancora/` e `co2-gateway/`). A fronteira principal, **aparelho ↔ servidor de
+> permanência**, está no [`README.md`](README.md) e na apresentação.
+
+Este documento explica tudo o que existe na fronteira de CO₂: cada arquivo, cada
+componente do circuito, o que faz, como faz, com quem se conecta e por quê.
 
 Projeto no Wokwi: https://wokwi.com/projects/476001394839038977
 
@@ -56,12 +60,12 @@ marco-02/
 │           ├── ambiente-bufferizado.json
 │           └── contagem-comando.json
 │
-├── produtor/              ← O QUE RODA NO ESP32 (dentro do Wokwi)
+├── co2-ancora/            ← O QUE RODA NO ESP32 (dentro do Wokwi)
 │   ├── sketch.ino             o programa em C++
 │   ├── diagram.json           a descrição do circuito
 │   └── libraries.txt          as bibliotecas necessárias
 │
-├── consumidor/            ← O QUE RODA NO SEU NOTEBOOK
+├── co2-gateway/           ← O QUE RODA NO SEU NOTEBOOK
 │   ├── consumidor.py          o programa em Python
 │   ├── requirements.txt       as dependências
 │   ├── config.exemplo.json    modelo de configuração
@@ -92,7 +96,7 @@ precisar mudar o formato de um jeito incompatível, cria-se `sala.ambiente.v2` e
 continua existindo. Os dispositivos antigos continuam funcionando enquanto migram. Se a
 versão não estivesse no nome, você quebraria todo mundo de uma vez.
 
-## 2.2 — `produtor/` — os três arquivos que o Wokwi precisa
+## 2.2 — `co2-ancora/` — os três arquivos que o Wokwi precisa
 
 | Arquivo | O que é |
 |---|---|
@@ -104,7 +108,7 @@ Esses três arquivos **são** o projeto do Wokwi. Se você abrir um Wokwi novo e
 três, tem o protótipo inteiro de volta. São também três dos arquivos exigidos no ZIP da
 Atividade 03.
 
-## 2.3 — `consumidor/` — o outro lado da fronteira
+## 2.3 — `co2-gateway/` — o outro lado da fronteira
 
 | Arquivo | O que é |
 |---|---|
@@ -228,7 +232,7 @@ Cada aperto **arma** uma anomalia, aplicada na publicação seguinte, ciclando e
 | Aperto | Anomalia | O que o ESP32 faz |
 |---|---|---|
 | 1º | `duplicata` | Publica de novo com a **mesma** sequência anterior |
-| 2º | `fora-de-ordem` | Publica com uma sequência **3 números atrás** |
+| 2º | `fora-de-ordem` | Segura o evento N e o entrega **depois** do N+1 (reenviar um número antigo seria só uma duplicata) |
 | 3º | `salto` | **Pula 5 números** na sequência |
 | 4º | volta para `duplicata` | … e recomeça o ciclo |
 

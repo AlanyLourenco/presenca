@@ -1,0 +1,737 @@
+configuracao: config.exemplo.json
+
+=== Presenca / servidor de permanencia ===
+p painel | n nova sessao | q sair
+[MQTT] conectado a broker.hivemq.com:1883
+[MQTT] assinando ufg/ssu/presenca/alany/sala-204/heartbeat
+
+=== sessao s1085 aberta ===
+escala 1:30  aula 100 s  persistencia 1 s  orcamento 30 s  avisos em 20 s e 26 s  requalificacao 60 s
+
+01:28:54 t=   0.0s      seq=1    A  -62 B  -62 C  -59  INDETERMINADA  (  6.0,  4.4) neutro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:28:55 t=   0.4s      seq=2    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:28:56 t=   1.0s      seq=3    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:28:58 t=   1.5s      seq=4    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   1.0s ( 1.0%) orc 30.0s
+      >>> FORA -> PRESENTE em t=0.4 s (sinal na sala sustentado)
+01:28:59 t=   2.0s      seq=5    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   1.5s ( 1.5%) orc 30.0s
+01:29:00 t=   2.5s      seq=6    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.0s ( 2.0%) orc 30.0s
+01:29:02 t=   3.0s      seq=7    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.5s ( 2.5%) orc 30.0s
+01:29:03 t=   3.5s      seq=8    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.1s ( 3.1%) orc 30.0s
+01:29:04 t=   4.0s      seq=9    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.6s ( 3.6%) orc 30.0s
+01:29:06 t=   4.5s      seq=10   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.1s ( 4.1%) orc 30.0s
+01:29:08 t=   5.0s      seq=11   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.6s ( 4.6%) orc 30.0s
+01:29:09 t=   5.5s      seq=12   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   5.1s ( 5.1%) orc 30.0s
+01:29:09 t=   6.1s      seq=13   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   5.6s ( 5.6%) orc 30.0s
+01:29:11 t=   6.6s      seq=14   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   6.1s ( 6.1%) orc 30.0s
+
+------------------------------------------------------------------------
+  painel da sessao s1085
+  estado: PRESENTE   t=6.6 s de 100 s
+  acumulado garantido: 6.1 s (6.1%)   provisorio: 0.0 s
+  presenca confirmada 6.1 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   0.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=14 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:29:12 t=   7.1s      seq=15   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   6.7s ( 6.7%) orc 30.0s
+01:29:14 t=   7.6s      seq=16   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   7.2s ( 7.2%) orc 30.0s
+01:29:15 t=   8.2s      seq=17   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   7.7s ( 7.7%) orc 30.0s
+01:29:17 t=   8.7s      seq=18   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   8.3s ( 8.3%) orc 30.0s
+01:29:18 t=   9.2s      seq=19   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   8.8s ( 8.8%) orc 30.0s
+01:29:20 t=   9.7s      seq=20   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   9.3s ( 9.3%) orc 30.0s
+01:29:21 t=  10.2s      seq=21   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   9.8s ( 9.8%) orc 30.0s
+01:29:22 t=  10.8s      seq=22   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  10.3s (10.3%) orc 30.0s
+01:29:24 t=  11.3s      seq=23   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  10.8s (10.8%) orc 30.0s
+01:29:25 t=  11.8s      seq=24   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  11.4s (11.4%) orc 30.0s
+01:29:27 t=  12.3s      seq=25   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  11.9s (11.9%) orc 30.0s
+01:29:28 t=  12.9s      seq=26   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  12.4s (12.4%) orc 30.0s
+01:29:29 t=  13.4s      seq=27   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  12.9s (12.9%) orc 30.0s
+01:29:30 t=  13.9s      seq=28   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  13.4s (13.4%) orc 30.0s
+01:29:32 t=  14.4s      seq=29   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  14.0s (14.0%) orc 30.0s
+01:29:33 t=  14.9s      seq=30   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  14.5s (14.5%) orc 30.0s
+01:29:34 t=  15.5s      seq=31   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  15.0s (15.0%) orc 30.0s
+01:29:36 t=  16.0s      seq=32   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  15.6s (15.6%) orc 30.0s
+01:29:37 t=  16.5s      seq=33   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  16.1s (16.1%) orc 30.0s
+01:29:39 t=  17.0s      seq=34   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  16.6s (16.6%) orc 30.0s
+01:29:40 t=  17.6s      seq=35   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  17.1s (17.1%) orc 30.0s
+
+------------------------------------------------------------------------
+  painel da sessao s1085
+  estado: PRESENTE   t=17.6 s de 100 s
+  acumulado garantido: 17.1 s (17.1%)   provisorio: 0.0 s
+  presenca confirmada 17.1 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 17.0 s
+    t=   0.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=35 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:29:41 t=  18.1s      seq=36   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  17.6s (17.6%) orc 30.0s
+01:29:43 t=  18.6s      seq=37   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  18.1s (18.1%) orc 30.0s
+01:29:44 t=  19.1s      seq=38   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  18.7s (18.7%) orc 30.0s
+01:29:45 t=  19.6s      seq=39   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  19.2s (19.2%) orc 30.0s
+01:29:47 t=  20.1s      seq=40   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  19.7s (19.7%) orc 30.0s
+01:29:48 t=  20.6s      seq=41   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  20.2s (20.2%) orc 30.0s
+01:29:49 t=  21.1s      seq=42   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  20.7s (20.7%) orc 30.0s
+01:29:50 t=  21.6s      seq=43   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  21.2s (21.2%) orc 30.0s
+01:29:51 t=  22.1s      seq=44   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  21.7s (21.7%) orc 30.0s
+01:29:53 t=  22.7s      seq=45   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  22.2s (22.2%) orc 30.0s
+01:29:54 t=  23.2s      seq=46   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  22.8s (22.8%) orc 30.0s
+01:29:56 t=  23.7s      seq=47   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  23.3s (23.3%) orc 30.0s
+01:29:57 t=  24.3s      seq=48   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  23.8s (23.8%) orc 30.0s
+01:29:58 t=  24.8s      seq=49   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  24.3s (24.3%) orc 30.0s
+01:30:00 t=  25.3s      seq=50   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  24.8s (24.8%) orc 30.0s
+01:30:01 t=  25.8s      seq=51   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  25.3s (25.3%) orc 30.0s
+01:30:02 t=  26.3s      seq=52   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  25.8s (25.8%) orc 30.0s
+01:30:03 t=  26.8s      seq=53   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  26.4s (26.4%) orc 30.0s
+01:30:04 t=  27.3s      seq=54   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  26.9s (26.9%) orc 30.0s
+01:30:06 t=  27.8s      seq=55   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  27.4s (27.4%) orc 30.0s
+01:30:07 t=  28.3s      seq=56   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  27.9s (27.9%) orc 30.0s
+01:30:08 t=  28.8s      seq=57   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  28.4s (28.4%) orc 30.0s
+01:30:09 t=  29.3s      seq=58   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  28.9s (28.9%) orc 30.0s
+01:30:10 t=  29.9s      seq=59   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  29.4s (29.4%) orc 30.0s
+
+------------------------------------------------------------------------
+  painel da sessao s1085
+  estado: PRESENTE   t=29.9 s de 100 s
+  acumulado garantido: 29.4 s (29.4%)   provisorio: 0.0 s
+  presenca confirmada 29.4 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 29.0 s
+    t=   0.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=59 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:30:12 t=  30.4s      seq=60   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  29.9s (29.9%) orc 30.0s
+01:30:13 t=  30.9s      seq=61   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  30.4s (30.4%) orc 30.0s
+01:30:14 t=  31.4s      seq=62   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  30.9s (30.9%) orc 30.0s
+01:30:16 t=  31.9s      seq=63   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  31.5s (31.5%) orc 30.0s
+01:30:17 t=  32.4s      seq=64   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  32.0s (32.0%) orc 30.0s
+01:30:19 t=  32.9s      seq=65   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  32.5s (32.5%) orc 30.0s
+01:30:20 t=  33.5s      seq=66   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  33.0s (33.0%) orc 30.0s
+01:30:21 t=  34.0s      seq=67   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  33.5s (33.5%) orc 30.0s
+01:30:23 t=  34.5s      seq=68   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  34.0s (34.0%) orc 30.0s
+01:30:24 t=  35.0s      seq=69   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  34.5s (34.5%) orc 30.0s
+01:30:28 t=  35.5s      seq=70   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  35.0s (35.0%) orc 30.0s
+01:30:28 t=  36.0s      seq=71   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  35.6s (35.6%) orc 30.0s
+01:30:28 t=  36.5s      seq=72   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  36.1s (36.1%) orc 30.0s
+01:30:29 t=  37.0s      seq=73   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  36.6s (36.6%) orc 30.0s
+
+=== sessao s31a2 aberta ===
+escala 1:30  aula 100 s  persistencia 1 s  orcamento 30 s  avisos em 20 s e 26 s  requalificacao 60 s
+
+01:30:30 t=   0.0s      seq=74   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:30:32 t=   0.5s      seq=75   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:30:38 SILENCIO       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; o que chegar depois entra no passado
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: FORA   t=0.5 s de 100 s
+  acumulado garantido: 0.0 s (0.0%)   provisorio: 0.0 s
+  presenca confirmada 0.0 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 1.0 s
+  aceitos=2 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:30:51 RETOMADO       heartbeats voltaram a chegar
+01:30:51 t=   1.0s      seq=1    A  -62 B  -62 C  -59  INDETERMINADA  (  6.0,  4.4) neutro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:30:52 t=   1.4s      seq=2    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:30:53 t=   2.0s      seq=3    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:30:55 t=   2.5s      seq=4    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   1.0s ( 1.0%) orc 30.0s
+      >>> FORA -> PRESENTE em t=1.4 s (sinal na sala sustentado)
+01:30:56 t=   3.0s      seq=5    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   1.5s ( 1.5%) orc 30.0s
+01:30:57 t=   3.5s      seq=6    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.0s ( 2.0%) orc 30.0s
+01:30:58 t=   4.0s      seq=7    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.5s ( 2.5%) orc 30.0s
+01:31:00 t=   4.5s      seq=8    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.0s ( 3.0%) orc 30.0s
+01:31:01 t=   5.0s      seq=9    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.6s ( 3.6%) orc 30.0s
+01:31:02 t=   5.5s      seq=10   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.1s ( 4.1%) orc 30.0s
+01:31:04 t=   6.0s      seq=11   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.6s ( 4.6%) orc 30.0s
+01:31:05 t=   6.6s      seq=12   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   5.1s ( 5.1%) orc 30.0s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=6.6 s de 100 s
+  acumulado garantido: 5.1 s (5.1%)   provisorio: 0.0 s
+  presenca confirmada 5.1 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=14 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:31:11 SILENCIO       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; o que chegar depois entra no passado
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=6.6 s de 100 s
+  acumulado garantido: 5.1 s (5.1%)   provisorio: 0.0 s
+  presenca confirmada 5.1 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=14 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=6.6 s de 100 s
+  acumulado garantido: 5.1 s (5.1%)   provisorio: 0.0 s
+  presenca confirmada 5.1 s + ausencia creditada 0.0 s   orcamento usado 0.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+  aceitos=14 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:32:13 RETOMADO       heartbeats voltaram a chegar
+01:32:13 t=   8.4s      seq=13   A  -64 B  -62 C  -61  DENTRO_ALCANCE (  6.8,  4.2) dentro -> PRESENTE          acum   6.9s ( 6.9%) orc 30.0s
+01:32:14 t=   8.8s      seq=14   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> PRESENTE          acum   7.4s ( 7.4%) orc 30.0s
+01:32:15 t=   9.3s      seq=15   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> PRESENTE          acum   7.4s ( 7.4%) orc 30.0s
+01:32:17 t=   9.8s      seq=16   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 29.0s
+      >>> PRESENTE -> AUSENCIA_TOLERADA em t=8.8 s (sinal fora da sala sustentado)
+01:32:18 t=  10.3s      seq=17   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 28.5s
+01:32:21 t=  10.8s      seq=18   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 28.0s
+01:32:22 t=  11.3s      seq=19   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 27.5s
+01:32:22 t=  11.8s      seq=20   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 27.0s
+01:32:24 t=  12.4s      seq=21   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 26.4s
+01:32:25 t=  12.9s      seq=22   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 25.9s
+01:32:26 t=  13.4s      seq=23   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 25.4s
+01:32:28 t=  13.9s      seq=24   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 24.9s
+01:32:29 t=  14.5s      seq=25   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 24.3s
+01:32:31 t=  15.0s      seq=26   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 23.8s
+01:32:32 t=  15.5s      seq=27   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 23.3s
+01:32:33 t=  16.0s      seq=28   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 22.8s
+01:32:35 t=  16.5s      seq=29   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 22.3s
+01:32:36 t=  17.0s      seq=30   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 21.8s
+01:32:37 t=  17.5s      seq=31   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 21.3s
+01:32:39 t=  18.0s      seq=32   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 20.8s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: AUSENCIA_TOLERADA   t=18.0 s de 100 s
+  acumulado garantido: 7.4 s (7.4%)   provisorio: 9.2 s
+  presenca confirmada 7.4 s + ausencia creditada 0.0 s   orcamento usado 9.2 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 7.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+  aceitos=34 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:32:41 t=  18.5s      seq=33   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 20.3s
+01:32:43 t=  19.0s      seq=34   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 19.8s
+01:32:43 t=  19.5s      seq=35   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 19.3s
+01:32:45 t=  20.1s      seq=36   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 18.7s
+01:32:46 t=  20.6s      seq=37   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 18.2s
+01:32:47 t=  21.1s      seq=38   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 17.7s
+01:32:48 t=  21.6s      seq=39   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 17.2s
+01:32:50 t=  22.1s      seq=40   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 16.7s
+01:32:51 t=  22.6s      seq=41   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 16.2s
+01:32:52 t=  23.1s      seq=42   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 15.7s
+01:32:54 t=  23.7s      seq=43   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 15.1s
+01:32:55 t=  24.2s      seq=44   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 14.6s
+01:32:57 t=  24.7s      seq=45   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 14.1s
+01:32:58 t=  25.2s      seq=46   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 13.6s
+01:33:00 t=  25.7s      seq=47   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 13.1s
+01:33:00 t=  26.2s      seq=48   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 12.6s
+01:33:01 t=  26.7s      seq=49   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 12.1s
+01:33:03 t=  27.2s      seq=50   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 11.6s
+01:33:05 t=  27.7s      seq=51   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 11.1s
+01:33:05 t=  28.2s      seq=52   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 10.6s
+01:33:07 t=  28.7s      seq=53   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc 10.1s
+01:33:08 t=  29.2s      seq=54   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  9.6s
+
+========================================================================
+  AVISO AO ESTUDANTE  [AVISO_10_MIN]  t=28.8 s
+  "Fora da sala ha 20 s. Seu limite e de 30 s nesta aula."
+========================================================================
+
+01:33:09 t=  29.7s      seq=55   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  9.1s
+01:33:11 t=  30.2s      seq=56   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  8.6s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: AUSENCIA_TOLERADA   t=30.2 s de 100 s
+  acumulado garantido: 7.4 s (7.4%)   provisorio: 21.4 s
+  presenca confirmada 7.4 s + ausencia creditada 0.0 s   orcamento usado 21.4 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 7.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+  aceitos=58 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:33:12 t=  30.7s      seq=57   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  8.1s
+01:33:13 t=  31.2s      seq=58   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  7.6s
+01:33:14 t=  31.7s      seq=59   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  7.1s
+01:33:16 t=  32.3s      seq=60   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  6.5s
+01:33:17 t=  32.8s      seq=61   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  6.0s
+01:33:18 t=  33.3s      seq=62   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  5.5s
+01:33:19 t=  33.8s      seq=63   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  5.0s
+01:33:21 t=  34.3s      seq=64   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  4.5s
+01:33:22 t=  34.8s      seq=65   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  4.0s
+01:33:23 t=  35.3s      seq=66   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  3.5s
+
+========================================================================
+  AVISO AO ESTUDANTE  [AVISO_13_MIN]  t=34.8 s
+  "Faltam 4 s do seu limite. Depois disso o tempo para de contar."
+========================================================================
+
+01:33:24 t=  35.8s      seq=67   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) fora   -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  3.0s
+01:33:26 t=  36.3s      seq=68   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  2.5s
+01:33:27 t=  36.8s      seq=69   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> AUSENCIA_TOLERADA acum   7.4s ( 7.4%) orc  2.0s
+01:33:28 t=  37.3s      seq=70   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   8.4s ( 8.4%) orc  2.5s
+      >>> AUSENCIA_TOLERADA -> PRESENTE em t=36.3 s (retornou dentro do orcamento)
+01:33:30 t=  37.8s      seq=71   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   8.9s ( 8.9%) orc  2.5s
+01:33:31 t=  38.3s      seq=72   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   9.4s ( 9.4%) orc  2.5s
+01:33:32 t=  38.8s      seq=73   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   9.9s ( 9.9%) orc  2.5s
+01:33:33 t=  39.3s      seq=74   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  10.4s (10.4%) orc  2.5s
+01:33:35 t=  39.8s      seq=75   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  10.9s (10.9%) orc  2.5s
+01:33:36 t=  40.3s      seq=76   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  11.4s (11.4%) orc  2.5s
+01:33:37 t=  40.8s      seq=77   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  11.9s (11.9%) orc  2.5s
+01:33:38 t=  41.3s      seq=78   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  12.4s (12.4%) orc  2.5s
+01:33:39 t=  41.9s      seq=79   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  13.0s (13.0%) orc  2.5s
+01:33:41 t=  42.4s      seq=80   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  13.5s (13.5%) orc  2.5s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=42.4 s de 100 s
+  acumulado garantido: 13.5 s (13.5%)   provisorio: 27.5 s
+  presenca confirmada 13.5 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 13.5 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=82 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:33:42 t=  42.9s      seq=81   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  14.0s (14.0%) orc  2.5s
+01:33:43 t=  43.4s      seq=82   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  14.5s (14.5%) orc  2.5s
+01:33:44 t=  43.9s      seq=83   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  15.0s (15.0%) orc  2.5s
+01:33:51 SILENCIO       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; o que chegar depois entra no passado
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=43.9 s de 100 s
+  acumulado garantido: 15.0 s (15.0%)   provisorio: 27.5 s
+  presenca confirmada 15.0 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 15.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=85 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=43.9 s de 100 s
+  acumulado garantido: 15.0 s (15.0%)   provisorio: 27.5 s
+  presenca confirmada 15.0 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 15.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=85 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:34:55 RETOMADO       heartbeats voltaram a chegar
+01:34:55 t=  45.9s      seq=84   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  17.0s (17.0%) orc  2.5s
+01:34:56 t=  46.4s      seq=85   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  17.5s (17.5%) orc  2.5s
+01:34:58 t=  46.9s      seq=86   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  18.0s (18.0%) orc  2.5s
+01:34:59 t=  47.4s      seq=87   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  18.5s (18.5%) orc  2.5s
+01:35:00 t=  47.9s      seq=88   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  19.0s (19.0%) orc  2.5s
+01:35:01 t=  48.4s      seq=89   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  19.5s (19.5%) orc  2.5s
+01:35:02 t=  48.9s      seq=90   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  20.0s (20.0%) orc  2.5s
+01:35:04 t=  49.4s      seq=91   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  20.5s (20.5%) orc  2.5s
+01:35:06 t=  49.9s      seq=92   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  21.0s (21.0%) orc  2.5s
+01:35:07 DUPLICADO      apar-01#a52e#92 ja processado - descartado, nada recalculado
+01:35:07 t=  50.9s      seq=93   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  22.0s (22.0%) orc  2.5s
+01:35:09 t=  51.5s      seq=94   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  22.6s (22.6%) orc  2.5s
+01:35:10 t=  52.0s      seq=95   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  23.1s (23.1%) orc  2.5s
+01:35:11 t=  52.5s      seq=96   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  23.6s (23.6%) orc  2.5s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=52.5 s de 100 s
+  acumulado garantido: 23.6 s (23.6%)   provisorio: 27.5 s
+  presenca confirmada 23.6 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 22.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=98 duplicados=1 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:35:12 t=  53.0s      seq=97   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  24.1s (24.1%) orc  2.5s
+01:35:13 t=  53.5s      seq=98   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  24.6s (24.6%) orc  2.5s
+01:35:14 t=  54.0s      seq=99   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  25.1s (25.1%) orc  2.5s
+01:35:17 SALTO          esperado 100, recebido 101 - 1 heartbeat(s) perdido(s); o intervalo fica sem evidencia
+01:35:17 t=  55.1s      seq=101  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  26.2s (26.2%) orc  2.5s
+01:35:17 FORA DE ORDEM  seq=100 chegou depois de 101 - inserido na posicao original e sessao recalculada
+01:35:17 t=  54.6s      seq=100  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  26.2s (26.2%) orc  2.5s
+01:35:18 t=  55.6s      seq=102  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  26.7s (26.7%) orc  2.5s
+01:35:19 t=  56.1s      seq=103  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  27.2s (27.2%) orc  2.5s
+01:35:20 t=  56.6s      seq=104  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  27.7s (27.7%) orc  2.5s
+01:35:21 t=  57.1s      seq=105  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  28.2s (28.2%) orc  2.5s
+01:35:22 t=  57.6s      seq=106  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  28.7s (28.7%) orc  2.5s
+01:35:24 SALTO          esperado 107, recebido 112 - 5 heartbeat(s) perdido(s); o intervalo fica sem evidencia
+01:35:24 t=  58.1s      seq=112  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  29.2s (29.2%) orc  2.5s
+01:35:25 t=  58.6s      seq=113  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  29.7s (29.7%) orc  2.5s
+01:35:26 t=  59.1s      seq=114  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  30.2s (30.2%) orc  2.5s
+01:35:27 t=  59.6s      seq=115  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  30.7s (30.7%) orc  2.5s
+01:35:28 t=  60.2s      seq=116  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  31.3s (31.3%) orc  2.5s
+01:35:30 t=  60.7s      seq=117  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  31.8s (31.8%) orc  2.5s
+01:35:31 t=  61.2s      seq=118  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  32.3s (32.3%) orc  2.5s
+01:35:32 t=  61.7s      seq=119  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  32.8s (32.8%) orc  2.5s
+01:35:33 t=  62.2s      seq=120  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  33.3s (33.3%) orc  2.5s
+01:35:34 t=  62.7s      seq=121  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  33.8s (33.8%) orc  2.5s
+01:35:35 t=  63.2s      seq=122  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  34.3s (34.3%) orc  2.5s
+01:35:37 t=  63.7s      seq=123  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  34.8s (34.8%) orc  2.5s
+01:35:38 t=  64.3s      seq=124  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  35.4s (35.4%) orc  2.5s
+01:35:39 t=  64.8s      seq=125  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  35.9s (35.9%) orc  2.5s
+01:35:40 t=  65.3s      seq=126  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  36.4s (36.4%) orc  2.5s
+01:35:41 t=  65.8s      seq=127  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  36.9s (36.9%) orc  2.5s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=65.8 s de 100 s
+  acumulado garantido: 36.9 s (36.9%)   provisorio: 27.5 s
+  presenca confirmada 36.9 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 35.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=124 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:35:42 t=  66.3s      seq=128  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  37.4s (37.4%) orc  2.5s
+01:35:44 t=  66.8s      seq=129  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  37.9s (37.9%) orc  2.5s
+01:35:45 t=  67.3s      seq=130  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  38.4s (38.4%) orc  2.5s
+01:35:46 t=  67.8s      seq=131  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  38.9s (38.9%) orc  2.5s
+01:35:47 t=  68.3s      seq=132  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  39.4s (39.4%) orc  2.5s
+01:35:53 SILENCIO       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; o que chegar depois entra no passado
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=68.3 s de 100 s
+  acumulado garantido: 39.4 s (39.4%)   provisorio: 27.5 s
+  presenca confirmada 39.4 s + ausencia creditada 0.0 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 37.5 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=129 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:36:25 RETOMADO       heartbeats voltaram a chegar
+01:36:25 ATRASADO       seq=133 retido no aparelho, medido em 76335 ms - entra no passado e a sessao e recalculada
+01:36:25 t=  68.8s      seq=133  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  39.9s (39.9%) orc  2.5s
+01:36:25 ATRASADO       seq=134 retido no aparelho, medido em 76835 ms - entra no passado e a sessao e recalculada
+01:36:25 t=  69.3s      seq=134  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  40.4s (40.4%) orc  2.5s
+01:36:25 ATRASADO       seq=135 retido no aparelho, medido em 77335 ms - entra no passado e a sessao e recalculada
+01:36:25 t=  69.8s      seq=135  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  40.9s (40.9%) orc  2.5s
+01:36:26 ATRASADO       seq=136 retido no aparelho, medido em 77835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  70.3s      seq=136  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  41.4s (41.4%) orc  2.5s
+01:36:26 ATRASADO       seq=137 retido no aparelho, medido em 78335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  70.8s      seq=137  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  41.9s (41.9%) orc  2.5s
+01:36:26 ATRASADO       seq=138 retido no aparelho, medido em 78835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  71.3s      seq=138  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  42.4s (42.4%) orc  2.5s
+01:36:26 ATRASADO       seq=139 retido no aparelho, medido em 79335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  71.8s      seq=139  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  42.9s (42.9%) orc  2.5s
+01:36:26 ATRASADO       seq=140 retido no aparelho, medido em 79835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  72.3s      seq=140  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  43.4s (43.4%) orc  2.5s
+01:36:26 ATRASADO       seq=141 retido no aparelho, medido em 80335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  72.8s      seq=141  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  43.9s (43.9%) orc  2.5s
+01:36:26 ATRASADO       seq=142 retido no aparelho, medido em 80835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  73.3s      seq=142  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  44.4s (44.4%) orc  2.5s
+01:36:26 ATRASADO       seq=143 retido no aparelho, medido em 81335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  73.8s      seq=143  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  44.9s (44.9%) orc  2.5s
+01:36:26 ATRASADO       seq=144 retido no aparelho, medido em 81835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  74.3s      seq=144  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  45.4s (45.4%) orc  2.5s
+01:36:26 ATRASADO       seq=145 retido no aparelho, medido em 82335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  74.8s      seq=145  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  45.9s (45.9%) orc  2.5s
+01:36:26 ATRASADO       seq=146 retido no aparelho, medido em 82835 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  75.3s      seq=146  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  46.4s (46.4%) orc  2.5s
+01:36:26 ATRASADO       seq=147 retido no aparelho, medido em 83335 ms - entra no passado e a sessao e recalculada
+01:36:26 t=  75.8s      seq=147  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  46.9s (46.9%) orc  2.5s
+01:36:27 ATRASADO       seq=148 retido no aparelho, medido em 83835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  76.3s      seq=148  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  47.4s (47.4%) orc  2.5s
+01:36:27 ATRASADO       seq=149 retido no aparelho, medido em 84335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  76.8s      seq=149  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  47.9s (47.9%) orc  2.5s
+01:36:27 ATRASADO       seq=150 retido no aparelho, medido em 84835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  77.3s      seq=150  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  48.4s (48.4%) orc  2.5s
+01:36:27 ATRASADO       seq=151 retido no aparelho, medido em 85335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  77.8s      seq=151  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  48.9s (48.9%) orc  2.5s
+01:36:27 ATRASADO       seq=152 retido no aparelho, medido em 85835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  78.3s      seq=152  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  49.4s (49.4%) orc  2.5s
+01:36:27 ATRASADO       seq=153 retido no aparelho, medido em 86335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  78.8s      seq=153  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  49.9s (49.9%) orc  2.5s
+01:36:27 ATRASADO       seq=154 retido no aparelho, medido em 86835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  79.3s      seq=154  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  50.4s (50.4%) orc  2.5s
+01:36:27 ATRASADO       seq=155 retido no aparelho, medido em 87335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  79.8s      seq=155  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  50.9s (50.9%) orc  2.5s
+01:36:27 ATRASADO       seq=156 retido no aparelho, medido em 87835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  80.3s      seq=156  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  51.4s (51.4%) orc  2.5s
+01:36:27 ATRASADO       seq=157 retido no aparelho, medido em 88335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  80.8s      seq=157  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  51.9s (51.9%) orc  2.5s
+01:36:27 ATRASADO       seq=158 retido no aparelho, medido em 88835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  81.3s      seq=158  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  52.4s (52.4%) orc  2.5s
+01:36:27 ATRASADO       seq=159 retido no aparelho, medido em 89335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  81.8s      seq=159  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  52.9s (52.9%) orc  2.5s
+01:36:27 ATRASADO       seq=160 retido no aparelho, medido em 89835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  82.3s      seq=160  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  53.4s (53.4%) orc  2.5s
+01:36:27 ATRASADO       seq=161 retido no aparelho, medido em 90335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  82.8s      seq=161  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  53.9s (53.9%) orc  2.5s
+01:36:27 ATRASADO       seq=162 retido no aparelho, medido em 90835 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  83.3s      seq=162  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  54.4s (54.4%) orc  2.5s
+01:36:27 ATRASADO       seq=163 retido no aparelho, medido em 91335 ms - entra no passado e a sessao e recalculada
+01:36:27 t=  83.8s      seq=163  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  54.9s (54.9%) orc  2.5s
+01:36:28 ATRASADO       seq=164 retido no aparelho, medido em 91835 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  84.3s      seq=164  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  55.4s (55.4%) orc  2.5s
+01:36:28 ATRASADO       seq=165 retido no aparelho, medido em 92335 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  84.8s      seq=165  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  55.9s (55.9%) orc  2.5s
+01:36:28 ATRASADO       seq=166 retido no aparelho, medido em 92835 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  85.3s      seq=166  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  56.4s (56.4%) orc  2.5s
+01:36:28 ATRASADO       seq=167 retido no aparelho, medido em 93335 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  85.8s      seq=167  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  56.9s (56.9%) orc  2.5s
+01:36:28 ATRASADO       seq=168 retido no aparelho, medido em 93835 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  86.3s      seq=168  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  57.4s (57.4%) orc  2.5s
+01:36:28 ATRASADO       seq=169 retido no aparelho, medido em 94335 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  86.8s      seq=169  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  57.9s (57.9%) orc  2.5s
+01:36:28 ATRASADO       seq=170 retido no aparelho, medido em 94835 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  87.3s      seq=170  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  58.4s (58.4%) orc  2.5s
+01:36:28 ATRASADO       seq=171 retido no aparelho, medido em 95335 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  87.8s      seq=171  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  58.9s (58.9%) orc  2.5s
+01:36:28 ATRASADO       seq=172 retido no aparelho, medido em 95835 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  88.3s      seq=172  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  59.4s (59.4%) orc  2.5s
+01:36:28 ATRASADO       seq=173 retido no aparelho, medido em 96335 ms - entra no passado e a sessao e recalculada
+01:36:28 t=  88.8s      seq=173  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  59.9s (59.9%) orc  2.5s
+01:36:29 t=  91.9s      seq=174  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  63.0s (63.0%) orc  2.5s
+01:36:30 t=  92.4s      seq=175  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  63.5s (63.5%) orc  2.5s
+01:36:31 t=  92.9s      seq=176  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  64.0s (64.0%) orc  2.5s
+01:36:32 t=  93.4s      seq=177  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  64.5s (64.5%) orc  2.5s
+01:36:33 t=  94.0s      seq=178  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  65.1s (65.1%) orc  2.5s
+01:36:34 t=  94.4s      seq=179  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  65.5s (65.5%) orc  2.5s
+01:36:35 t=  94.9s      seq=180  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  66.0s (66.0%) orc  2.5s
+01:36:36 t=  95.5s      seq=181  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  66.6s (66.6%) orc  2.5s
+01:36:37 t=  95.9s      seq=182  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  67.1s (67.1%) orc  2.5s
+01:36:38 t=  96.5s      seq=183  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  95.0s (95.0%) orc  2.5s
+01:36:40 t=  97.0s      seq=184  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  95.5s (95.5%) orc  2.5s
+01:36:40 t=  97.5s      seq=185  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  96.0s (96.0%) orc  2.5s
+
+------------------------------------------------------------------------
+  painel da sessao s31a2
+  estado: PRESENTE   t=97.5 s de 100 s
+  acumulado garantido: 96.0 s (96.0%)   provisorio: 0.0 s
+  presenca confirmada 68.6 s + ausencia creditada 27.5 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 64.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=182 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=41 invalidos=0
+------------------------------------------------------------------------
+
+01:36:42 t=  98.0s      seq=186  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  96.5s (96.5%) orc  2.5s
+01:36:43 t=  98.5s      seq=187  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  97.0s (97.0%) orc  2.5s
+01:36:44 t=  99.0s      seq=188  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  97.5s (97.5%) orc  2.5s
+01:36:45 t=  99.5s      seq=189  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  98.0s (98.0%) orc  2.5s
+01:36:46 t= 100.0s      seq=190  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  98.5s (98.5%) orc  2.5s
+01:36:47 t= 100.5s      seq=191  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum  98.6s (98.6%) orc  2.5s
+
+========================================================================
+  AVISO AO ESTUDANTE  [FIM_DA_AULA]  t=100.0 s
+  "Voce acumulou 99% desta aula."
+========================================================================
+
+
+------------------------------------------------------------------------
+  RELATORIO FINAL DA SESSAO s31a2
+  estado: PRESENTE   t=100.0 s de 100 s
+  acumulado garantido: 98.6 s (98.6%)   provisorio: 0.0 s   -> APROVADO na aula (minimo 75%)
+  presenca confirmada 71.1 s + ausencia creditada 27.5 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 67.0 s
+    t=   1.4s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -> PRESENTE  (retornou dentro do orcamento)
+  aceitos=188 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=41 invalidos=0
+------------------------------------------------------------------------
+
+
+=== sessao sb6a8 aberta ===
+escala 1:30  aula 100 s  persistencia 1 s  orcamento 30 s  avisos em 20 s e 26 s  requalificacao 60 s
+
+01:37:14 t=   0.0s      seq=215  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:37:14 t=   0.5s      seq=216  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:37:15 t=   1.0s      seq=217  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> FORA              acum   0.0s ( 0.0%) orc 30.0s
+01:37:16 t=   1.5s      seq=218  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   1.5s ( 1.5%) orc 30.0s
+      >>> FORA -> PRESENTE em t=0.0 s (sinal na sala sustentado)
+01:37:17 t=   2.0s      seq=219  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.0s ( 2.0%) orc 30.0s
+01:37:19 t=   2.5s      seq=220  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   2.5s ( 2.5%) orc 30.0s
+01:37:20 t=   3.1s      seq=221  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.1s ( 3.1%) orc 30.0s
+01:37:21 t=   3.6s      seq=222  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   3.6s ( 3.6%) orc 30.0s
+01:37:22 t=   4.1s      seq=223  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.1s ( 4.1%) orc 30.0s
+01:37:23 t=   4.6s      seq=224  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   4.6s ( 4.6%) orc 30.0s
+01:37:25 t=   5.1s      seq=225  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   5.1s ( 5.1%) orc 30.0s
+01:37:26 t=   5.6s      seq=226  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   5.6s ( 5.6%) orc 30.0s
+01:37:27 t=   6.1s      seq=227  A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -> PRESENTE          acum   6.1s ( 6.1%) orc 30.0s
+01:37:28 t=   6.6s      seq=228  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> PRESENTE          acum   6.6s ( 6.6%) orc 30.0s
+01:37:29 t=   7.2s      seq=229  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> PRESENTE          acum   6.6s ( 6.6%) orc 30.0s
+01:37:31 t=   7.7s      seq=230  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 29.0s
+      >>> PRESENTE -> AUSENCIA_TOLERADA em t=6.6 s (sinal fora da sala sustentado)
+01:37:32 t=   8.2s      seq=231  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 28.4s
+01:37:33 t=   8.7s      seq=232  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 27.9s
+01:37:34 t=   9.2s      seq=233  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 27.4s
+01:37:36 t=   9.8s      seq=234  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 26.9s
+01:37:37 t=  10.3s      seq=235  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 26.4s
+01:37:38 t=  10.8s      seq=236  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 25.9s
+01:37:39 t=  11.3s      seq=237  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 25.3s
+01:37:40 t=  11.8s      seq=238  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 24.8s
+01:37:41 t=  12.3s      seq=239  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 24.3s
+
+------------------------------------------------------------------------
+  painel da sessao sb6a8
+  estado: AUSENCIA_TOLERADA   t=12.3 s de 100 s
+  acumulado garantido: 6.6 s (6.6%)   provisorio: 5.7 s
+  presenca confirmada 6.6 s + ausencia creditada 0.0 s   orcamento usado 5.7 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   0.0s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   6.6s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+  aceitos=25 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:37:42 t=  12.8s      seq=240  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 23.8s
+01:37:44 t=  13.3s      seq=241  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 23.3s
+01:37:45 t=  13.8s      seq=242  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 22.8s
+01:37:46 t=  14.4s      seq=243  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 22.3s
+01:37:47 t=  14.9s      seq=244  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 21.7s
+01:37:49 t=  15.4s      seq=245  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 21.2s
+01:37:50 t=  15.9s      seq=246  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 20.7s
+01:37:51 t=  16.4s      seq=247  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 20.2s
+01:37:52 t=  16.9s      seq=248  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 19.7s
+01:37:53 t=  17.4s      seq=249  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 19.2s
+01:37:54 t=  18.0s      seq=250  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 18.7s
+01:37:55 t=  18.5s      seq=251  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 18.2s
+01:37:56 t=  19.0s      seq=252  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 17.7s
+01:37:58 t=  19.5s      seq=253  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 17.2s
+01:37:59 t=  20.0s      seq=254  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 16.7s
+01:38:00 t=  20.5s      seq=255  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 16.2s
+01:38:01 t=  21.0s      seq=256  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 15.7s
+01:38:02 t=  21.5s      seq=257  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 15.2s
+01:38:03 t=  22.0s      seq=258  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 14.7s
+01:38:05 t=  22.5s      seq=259  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 14.1s
+01:38:06 t=  23.0s      seq=260  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 13.6s
+01:38:07 t=  23.5s      seq=261  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 13.1s
+01:38:08 t=  24.1s      seq=262  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 12.6s
+01:38:09 t=  24.6s      seq=263  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 12.1s
+01:38:11 t=  25.1s      seq=264  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 11.6s
+
+------------------------------------------------------------------------
+  painel da sessao sb6a8
+  estado: AUSENCIA_TOLERADA   t=25.1 s de 100 s
+  acumulado garantido: 6.6 s (6.6%)   provisorio: 18.4 s
+  presenca confirmada 6.6 s + ausencia creditada 0.0 s   orcamento usado 18.4 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   0.0s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   6.6s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+  aceitos=50 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:38:12 t=  25.6s      seq=265  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 11.1s
+01:38:13 t=  26.1s      seq=266  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 10.6s
+01:38:14 t=  26.6s      seq=267  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc 10.1s
+01:38:15 t=  27.1s      seq=268  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  9.6s
+
+========================================================================
+  AVISO AO ESTUDANTE  [AVISO_10_MIN]  t=26.6 s
+  "Fora da sala ha 20 s. Seu limite e de 30 s nesta aula."
+========================================================================
+
+01:38:17 t=  27.6s      seq=269  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  9.0s
+01:38:19 t=  28.1s      seq=270  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  8.5s
+01:38:19 t=  28.6s      seq=271  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  8.0s
+01:38:22 t=  29.1s      seq=272  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  7.5s
+01:38:23 t=  29.6s      seq=273  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  7.0s
+01:38:23 t=  30.1s      seq=274  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  6.5s
+01:38:24 t=  30.6s      seq=275  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  6.0s
+01:38:25 t=  31.1s      seq=276  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  5.5s
+01:38:27 t=  31.6s      seq=277  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  5.0s
+01:38:28 t=  32.2s      seq=278  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  4.5s
+01:38:29 t=  32.7s      seq=279  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  4.0s
+
+========================================================================
+  AVISO AO ESTUDANTE  [AVISO_13_MIN]  t=32.6 s
+  "Faltam 4 s do seu limite. Depois disso o tempo para de contar."
+========================================================================
+
+01:38:31 t=  33.2s      seq=280  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  3.5s
+01:38:32 t=  33.7s      seq=281  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  2.9s
+01:38:32 t=  34.2s      seq=282  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  2.4s
+01:38:34 t=  34.7s      seq=283  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  1.9s
+01:38:35 t=  35.2s      seq=284  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  1.4s
+01:38:36 t=  35.7s      seq=285  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  0.9s
+01:38:37 t=  36.2s      seq=286  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> AUSENCIA_TOLERADA acum   6.6s ( 6.6%) orc  0.4s
+01:38:38 t=  36.7s      seq=287  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+      >>> AUSENCIA_TOLERADA -> FORA em t=36.6 s (orcamento de ausencia esgotado)
+
+========================================================================
+  AVISO AO ESTUDANTE  [LIMITE_ESGOTADO]  t=36.6 s
+  "O tempo parou de ser contabilizado em t=7 s."
+========================================================================
+
+01:38:39 t=  37.2s      seq=288  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:40 t=  37.8s      seq=289  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+
+------------------------------------------------------------------------
+  painel da sessao sb6a8
+  estado: FORA   t=37.8 s de 100 s
+  acumulado garantido: 6.6 s (6.6%)   provisorio: 0.0 s
+  presenca confirmada 6.6 s + ausencia creditada 0.0 s   orcamento usado 30.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   0.0s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   6.6s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.6s  AUSENCIA_TOLERADA -> FORA  (orcamento de ausencia esgotado)
+  aceitos=75 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:38:42 t=  38.3s      seq=290  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:43 t=  38.8s      seq=291  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:44 t=  39.3s      seq=292  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:45 t=  39.8s      seq=293  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:46 t=  40.3s      seq=294  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:47 t=  40.8s      seq=295  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:49 t=  41.3s      seq=296  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:51 t=  41.8s      seq=297  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:51 t=  42.3s      seq=298  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:52 t=  42.8s      seq=299  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:53 t=  43.3s      seq=300  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:54 t=  43.8s      seq=301  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:56 t=  44.3s      seq=302  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:56 t=  44.8s      seq=303  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:58 t=  45.4s      seq=304  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:38:59 t=  45.9s      seq=305  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:00 t=  46.4s      seq=306  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:01 t=  46.9s      seq=307  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:02 t=  47.4s      seq=308  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:08 t=  47.9s      seq=309  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:08 t=  48.4s      seq=310  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:10 t=  48.9s      seq=311  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:10 t=  49.4s      seq=312  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:10 t=  49.9s      seq=313  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:10 t=  50.4s      seq=314  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:10 t=  50.9s      seq=315  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+
+------------------------------------------------------------------------
+  painel da sessao sb6a8
+  estado: FORA   t=50.9 s de 100 s
+  acumulado garantido: 6.6 s (6.6%)   provisorio: 0.0 s
+  presenca confirmada 6.6 s + ausencia creditada 0.0 s   orcamento usado 30.0 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 6.5 s
+    t=   0.0s  FORA -> PRESENTE  (sinal na sala sustentado)
+    t=   6.6s  PRESENTE -> AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.6s  AUSENCIA_TOLERADA -> FORA  (orcamento de ausencia esgotado)
+  aceitos=101 duplicados=0 fora de ordem=0 saltos=0 (0 perdidos) atrasados=0 invalidos=0
+------------------------------------------------------------------------
+
+01:39:11 t=  51.5s      seq=316  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:12 t=  52.0s      seq=317  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:13 t=  52.5s      seq=318  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:14 t=  53.0s      seq=319  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:15 t=  53.5s      seq=320  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:17 t=  54.0s      seq=321  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s
+01:39:18 t=  54.5s      seq=322  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -> FORA              acum   6.6s ( 6.6%) orc  0.0s

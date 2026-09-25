@@ -1,0 +1,377 @@
+{
+  "version": 1,
+  "author": "Alany Gabrielly - 202105018",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 150,
+      "left": 230,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potA",
+      "top": 0,
+      "left": 20,
+      "attrs": {
+        "value": "731"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potB",
+      "top": 100,
+      "left": 20,
+      "attrs": {
+        "value": "731"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potC",
+      "top": 200,
+      "left": 20,
+      "attrs": {
+        "value": "731"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnAnom",
+      "top": 320,
+      "left": 20,
+      "attrs": {
+        "color": "blue",
+        "label": "ANOMALIA"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnRede",
+      "top": 400,
+      "left": 20,
+      "attrs": {
+        "color": "red",
+        "label": "REDE OFF"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledVerde",
+      "top": 170,
+      "left": 500,
+      "attrs": {
+        "color": "green",
+        "label": "PRESENTE"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledAmarelo",
+      "top": 240,
+      "left": 500,
+      "attrs": {
+        "color": "yellow",
+        "label": "AUSENCIA"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledVermelho",
+      "top": 310,
+      "left": 500,
+      "attrs": {
+        "color": "red",
+        "label": "FORA"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 190,
+      "left": 420,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 260,
+      "left": 420,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 330,
+      "left": 420,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 390,
+      "left": 470,
+      "attrs": {
+        "volume": "0.2"
+      }
+    },
+    {
+      "type": "wokwi-ssd1306",
+      "id": "oled",
+      "top": 10,
+      "left": 400,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "potA:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potA:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potA:SIG",
+      "esp:D34",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potB:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potB:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potB:SIG",
+      "esp:D35",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potC:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potC:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "potC:SIG",
+      "esp:D32",
+      "violet",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "btnAnom:1.l",
+      "esp:D25",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "btnAnom:2.l",
+      "esp:GND.2",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "btnRede:1.l",
+      "esp:D26",
+      "orange",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "btnRede:2.l",
+      "esp:GND.2",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:D14",
+      "r1:1",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "r1:2",
+      "ledVerde:A",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "ledVerde:C",
+      "esp:GND.3",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:D27",
+      "r2:1",
+      "gold",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "r2:2",
+      "ledAmarelo:A",
+      "gold",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "ledAmarelo:C",
+      "esp:GND.3",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:D13",
+      "r3:1",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "r3:2",
+      "ledVermelho:A",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "ledVermelho:C",
+      "esp:GND.3",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:D18",
+      "bz1:2",
+      "magenta",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "bz1:1",
+      "esp:GND.3",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "oled:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "oled:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "oled:SDA",
+      "esp:D21",
+      "purple",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "oled:SCL",
+      "esp:D22",
+      "yellow",
+      [
+        "v0"
+      ]
+    ]
+  ],
+  "dependencies": {},
+  "serialMonitor": {
+    "display": "always",
+    "newline": "lf"
+  }
+}

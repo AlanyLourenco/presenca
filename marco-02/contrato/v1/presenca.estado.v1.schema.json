@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.estado.v1.schema.json",
+  "title": "presenca.estado.v1",
+  "description": "Resposta do servidor ao aparelho depois de cada heartbeat processado. Carrega a decisão sobre a permanência. É publicada com retain: um aparelho que acabou de ligar recebe o último estado de imediato.",
+  "type": "object",
+  "required": [
+    "eventType", "estadoId", "aluno", "entityId", "estado", "acumuladoS",
+    "provisorioS", "percentual", "orcamentoRestanteS", "emitidoEmMs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": { "const": "presenca.estado.v1" },
+    "estadoId": {
+      "type": "string",
+      "description": "Identificação única da resposta: srv-204#n. O aparelho ignora uma resposta mais antiga que a última aplicada."
+    },
+    "aluno": { "type": "string" },
+    "entityId": { "type": "string" },
+    "estado": {
+      "enum": ["FORA", "PRESENTE", "AUSENCIA_TOLERADA", "PAUSA_PROGRAMADA"],
+      "description": "Estado da máquina de permanência (projeto técnico, seção 6)."
+    },
+    "acumuladoS": {
+      "type": "number", "minimum": 0,
+      "description": "Permanência garantida na sessão: presença confirmada mais ausência tolerada já requalificada. Monotônico."
+    },
+    "provisorioS": {
+      "type": "number", "minimum": 0,
+      "description": "Tempo que ainda pode entrar ou sair do acumulado: ausência em curso, ausência aguardando requalificação e saída ainda não confirmada."
+    },
+    "percentual": { "type": "number", "minimum": 0, "maximum": 100 },
+    "orcamentoRestanteS": { "type": "number", "minimum": 0 },
+    "tempoAulaS": { "type": "number", "minimum": 0, "description": "Posição na aula, em segundos da demonstração." },
+    "classe": { "enum": ["dentro", "fora", "neutro"], "description": "O que o último heartbeat indicou." },
+    "posicao": {
+      "type": ["array", "null"],
+      "items": { "type": "number" },
+      "minItems": 2, "maxItems": 2,
+      "description": "Posição estimada por trilateração, em metros. Não é persistida: serve só para explicar a decisão."
+    },
+    "dentroPoligono": { "type": ["boolean", "null"] },
+    "encerrada": { "type": "boolean" },
+    "emitidoEmMs": { "type": "integer", "description": "Relógio do servidor, epoch em ms." }
+  }
+}

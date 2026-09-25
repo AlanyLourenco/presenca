@@ -134,6 +134,8 @@ unsigned int descartadosPorFilaCheia = 0;
 bool redeSimuladaCaida = false;
 Anomalia proximaAnomalia = ANOM_DUPLICATA;   // cicla a cada aperto
 Anomalia anomaliaArmada  = ANOM_NENHUMA;
+String   eventoRetido    = "";               // teste fora de ordem
+bool     temEventoRetido = false;
 
 unsigned long ultimaAmostraMs = 0;
 unsigned long ultimaPublicacaoMs = 0;
@@ -360,9 +362,13 @@ void publicar() {
       Serial.printf("\n>>> ADVERSARIAL: repetindo sequencia %lu\n", seq);
       break;
     case ANOM_FORA_DE_ORDEM:
-      seq = (ultimaSequenciaEnviada > 3) ? ultimaSequenciaEnviada - 3 : 1;
-      Serial.printf("\n>>> ADVERSARIAL: enviando fora de ordem, seq %lu apos %lu\n",
-                    seq, ultimaSequenciaEnviada);
+      // Segura este evento e o entrega DEPOIS do próximo. Reenviar uma
+      // sequência antiga não serve: ela já foi processada e o gateway a
+      // classificaria, corretamente, como duplicata.
+      sequencia++;
+      seq = sequencia;
+      Serial.printf("\n>>> ADVERSARIAL: segurando seq %lu para entregar depois de %lu\n",
+                    seq, seq + 1);
       break;
     case ANOM_SALTO:
       sequencia += 6;                                // pula 5 números
@@ -388,11 +394,19 @@ void publicar() {
     enfileirar(seq, ppmFiltrado, agora);
     Serial.printf("[REDE] indisponivel: evento seq=%lu retido (fila %d/%d)\n",
                   seq, filaTamanho, MAX_FILA);
+  } else if (anom == ANOM_FORA_DE_ORDEM) {
+    eventoRetido = buf;
+    temEventoRetido = true;
   } else {
     mqtt.publish(TOPICO_AMBIENTE, buf);
+    if (temEventoRetido) {
+      Serial.println(">>> ADVERSARIAL: entregando agora o evento retido (fora de ordem)");
+      mqtt.publish(TOPICO_AMBIENTE, eventoRetido.c_str());
+      temEventoRetido = false;
+    }
   }
 
-  if (anom == ANOM_NENHUMA || anom == ANOM_SALTO) ultimaSequenciaEnviada = seq;
+  if (anom != ANOM_DUPLICATA) ultimaSequenciaEnviada = seq;
 }
 
 // ==========================================================================

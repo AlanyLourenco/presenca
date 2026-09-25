@@ -1,0 +1,891 @@
+  <div class="parte" id="parte1" style="page-break-before:auto">
+    <div class="pn">Parte I · fronteira principal</div>
+    <div class="pt">Aparelho do estudante ↔ servidor de permanência</div>
+    <p>O núcleo do sistema Presença rodando de verdade: um ESP32 que ouve as três âncoras e um
+    servidor que transforma esses heartbeats em minutos de permanência, avisa antes de punir e
+    devolve a decisão ao aparelho.</p>
+  </div>
+
+  <!-- ============ 1 ============ -->
+  <section id="p1">
+    <div class="sec-head"><span class="sec-n">01</span><h2>O que este marco entrega</h2></div>
+
+    <p>A chamada tradicional mede <strong>presença</strong>: um estado binário, num instante
+    arbitrário. O Presença mede <strong>permanência</strong>, o tempo acumulado ao longo da aula.
+    Três minutos de sensor ruim custam três minutos, e não a aula inteira.</p>
+
+    <p>O Marco 2 pede uma fronteira real entre <em>dois</em> componentes. A escolhida é a que
+    carrega o projeto: o <strong>aparelho do estudante</strong>, que mede o sinal das âncoras,
+    falando com o <strong>servidor</strong>, que decide quanto tempo aquilo vale. Tudo o que o
+    projeto técnico chama de regra inviolável passa por essa fronteira: histerese, trilateração,
+    polígono, persistência, acumulador monotônico, orçamento por sessão, requalificação e aviso
+    antes da punição.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="v">7</div><div class="l">cenários executados no Wokwi, com captura e log</div></div>
+      <div class="stat"><div class="v">34</div><div class="l">testes automatizados passando</div></div>
+      <div class="stat"><div class="v">98,6 %</div><div class="l">permanência da sessão gravada, calculada sobre 188 heartbeats</div></div>
+      <div class="stat"><div class="v">3</div><div class="l">defeitos encontrados rodando, todos corrigidos</div></div>
+    </div>
+
+    <h3>O ciclo completo exigido pela Atividade 03</h3>
+    <div class="tw"><table>
+      <tr><th>Etapa</th><th>Onde acontece</th></tr>
+      <tr><td><strong>Fenômeno</strong></td><td>Intensidade do sinal das âncoras A, B e C no ponto onde o estudante está</td></tr>
+      <tr><td><strong>Entrada</strong></td><td>Três potenciômetros em <code>GPIO34</code>, <code>GPIO35</code> e <code>GPIO32</code>, convertidos para −105…−35 dBm</td></tr>
+      <tr><td><strong>Validação</strong></td><td>Âncora não ouvida abaixo de −100 dBm (dado ausente, não número baixo), média móvel de 5 amostras por âncora</td></tr>
+      <tr><td><strong>Evento</strong></td><td><code>presenca.heartbeat.v1</code> em JSON, no serial e no MQTT, a cada 500 ms</td></tr>
+      <tr><td><strong>Estado e regra</strong></td><td>No aparelho, região com histerese −70/−85 dBm. No servidor, polígono, persistência, máquina de estados, orçamento e requalificação</td></tr>
+      <tr><td><strong>Decisão</strong></td><td><span class="pill v">PRESENTE</span> · <span class="pill a">AUSENCIA_TOLERADA</span> · <span class="pill r">FORA</span></td></tr>
+      <tr><td><strong>Atuação</strong></td><td>LEDs e OLED mostram o estado; buzzer e OLED entregam os avisos de 10 min, 13 min e limite esgotado</td></tr>
+    </table></div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section id="p2">
+    <div class="sec-head"><span class="sec-n">02</span><h2>A fronteira</h2></div>
+
+    <div class="arch">
+      <div class="node">
+        <div class="role">Produtor</div>
+        <div class="name">Aparelho do estudante</div>
+        <div class="sub">ESP32 · C++ · roda no Wokwi</div>
+        <ul>
+          <li>Mede o RSSI de cada âncora</li>
+          <li>Trata âncora não ouvida</li>
+          <li>Filtra e aplica histerese de região</li>
+          <li>Envia heartbeat com sequência</li>
+          <li>Retém heartbeats se a rede cai</li>
+          <li>Mostra o estado, toca o aviso</li>
+        </ul>
+      </div>
+      <div class="wire">
+        <div class="a1">▶ heartbeat a cada 500 ms
+          <span class="m">presenca.heartbeat.v1</span></div>
+        <div class="proto">MQTT · broker.hivemq.com</div>
+        <div class="a2">◀ estado a cada heartbeat
+          <span class="m">presenca.estado.v1</span></div>
+        <div class="a2">◀ só em 4 momentos
+          <span class="m">presenca.aviso.v1</span></div>
+      </div>
+      <div class="node">
+        <div class="role">Consumidor</div>
+        <div class="name">Servidor de permanência</div>
+        <div class="sub">Python · roda no notebook</div>
+        <ul>
+          <li>Valida contra o contrato</li>
+          <li>Deduplica, ordena, acha lacunas</li>
+          <li>Trilatera e testa o polígono</li>
+          <li>Refaz a sessão sobre o log</li>
+          <li>Orçamento e requalificação</li>
+          <li>Avisa e detecta silêncio</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>A âncora da sala <strong>não</strong> aparece nesta fronteira, e isso é deliberado: pela
+    decisão fechada nº 3, ela só transmite e nunca escuta aparelhos. Quem mede é o aparelho. Por
+    isso o ESP32 deste marco faz o papel do celular, e as âncoras existem apenas como o sinal que
+    ele ouve (os potenciômetros).</p>
+
+    <h3>Quem decide o quê</h3>
+    <div class="tw"><table>
+      <tr><th>Decisão</th><th>Onde</th><th>Por quê</th></tr>
+      <tr><td>A âncora foi ouvida? Qual o sinal filtrado?</td><td>Aparelho</td><td>É medição; só o aparelho tem o rádio</td></tr>
+      <tr><td>Região de rádio: dentro ou fora do alcance</td><td>Aparelho</td><td>É o que o iOS faz no monitoramento de região. O sistema operacional decide entrada e saída e acorda o app</td></tr>
+      <tr><td>O ponto está <em>dentro da sala</em>?</td><td>Servidor</td><td>Só o servidor conhece a planta. Rádio atravessa parede, e um sinal forte na sala vizinha passa pela histerese mas não pelo polígono</td></tr>
+      <tr><td>Estado, acumulado, orçamento, avisos</td><td>Servidor</td><td>Precisa do log inteiro da sessão e é recalculado retroativamente</td></tr>
+      <tr><td>Qual horário vale</td><td>Servidor</td><td>O aparelho só informa tempo relativo ao boot; o servidor grava o próprio carimbo de recepção</td></tr>
+    </table></div>
+
+    <h3>Uma volta completa pela fronteira</h3>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">Aparelho · a cada 100 ms</span>Lê os três ADCs, converte para dBm, descarta âncora abaixo de −100 dBm e atualiza a média móvel de cada uma.</div></li>
+      <li><span class="s">2</span><div><span class="who">Aparelho</span>Aplica a histerese sobre o melhor sinal: <code>DENTRO_ALCANCE</code> acima de −70 dBm, <code>FORA_ALCANCE</code> abaixo de −85 dBm. Entre os dois, mantém.</div></li>
+      <li><span class="s">3</span><div><span class="who">Aparelho · a cada 500 ms</span>Monta o heartbeat com <code>eventId = apar-01#bootId#seq</code> e publica. Se a rede está fora, guarda na fila.</div></li>
+      <li><span class="s">4</span><div><span class="who">Servidor</span>Valida contra <code>presenca.heartbeat.v1.schema.json</code>. Um campo a mais ou a menos é rejeitado.</div></li>
+      <li><span class="s">5</span><div><span class="who">Servidor</span>Confere a sequência: duplicata é descartada, fora de ordem é inserido no lugar certo, salto abre uma lacuna.</div></li>
+      <li><span class="s">6</span><div><span class="who">Servidor</span>Converte RSSI em distância, trilatera, testa o polígono e classifica o heartbeat como dentro, fora ou neutro.</div></li>
+      <li><span class="s">7</span><div><span class="who">Servidor</span>Refaz a sessão inteira a partir do log e obtém estado, acumulado garantido, provisório e orçamento restante.</div></li>
+      <li><span class="s">8</span><div><span class="who">Servidor → aparelho</span>Publica <code>presenca.estado.v1</code> com retain, no tópico do próprio aluno. Se um limite de aviso foi cruzado, publica também <code>presenca.aviso.v1</code>.</div></li>
+      <li><span class="s">9</span><div><span class="who">Aparelho</span>Acende o LED do estado, escreve no OLED e, se houver aviso novo, toca o buzzer. Aviso repetido é ignorado.</div></li>
+    </ol>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section id="p3">
+    <div class="sec-head"><span class="sec-n">03</span><h2>Todos os arquivos</h2></div>
+
+<pre><code>marco-02/
+├── README.md                    ← a entrega: a fronteira em uma página
+├── GUIA.md                      ← guia da segunda fronteira (CO₂)
+│
+├── contrato/v1/                 ← O IDIOMA dos componentes (versão no nome)
+│   ├── presenca.heartbeat.v1.schema.json   aparelho → servidor
+│   ├── presenca.estado.v1.schema.json      servidor → aparelho
+│   ├── presenca.aviso.v1.schema.json       servidor → aparelho
+│   ├── sala.ambiente.v1.schema.json        (CO₂) âncora → gateway
+│   ├── gateway.contagem.v1.schema.json     (CO₂) gateway → âncora
+│   └── exemplos/                mensagens reais, todas válidas pelo schema
+│
+├── aparelho/                    ← O QUE RODA NO ESP32 (Wokwi)
+│   ├── sketch.ino                   ~535 linhas de C++
+│   ├── diagram.json                 o circuito em texto
+│   └── libraries.txt                PubSubClient, Adafruit GFX, SSD1306
+│
+├── servidor/                    ← O QUE RODA NO NOTEBOOK
+│   ├── permanencia.py               a regra: localização + máquina de estados, sem rede
+│   ├── servidor.py                  MQTT, contrato, sequência, avisos, silêncio
+│   ├── config.exemplo.json          broker, tópicos, parâmetros, planta da sala
+│   ├── requirements.txt             paho-mqtt, jsonschema
+│   └── testes/                      34 testes (pytest)
+│
+├── co2-ancora/  co2-gateway/    ← a segunda fronteira (Parte II)
+│
+├── evidencias/presenca/         ← capturas e logs da execução no Wokwi
+│   ├── 01…07-*.jpg                  uma captura por cenário
+│   ├── log-serial-aparelho.txt      tudo o que o ESP32 escreveu
+│   ├── log-servidor.txt             tudo o que o servidor escreveu
+│   └── recebidos.jsonl              cada heartbeat com carimbo e classificação
+│
+└── apresentacao/                ← este documento (HTML e PDF) e suas fontes</code></pre>
+
+    <h3>Por que a lógica mora num arquivo sem rede</h3>
+    <p><code>permanencia.py</code> não importa MQTT nem lê relógio. Recebe uma lista de
+    heartbeats e devolve o resultado. Isso tem duas consequências. Dá para testar cada regra
+    do projeto técnico em milissegundos, sem Wokwi nem broker. E o cálculo retroativo sai de
+    graça: como a função só olha para o log, basta chamá-la de novo quando chega um dado
+    atrasado.</p>
+
+    <h3>Arquivos que nascem em execução</h3>
+    <div class="tw"><table>
+      <tr><th>Arquivo</th><th>Quando aparece</th><th>Versionado?</th></tr>
+      <tr><td><code>servidor/config.json</code></td><td>Ao copiar o exemplo para mudar broker ou escala</td><td>Não</td></tr>
+      <tr><td><code>servidor/recebidos.log</code></td><td>Toda execução; uma linha JSON por heartbeat, com o carimbo do servidor, a classificação e o que foi derivado (t, classe, posição, estado)</td><td>Não, mas uma cópia está em <code>evidencias/</code></td></tr>
+    </table></div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section id="p4">
+    <div class="sec-head"><span class="sec-n">04</span><h2>O circuito do aparelho, peça por peça</h2></div>
+
+    <figure>
+      <img src="{{img:evidencias/presenca/componentes/circuito.jpg}}" alt="Circuito do aparelho no Wokwi: três potenciômetros à esquerda, dois botões abaixo deles, ESP32 no centro, OLED no alto à direita, três LEDs com resistores e um buzzer à direita">
+      <figcaption><b>Circuito completo em execução.</b> O OLED mostra <code>PRESENTE</code> e o LED verde está aceso: o servidor confirmou a presença.</figcaption>
+    </figure>
+
+    <div class="tw"><table>
+      <tr><th>Peça</th><th>Pino do ESP32</th><th>Papel</th></tr>
+      <tr><td>Potenciômetro A (de cima)</td><td><span class="pin">GPIO34</span></td><td>RSSI da âncora <code>anc-204-A</code>, parede oeste</td></tr>
+      <tr><td>Potenciômetro B (meio)</td><td><span class="pin">GPIO35</span></td><td>RSSI da âncora <code>anc-204-B</code>, parede leste</td></tr>
+      <tr><td>Potenciômetro C (de baixo)</td><td><span class="pin">GPIO32</span></td><td>RSSI da âncora <code>anc-204-C</code>, parede norte</td></tr>
+      <tr><td>Botão azul ANOMALIA</td><td><span class="pin">GPIO25</span></td><td>Arma duplicata → fora de ordem → salto</td></tr>
+      <tr><td>Botão vermelho REDE OFF</td><td><span class="pin">GPIO26</span></td><td>Liga e desliga a rede simulada</td></tr>
+      <tr><td>LED verde + 220 Ω</td><td><span class="pin v">GPIO14</span></td><td><code>PRESENTE</code></td></tr>
+      <tr><td>LED amarelo + 220 Ω</td><td><span class="pin a">GPIO27</span></td><td><code>AUSENCIA_TOLERADA</code>; pisca durante um aviso</td></tr>
+      <tr><td>LED vermelho + 220 Ω</td><td><span class="pin r">GPIO13</span></td><td><code>FORA</code></td></tr>
+      <tr><td>Buzzer</td><td><span class="pin">GPIO18</span></td><td>Toca 400 ms a 1760 Hz em cada aviso novo</td></tr>
+      <tr><td>OLED SSD1306 (I²C 0x3C)</td><td><span class="pin">SDA 21</span><span class="pin">SCL 22</span></td><td>Estado, acumulado, orçamento, RSSI, região e texto do aviso</td></tr>
+    </table></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/potenciometros.jpg}}" alt="Três potenciômetros empilhados"></div>
+      <div class="comp-body">
+        <h3>Três potenciômetros: o sinal das três âncoras</h3>
+        <p><strong>O que são.</strong> Resistores variáveis com três pinos: VCC (3,3 V), GND e o
+        cursor (SIG), que entrega uma tensão entre 0 e 3,3 V conforme o giro. O ADC de 12 bits
+        do ESP32 lê isso como 0 a 4095.</p>
+        <p><strong>O que representam.</strong> Cada um é o RSSI que o celular mediria de uma
+        âncora. O código converte linearmente: <code>−105 + (leitura / 4095) × 70</code>, ou
+        seja, −105 dBm no mínimo e −35 dBm no máximo.</p>
+        <p><strong>Por que três.</strong> Porque o projeto usa trilateração: com três distâncias
+        dá para calcular um ponto, e com um ponto dá para perguntar se ele está <em>dentro da
+        sala</em>. Um potenciômetro só daria um raio, e raio é exatamente o que o projeto
+        rejeita.</p>
+        <p><strong>Por que ADC1.</strong> Os pinos 32, 34 e 35 pertencem ao ADC1. O ADC2 fica
+        indisponível enquanto o Wi-Fi está ligado, e este aparelho vive conectado.</p>
+      </div>
+    </div></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/botoes.jpg}}" alt="Botão azul ANOMALIA e botão vermelho REDE OFF"></div>
+      <div class="comp-body">
+        <h3>Dois botões: as falhas sob demanda</h3>
+        <p>Ligados entre o pino e o GND, com o <code>INPUT_PULLUP</code> interno: solto lê
+        <code>HIGH</code>, apertado lê <code>LOW</code>. O código age na <strong>borda de
+        descida</strong> e ignora mudanças a menos de 50 ms da anterior (debounce), para que um
+        aperto não conte como vários.</p>
+        <p><strong>Azul, ANOMALIA.</strong> Cada aperto arma a próxima anomalia do ciclo
+        duplicata → fora de ordem → salto, aplicada no heartbeat seguinte. É o teste
+        adversarial da matrícula terminada em 8.</p>
+        <p><strong>Vermelho, REDE OFF.</strong> Alterna uma queda de rede simulada. O aparelho
+        continua medindo e guarda os heartbeats; ao voltar, entrega todos com
+        <code>bufferizado: true</code>.</p>
+      </div>
+    </div></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/leds.jpg}}" alt="Três LEDs verde, amarelo e vermelho com resistores"></div>
+      <div class="comp-body">
+        <h3>Três LEDs: a decisão do servidor, visível</h3>
+        <p>Cada LED tem um resistor de 220 Ω em série: com 3,3 V no pino e cerca de 2 V de queda
+        no LED, passam uns 6 mA, dentro do que o GPIO fornece com folga.</p>
+        <p><strong>Comportamento seguro.</strong> Os LEDs mostram o estado que o servidor
+        decidiu, e só enquanto essa resposta é recente (4 s). Se o servidor some ou a rede cai,
+        <strong>todos se apagam</strong>: um verde velho aceso diria "você está presente" sem
+        ninguém saber se é verdade. O OLED explica o motivo (<code>SEM RESP.</code> ou
+        <code>REDE OFF</code>).</p>
+      </div>
+    </div></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/buzzer.jpg}}" alt="Buzzer piezoelétrico"></div>
+      <div class="comp-body">
+        <h3>Buzzer: o aviso que fecha o laço</h3>
+        <p>Um piezo entre o <code>GPIO18</code> e o GND. <code>tone(18, 1760, 400)</code> gera
+        uma onda quadrada de 1760 Hz por 400 ms.</p>
+        <p>Ele representa a notificação do celular. É o ponto em que o sistema deixa de só
+        medir e passa a <strong>atuar</strong>: o aviso chega enquanto o estudante ainda pode
+        voltar, e voltar muda a grandeza que o sistema mede. Por isso ele toca só nos momentos
+        previstos pelo projeto, e uma vez só por aviso.</p>
+      </div>
+    </div></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/oled.jpg}}" alt="Display OLED mostrando tok-7f3a, PRESENTE, acumulado, orçamento, RSSI e região"></div>
+      <div class="comp-body">
+        <h3>OLED: o que o estudante vê</h3>
+        <p>SSD1306 de 128×64 pixels, pelo barramento I²C (SDA no 21, SCL no 22, endereço 0x3C).</p>
+        <div class="tw"><table>
+          <tr><th>Linha</th><th>Conteúdo</th></tr>
+          <tr><td>1</td><td>Pseudônimo do aluno e sequência atual</td></tr>
+          <tr><td>2 (grande)</td><td>Estado decidido pelo servidor, <code>REDE OFF</code> ou <code>SEM RESP.</code></td></tr>
+          <tr><td>3</td><td>Acumulado (%) e orçamento restante (s), ou a fila retida</td></tr>
+          <tr><td>4</td><td>RSSI filtrado de A, B e C (<code>--</code> = não ouvida)</td></tr>
+          <tr><td>5</td><td>Região decidida no próprio aparelho</td></tr>
+        </table></div>
+        <p>Durante um aviso, as linhas 3 a 5 dão lugar ao texto da mensagem por 6 s.</p>
+      </div>
+    </div></div>
+
+    <div class="comp"><div class="comp-top">
+      <div class="comp-img"><img src="{{img:evidencias/presenca/componentes/esp32.jpg}}" alt="Placa ESP32 DevKit"></div>
+      <div class="comp-body">
+        <h3>ESP32: o aparelho</h3>
+        <p>Processador de dois núcleos com Wi-Fi. No Wokwi, conecta à rede <code>Wokwi-GUEST</code>,
+        que tem saída real para a internet. É por isso que o MQTT funciona com um broker
+        público de verdade.</p>
+        <p>Ele não guarda identidade: o aluno aparece só como o pseudônimo
+        <code>tok-7f3a</code>. No sistema real, esse identificador vem da chave pública gerada
+        no cofre de hardware no pareamento. Aqui é fixo, e não há assinatura.</p>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section id="p5">
+    <div class="sec-head"><span class="sec-n">05</span><h2>Como o programa do aparelho funciona</h2></div>
+
+    <h3>Leitura e validação: âncora não ouvida é falta de dado</h3>
+<pre><code>if (bruto &lt; RSSI_NAO_OUVIDA) {         // abaixo de -100 dBm
+  ouvida[i] = false;
+  preenchida[i] = 0; indice[i] = 0;     // esvazia a janela desta âncora
+  continue;
+}</code></pre>
+    <p>Uma implementação ingênua trataria −103 dBm como "muito longe" e jogaria o número na
+    média. Mas −103 dBm, aqui, significa que o aparelho <strong>não ouviu</strong> a âncora. Não
+    é uma medida baixa, é ausência de medida. O heartbeat leva <code>"rssi": null</code> e a
+    janela é esvaziada, para que valores antigos não se misturem aos novos quando a âncora voltar.
+    Leituras fisicamente impossíveis (acima de −30 dBm) contam em <code>amostrasInvalidas</code>.</p>
+
+    <h3>Média móvel por âncora</h3>
+    <p>Cinco amostras de 100 ms. Suaviza o ruído sem atrasar mais que meio segundo. A região só
+    é avaliada com a janela cheia; antes disso o estado é <code>INDETERMINADA</code>, e o
+    servidor não decide nada com base nele.</p>
+
+    <h3>Regra local: histerese de região</h3>
+<pre><code>if (nenhumaOuvida)                  nova = REG_FORA;
+else if (melhor &gt; LIMIAR_ENTRADA)   nova = REG_DENTRO;    // -70 dBm
+else if (melhor &lt; LIMIAR_SAIDA)     nova = REG_FORA;      // -85 dBm
+// entre os dois: mantém</code></pre>
+    <p>Dois limiares, não um. Quem senta na borda do alcance, com o sinal oscilando entre −72 e
+    −78 dBm, não fica entrando e saindo: a faixa morta de 15 dB absorve a oscilação. Esta é a
+    característica de estado que a Atividade 03 exige no próprio ESP32 (item 5.3).</p>
+
+    <h3>O heartbeat e a sequência</h3>
+    <p><code>eventId = deviceId#bootId#sequence</code>. O <code>bootId</code> é sorteado com
+    <code>esp_random()</code> a cada inicialização. Sem ele, reiniciar o aparelho zeraria a
+    sequência, e todo heartbeat novo teria a mesma identidade de um antigo: o servidor
+    descartaria o boot inteiro como cópia. O problema foi visto rodando num protótipo anterior,
+    e a correção vale para os dois.</p>
+
+    <h3>A fila da queda de rede</h3>
+    <p>Com a rede fora, o heartbeat vai para uma fila circular de 60 posições (30 s), guardando
+    a sequência, o <code>eventTimeMs</code> original, os três RSSI e a região. Se a fila
+    enche, o <strong>mais antigo</strong> é descartado e contado. O servidor verá um salto na
+    sequência, e o intervalo aparece como sem evidência, e não como vazio. Ao voltar, a fila é
+    drenada com <code>bufferizado: true</code>.</p>
+
+    <h3>As três anomalias, feitas de verdade</h3>
+    <div class="tw"><table>
+      <tr><th>Anomalia</th><th>Como o aparelho a produz</th></tr>
+      <tr><td>Duplicata</td><td>Reenvia o <em>último payload</em>, byte a byte: mesmo <code>eventId</code>, mesmo conteúdo. É o que um QoS 1 reentregando faria</td></tr>
+      <tr><td>Fora de ordem</td><td>Segura o heartbeat N e o publica logo depois do N+1. A mensagem é real e nova, só chega na ordem errada</td></tr>
+      <tr><td>Salto</td><td>Soma 5 à sequência. Esses cinco números nunca existem</td></tr>
+    </table></div>
+
+    <h3>Recebendo as respostas</h3>
+    <p>O parser procura <code>"campo":valor</code> na string recebida. É pequeno e não aloca
+    árvore JSON, o que importa num microcontrolador. Duas proteções:</p>
+    <ul>
+      <li><strong>Estado velho não sobrescreve estado novo.</strong> <code>estadoId</code> traz um
+      número crescente; um número menor que o último aplicado é ignorado (a não ser que a queda
+      seja grande, o que indica servidor reiniciado).</li>
+      <li><strong>Aviso é idempotente.</strong> Os últimos 8 <code>avisoId</code> exibidos ficam
+      guardados; uma reentrega não toca o buzzer de novo.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="p6">
+    <div class="sec-head"><span class="sec-n">06</span><h2>Como o servidor decide</h2></div>
+
+    <h3>Onde o aparelho está: trilateração e polígono</h3>
+    <p>Cada RSSI vira uma distância pelo modelo de propagação do projeto técnico (§5):
+    <code>d = 10^((A − RSSI) / 10n)</code>, com <code>A = −45 dBm</code> a 1 m e
+    <code>n = 2,2</code>. Três círculos, subtraídos dois a dois, viram um sistema linear em
+    (x, y), resolvido direto. O ponto então passa por um teste de pertinência ao polígono
+    (<em>ray casting</em>): conta quantas paredes uma semirreta a partir do ponto atravessa.</p>
+
+    <div class="diag">
+      <svg viewBox="0 0 620 330" role="img" aria-label="Planta da sala 204 de 12 por 9 metros com as âncoras A, B e C nas paredes oeste, leste e norte, um ponto dentro da sala no centro e um ponto na sala vizinha a leste, com os círculos de distância estimados para ele">
+        <defs><clipPath id="clipSala"><rect x="0" y="0" width="620" height="330"/></clipPath></defs>
+        <g clip-path="url(#clipSala)">
+          <!-- escala: 26 px por metro; origem (0,0) em (60,290), y para cima -->
+          <rect x="376" y="56" width="208" height="234" class="b-surf2" stroke-dasharray="5 4" style="stroke:var(--rule-strong)"/>
+          <text x="480" y="80" text-anchor="middle" class="s-mut" font-size="12">sala vizinha</text>
+          <rect x="60" y="56" width="312" height="234" class="b-verde" style="stroke:var(--verde);stroke-width:2"/>
+          <text x="216" y="80" text-anchor="middle" class="s-verde" font-size="13" font-weight="600">sala 204 · polígono 12 × 9 m</text>
+          <circle cx="60" cy="173" r="443" fill="none" class="st-acc" stroke-width="1" stroke-dasharray="4 4" opacity=".55"/>
+          <circle cx="372" cy="173" r="130" fill="none" class="st-acc" stroke-width="1" stroke-dasharray="4 4" opacity=".75"/>
+          <circle cx="216" cy="56" r="311" fill="none" class="st-acc" stroke-width="1" stroke-dasharray="4 4" opacity=".55"/>
+          <circle cx="216" cy="175" r="8" class="s-verde" style="stroke:var(--surface);stroke-width:2"/>
+          <text x="216" y="202" text-anchor="middle" class="s-ink2" font-size="12" font-weight="600">(6,0 ; 4,4) dentro</text>
+          <text x="216" y="217" text-anchor="middle" class="s-mut" font-size="11">A −62 · B −62 · C −59 dBm</text>
+          <circle cx="505" cy="175" r="8" class="s-verm" style="stroke:var(--surface);stroke-width:2"/>
+          <text x="505" y="202" text-anchor="middle" class="s-ink2" font-size="12" font-weight="600">(17,1 ; 4,4) fora</text>
+          <text x="505" y="217" text-anchor="middle" class="s-mut" font-size="11">A −72 · B −60 · C −69 dBm</text>
+          <g font-size="12" font-weight="700">
+            <rect x="50" y="163" width="20" height="20" rx="4" class="s-acc"/><text x="60" y="177" text-anchor="middle" style="fill:var(--surface)">A</text>
+            <rect x="362" y="163" width="20" height="20" rx="4" class="s-acc"/><text x="372" y="177" text-anchor="middle" style="fill:var(--surface)">B</text>
+            <rect x="206" y="46" width="20" height="20" rx="4" class="s-acc"/><text x="216" y="60" text-anchor="middle" style="fill:var(--surface)">C</text>
+          </g>
+          <text x="60" y="312" class="s-mut" font-size="11">Círculos tracejados: distâncias estimadas para o ponto da sala vizinha (A 17,1 m · B 5,0 m · C 12,0 m)</text>
+        </g>
+      </svg>
+    </div>
+    <p>O ponto vermelho é o caso que derruba qualquer limiar em metros. O melhor sinal é de
+    −60 dBm, forte o bastante para passar pela histerese do aparelho (<code>DENTRO_ALCANCE</code>).
+    Um raio de alcance contaria presença. Mas os três círculos se cruzam a 5 m <em>do lado de
+    fora</em> da parede leste, e o polígono diz não. Esse cenário foi executado no Wokwi
+    (teste T2).</p>
+
+    <h3>O que cada heartbeat diz</h3>
+    <div class="tw"><table>
+      <tr><th>Região informada</th><th>Posição</th><th>Classe</th></tr>
+      <tr><td><code>FORA_ALCANCE</code></td><td>qualquer, ou nenhuma</td><td><strong>fora</strong></td></tr>
+      <tr><td><code>DENTRO_ALCANCE</code></td><td>dentro do polígono</td><td><strong>dentro</strong></td></tr>
+      <tr><td><code>DENTRO_ALCANCE</code></td><td>fora do polígono</td><td><strong>fora</strong></td></tr>
+      <tr><td><code>DENTRO_ALCANCE</code></td><td>sem as três âncoras</td><td><strong>neutro</strong>: não há base para decidir</td></tr>
+      <tr><td><code>INDETERMINADA</code></td><td>—</td><td><strong>neutro</strong></td></tr>
+    </table></div>
+
+    <h3>A máquina de estados</h3>
+    <div class="diag">
+      <svg viewBox="0 0 640 250" role="img" aria-label="Máquina de estados: FORA vai a PRESENTE com dentro sustentado; PRESENTE vai a AUSÊNCIA TOLERADA com fora sustentado se houver orçamento, ou a FORA se não houver; AUSÊNCIA TOLERADA volta a PRESENTE com dentro sustentado ou vai a FORA quando o orçamento acaba">
+        <defs>
+          <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-2)"/></marker>
+        </defs>
+        <g font-size="14" font-weight="700" text-anchor="middle">
+          <rect x="20" y="95" width="130" height="54" rx="10" class="b-verm" style="stroke:var(--vermelho);stroke-width:1.5"/>
+          <text x="85" y="127" class="s-verm">FORA</text>
+          <rect x="255" y="20" width="130" height="54" rx="10" class="b-verde" style="stroke:var(--verde);stroke-width:1.5"/>
+          <text x="320" y="52" class="s-verde">PRESENTE</text>
+          <rect x="455" y="95" width="170" height="54" rx="10" class="b-ambar" style="stroke:var(--ambar);stroke-width:1.5"/>
+          <text x="540" y="120" class="s-ambar">AUSÊNCIA</text>
+          <text x="540" y="137" class="s-ambar" font-size="12">TOLERADA</text>
+        </g>
+        <g fill="none" style="stroke:var(--ink-2)" stroke-width="1.4" marker-end="url(#seta)">
+          <path d="M110,95 C150,50 200,40 253,44"/>
+          <path d="M387,44 C450,44 500,60 520,93"/>
+          <path d="M470,150 C420,200 250,200 120,152"/>
+          <path d="M500,95 C470,75 430,62 388,56"/>
+          <path d="M290,76 C240,110 190,118 152,120"/>
+        </g>
+        <g font-size="11.5" class="s-ink2" text-anchor="middle">
+          <text x="170" y="36">dentro por 30 s</text>
+          <text x="478" y="44">fora por 30 s</text>
+          <text x="478" y="58" class="s-mut">(há orçamento)</text>
+          <text x="440" y="84">dentro por 30 s</text>
+          <text x="210" y="102">fora por 30 s,</text>
+          <text x="210" y="115" class="s-mut">sem orçamento</text>
+          <text x="300" y="205">orçamento de 15 min esgotado · ausência estornada</text>
+        </g>
+        <text x="320" y="238" text-anchor="middle" font-size="11" class="s-mut">PAUSA_PROGRAMADA existe no contrato, mas depende da agenda e não está neste marco</text>
+      </svg>
+    </div>
+
+    <h3>O acumulado é refeito sobre o log, a cada heartbeat</h3>
+    <p>O servidor nunca faz <code>acumulado += 0,5</code>. A cada heartbeat aceito, ele ordena o
+    log inteiro pelo tempo do evento e percorre a sessão desde o início. Isso é o que torna
+    possível cumprir três regras do projeto técnico ao mesmo tempo:</p>
+    <ul>
+      <li><strong>Entrada e saída valem desde o início real.</strong> A saída só é confirmada
+      depois de 30 s de sinal fora, mas ela começou 30 s antes. Esses 30 s deixam de ser presença
+      e passam a ser ausência, retroativamente.</li>
+      <li><strong>Evento atrasado ou fora de ordem não corrompe nada.</strong> Ele entra na
+      posição certa do log, e o resultado é idêntico ao da chegada em ordem. Há um teste que
+      embaralha o log inteiro e compara.</li>
+      <li><strong>O acumulado garantido nunca diminui.</strong> O que ainda pode mudar (ausência
+      em curso, ausência aguardando requalificação, saída ainda não confirmada) é publicado à
+      parte, como <code>provisorioS</code>.</li>
+    </ul>
+
+    <h3>Orçamento, requalificação e estorno</h3>
+    <div class="tw"><table>
+      <tr><th>Situação</th><th>O que acontece com o tempo</th></tr>
+      <tr><td>Sai e volta com orçamento</td><td>A ausência consome o orçamento e fica <strong>provisória</strong>. Só é creditada se o estudante permanecer <code>min(30 min, restante)</code> depois de voltar</td></tr>
+      <tr><td>Volta só por instantes e sai de novo</td><td>A ausência anterior é <strong>estornada</strong>, mas o orçamento continua consumido. Aparecer 20 s não reabre crédito</td></tr>
+      <tr><td>Orçamento acaba durante a ausência</td><td>Vai para <code>FORA</code> e a ausência <strong>inteira</strong> é estornada. O aviso informa quando o tempo parou de contar: no início real da ausência</td></tr>
+      <tr><td>Várias saídas curtas</td><td>O orçamento é da <strong>sessão</strong>, não do evento. Três saídas de 6 min estouram os 15</td></tr>
+      <tr><td>Sai no fim da aula</td><td>Soma o que assistiu. Ausência em curso no encerramento não é creditada</td></tr>
+    </table></div>
+
+    <h3>Os quatro avisos</h3>
+    <p>Só existem os quatro momentos do §7 do projeto técnico: 10 min de ausência acumulada,
+    13 min, limite esgotado e fim da aula. Cada um é emitido <strong>uma vez por sessão</strong>,
+    com <code>avisoId = sessão#tipo</code>. Se o estudante ignorar, o sistema não insiste.</p>
+
+    <h3>Silêncio</h3>
+    <p>Uma thread do servidor observa o relógio real. Se nenhum heartbeat chega por 6 s, o
+    servidor escreve <code>SILENCIO</code> e <strong>não decide nada</strong>: silêncio pode ser
+    rede, bateria ou aplicativo morto, e nenhuma dessas é evidência de que o estudante saiu. O
+    que chegar depois entra no passado. Quando os heartbeats voltam, escreve
+    <code>RETOMADO</code>.</p>
+
+    <h3>O tempo do protótipo</h3>
+    <p>O relógio do Wokwi anda entre 10 % e 80 % do tempo real, variando com a carga. Se o
+    servidor medisse durações pelo próprio relógio, "30 s de ausência" seria outra coisa a cada
+    execução. Por isso a linha do tempo da máquina de estados é o <code>eventTimeMs</code> do
+    aparelho, usado <strong>só como diferença</strong> dentro de um mesmo boot. Um boot novo é
+    encaixado logo depois do último instante conhecido. O carimbo do servidor continua gravado
+    em cada linha do log, para auditoria. Num aparelho real, com relógio sincronizado, a
+    máquina usaria o carimbo do servidor.</p>
+  </section>
+
+  <!-- ============ 7 ============ -->
+  <section id="p7">
+    <div class="sec-head"><span class="sec-n">07</span><h2>Os contratos</h2></div>
+
+    <p>Três schemas JSON (draft 2020-12) em <code>contrato/v1/</code>, todos com
+    <code>additionalProperties: false</code>. O servidor lê o schema do disco e valida cada
+    heartbeat: um campo inventado é rejeitado, não ignorado. Os exemplos em
+    <code>contrato/v1/exemplos/</code> são mensagens <strong>reais</strong> da sessão gravada, e
+    todos passam pela validação.</p>
+
+    <h3><code>presenca.heartbeat.v1</code>: aparelho → servidor</h3>
+<pre><code>{
+  "eventType": "presenca.heartbeat.v1",
+  "eventId": "apar-01#a52e#14",           ← deviceId#bootId#sequence
+  "deviceId": "apar-01",
+  "entityId": "sala-204",
+  "aluno": "tok-7f3a",                    ← pseudônimo, nunca MAC/IMEI/nome
+  "bootId": "a52e",
+  "eventTimeMs": 16371,                   ← desde o boot, não absoluto
+  "sequence": 14,
+  "value": -60.4,  "unit": "dBm",         ← melhor sinal
+  "state": "DENTRO_ALCANCE",              ← histerese no aparelho
+  "ancoras": [
+    {"id": "anc-204-A", "rssi": -72.1},
+    {"id": "anc-204-B", "rssi": -60.4},
+    {"id": "anc-204-C", "rssi": -68.7}
+  ],
+  "amostrasInvalidas": 0,
+  "bufferizado": false,
+  "anomaliaInjetada": "nenhuma"           ← o servidor não lê este campo
+}</code></pre>
+    <p>Este é o heartbeat da sala vizinha: dentro do alcance e, mesmo assim, classificado como
+    <strong>fora</strong>.</p>
+
+    <h3><code>presenca.estado.v1</code>: servidor → aparelho, com retain</h3>
+<pre><code>{"eventType":"presenca.estado.v1","estadoId":"srv-204#62","aluno":"tok-7f3a",
+ "entityId":"sala-204","estado":"AUSENCIA_TOLERADA","acumuladoS":7.4,"provisorioS":24.5,
+ "percentual":7.4,"orcamentoRestanteS":5.5,"tempoAulaS":33.3,"classe":"fora",
+ "posicao":[17.1,4.4],"dentroPoligono":false,"encerrada":false,"emitidoEmMs":1790310798000}</code></pre>
+    <p>Publicado no tópico <code>…/estado/tok-7f3a</code>: cada aparelho só assina o próprio.
+    Com <code>retain</code>, um aparelho que acabou de ligar recebe o último estado de imediato.
+    O JSON sai compacto, sem espaços, porque o parser do ESP32 procura
+    <code>"campo":valor</code>.</p>
+
+    <h3><code>presenca.aviso.v1</code>: servidor → aparelho, QoS 1</h3>
+<pre><code>{"eventType":"presenca.aviso.v1","avisoId":"s31a2#AVISO_10_MIN","aluno":"tok-7f3a",
+ "tipo":"AVISO_10_MIN","texto":"Fora da sala ha 20 s. Seu limite e de 30 s nesta aula.",
+ "percentual":7.4,"emitidoEmMs":1790310788000}</code></pre>
+
+    <div class="callout">
+      <span class="tag">Por que a versão está no nome</span>
+      <p>Uma mudança incompatível cria <code>presenca.heartbeat.v2</code>, e a v1 continua
+      válida enquanto os aparelhos antigos migram. Adicionar <code>bateria</code> ao heartbeat hoje
+      faz o servidor responder <code>INVALIDO … Additional properties are not allowed</code>: há
+      um teste só para isso. É a alteração ao vivo mais convincente para mostrar na banca.</p>
+    </div>
+  </section>
+
+  <!-- ============ 8 ============ -->
+  <section id="p8">
+    <div class="sec-head"><span class="sec-n">08</span><h2>Testes executados no Wokwi</h2></div>
+
+    <p>Tudo abaixo foi executado em 25/09/2026, com o aparelho no Wokwi e o servidor no notebook
+    falando pelo <code>broker.hivemq.com:1883</code>. Não há simulação de resultado: as capturas são
+    da tela do Wokwi, e os trechos de terminal foram copiados dos logs em
+    <code>evidencias/presenca/</code>. Os potenciômetros e botões foram acionados pelo próprio
+    circuito do Wokwi.</p>
+
+    <div class="callout">
+      <span class="tag">Parâmetros de todos os testes</span>
+      <p>Escala 1:30. Persistência 1 s · orçamento 30 s · avisos em 20 s e 26 s · requalificação
+      60 s · aula de 100 s · mínimo de 75 %. Heartbeat a cada 500 ms. Tempos em segundos da
+      linha do tempo da sessão (<code>t</code>).</p>
+    </div>
+
+    <h3>A sessão gravada, do início ao fim</h3>
+    <p>Os testes T1 a T4 e T6 aconteceram numa mesma aula de 100 s, a sessão
+    <code>s31a2</code>. O gráfico mostra o acumulado garantido que o servidor publicou para cada
+    heartbeat, na ordem do tempo do evento.</p>
+    <div class="diag grafico">{{grafico}}</div>
+    <p>Três coisas para notar. Durante a ausência (faixa âmbar) o acumulado <strong>para</strong>,
+    mas não cai. Na queda de rede, o servidor ficou em silêncio e depois recebeu 41 heartbeats
+    atrasados que preencheram o trecho sem buraco. Em t = 96,3 s a requalificação se cumpre e os
+    27,5 s de ausência tolerada entram de uma vez no acumulado.</p>
+
+    <!-- T1 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T1</span><span class="t">Estado normal: dentro da sala</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd>Simulação reiniciada, sessão nova <code>s31a2</code> aberta no servidor. Estado <span class="pill r">FORA</span>, acumulado 0.</dd>
+          <dt>Entradas</dt><dd>Potenciômetros em A = 628, B = 628, C = 667 (de 1023), o centro da sala.</dd>
+          <dt>Valores e tempos</dt><dd>RSSI filtrado A −62,0, B −62,0, C −59,4 dBm. Posição trilaterada (6,0; 4,4). Região <code>DENTRO_ALCANCE</code>.</dd>
+          <dt>Esperado</dt><dd>Depois de 1 s de sinal dentro, <code>PRESENTE</code> desde o início real da condição; LED verde; acumulado crescendo; nenhum aviso.</dd>
+          <dt>Observado</dt><dd><code>FORA → PRESENTE em t=1,4 s</code>, confirmado no heartbeat seguinte e datado no início da condição. LED verde aceso, OLED com <code>PRESENTE</code>, orçamento intacto em 30 s.</dd>
+          <dt>Por quê</dt><dd>Três heartbeats seguidos <em>dentro</em> cobrem a persistência. A entrada é datada no primeiro deles, e não no que a confirmou: é o cálculo retroativo.</dd>
+        </dl>
+        <div class="fig-par">
+          <figure><img src="{{img:evidencias/presenca/01-normal-presente.jpg}}" alt="Wokwi com o aparelho no centro da sala: LED verde aceso e OLED mostrando PRESENTE"><figcaption>Captura do Wokwi durante o T1.</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-01-normal-presente.jpg}}" alt="Ampliação do OLED: PRESENTE, acum 5 %, orc 30 s, A-62 B-62 C-59, DENTRO_ALCANCE; LED verde aceso"><figcaption>OLED e LEDs ampliados.</figcaption></figure>
+        </div>
+<div class="term"><span class="h">servidor · log-servidor.txt</span>01:30:53 <span class="k">t=   2.0s</span>  seq=3    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; FORA
+01:30:55 <span class="g">t=   2.5s</span>  seq=4    A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; <span class="g">PRESENTE</span>   acum   1.0s
+<span class="g">      &gt;&gt;&gt; FORA -&gt; PRESENTE em t=1.4 s (sinal na sala sustentado)</span></div>
+      </div>
+    </div>
+
+    <!-- T2 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T2</span><span class="t">Decisão e atuação: sala vizinha, avisos e retorno</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd><span class="pill v">PRESENTE</span>, acumulado 7,4 s, orçamento 30 s.</dd>
+          <dt>Entradas</dt><dd>Potenciômetros para A = 481, B = 652, C = 531 (sala vizinha, colado à parede leste). Depois do segundo aviso, de volta a 628 / 628 / 667.</dd>
+          <dt>Valores e tempos</dt><dd>RSSI A −72, B −60, C −69 dBm: a região continua <code>DENTRO_ALCANCE</code>. Posição (17,1; 4,4), fora do polígono. Saída a partir de t = 8,8 s; volta em t = 36,3 s.</dd>
+          <dt>Esperado</dt><dd><code>AUSENCIA_TOLERADA</code> com LED amarelo; aviso de 10 min em 20 s de ausência (t = 28,8); aviso de 13 min em 26 s (t = 34,8); retorno antes dos 30 s volta a <code>PRESENTE</code> sem punição; ausência provisória até a requalificação.</dd>
+          <dt>Observado</dt><dd>Exatamente isso. Buzzer e OLED com "Fora da sala ha 20 s. Seu limite e de 30 s nesta aula." e depois "Faltam 4 s do seu limite…". Retorno confirmado em t = 36,3 s com 2,5 s de orçamento sobrando. A ausência de 27,5 s foi creditada em t = 96,3 s, quando a requalificação se cumpriu.</dd>
+          <dt>Por quê</dt><dd>A histerese sozinha diria "presente": o sinal é forte. É o polígono que decide. Os avisos chegam enquanto ainda cabe reação, e a reação (voltar) é que impede a punição. É o laço ciber-físico fechado.</dd>
+        </dl>
+        <div class="fig-par">
+          <figure><img src="{{img:evidencias/presenca/02-sala-vizinha-ausencia.jpg}}" alt="Wokwi com os potenciômetros na posição da sala vizinha: LED amarelo aceso e OLED mostrando AUSENCIA com A-72 B-60 C-69 DENTRO_ALCANCE"><figcaption>Sinal forte, mas na sala vizinha: <b>AUSENCIA</b>, com a região ainda <code>DENTRO_ALCANCE</code>.</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-02-sala-vizinha-ausencia.jpg}}" alt="Ampliação do OLED: AUSENCIA, acum 7 %, orc 14 s, A-72 B-60 C-69, DENTRO_ALCANCE; LED amarelo aceso"><figcaption>OLED e LEDs ampliados.</figcaption></figure>
+        </div>
+        <div class="fig-par">
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-03-aviso-10min.jpg}}" alt="OLED com o aviso: Fora da sala ha 20 s. Seu limite e de 30 s nesta aula."><figcaption>Primeiro aviso (10 min reais, 20 s na escala).</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-04-retorno-aviso-13min.jpg}}" alt="OLED já em PRESENTE com o texto do segundo aviso: Faltam 4 s do seu limite. Depois disso o tempo para de contar."><figcaption>Segundo aviso, já de volta: o LED verde acendeu.</figcaption></figure>
+        </div>
+<div class="term"><span class="h">servidor · log-servidor.txt (trechos)</span>01:32:36 <span class="k">t=  17.0s</span>  seq=30   A  -72 B  -60 C  -69  DENTRO_ALCANCE ( 17.1,  4.4) <span class="y">fora</span>   -&gt; <span class="y">AUSENCIA_TOLERADA</span> acum   7.4s  orc 21.8s
+<span class="r">  AVISO AO ESTUDANTE  [AVISO_10_MIN]  t=28.8 s
+  "Fora da sala ha 20 s. Seu limite e de 30 s nesta aula."</span>
+<span class="r">  AVISO AO ESTUDANTE  [AVISO_13_MIN]  t=34.8 s
+  "Faltam 4 s do seu limite. Depois disso o tempo para de contar."</span>
+01:33:26 <span class="k">t=  36.3s</span>  seq=68   A  -62 B  -62 C  -59  DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; AUSENCIA_TOLERADA acum   7.4s  orc  2.5s
+01:33:27 <span class="k">t=  36.8s</span>  seq=69   ...                                                  dentro -&gt; AUSENCIA_TOLERADA acum   7.4s  orc  2.0s
+01:33:28 <span class="g">t=  37.3s</span>  seq=70   ...                                                  dentro -&gt; <span class="g">PRESENTE</span>          acum   8.4s  orc  2.5s
+<span class="g">      &gt;&gt;&gt; AUSENCIA_TOLERADA -&gt; PRESENTE em t=36.3 s (retornou dentro do orcamento)</span>
+01:36:37 <span class="k">t=  95.9s</span>  seq=182  ...                                                  dentro -&gt; PRESENTE          acum  <b>67.1s</b>
+01:36:38 <span class="g">t=  96.5s</span>  seq=183  ...                                                  dentro -&gt; PRESENTE          acum  <b class="g">95.0s</b>   <span class="k">← requalificou: +27,5 s</span></div>
+        <p>Repare no orçamento em t = 36,8 s: 2,0 s. No heartbeat seguinte, quando o retorno se
+        confirma, ele <strong>volta a 2,5 s</strong>. O servidor refez a sessão e descobriu que a
+        ausência terminou em 36,3 s, e não em 36,8 s.</p>
+      </div>
+    </div>
+
+    <!-- T3 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T3</span><span class="t">Adversarial (matrícula final 8): repetido, fora de ordem, salto</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd><span class="pill v">PRESENTE</span>, t ≈ 49 s, acumulado 20,5 s, sequência 91.</dd>
+          <dt>Entradas</dt><dd>Três apertos do botão azul, cada um segurado por 2 s, com cerca de 6 s entre eles.</dd>
+          <dt>Valores</dt><dd>Duplicata do seq 92 · seq 100 retido e entregue depois do 101 · salto de 106 para 112.</dd>
+          <dt>Esperado</dt><dd>Duplicata descartada sem recálculo; fora de ordem aceito na posição original, sem alterar o resultado; salto contado com 5 perdidos. Nenhuma mudança de estado.</dd>
+          <dt>Observado</dt><dd><code>DUPLICADO</code> · <code>FORA DE ORDEM … inserido na posicao original</code> · <code>SALTO … 5 heartbeat(s) perdido(s)</code>. Estado <code>PRESENTE</code> o tempo todo. O fora de ordem chegou com o mesmo acumulado do heartbeat anterior (26,2 s), já que o resultado não depende da ordem de chegada.</dd>
+          <dt>Por que o ingênuo erra</dt><dd>Um contador que soma 0,5 s por heartbeat recebido contaria a duplicata duas vezes. Um que usa "o último que chegou" como estado atual retrocederia no tempo com o fora de ordem. Um que não olha a sequência não saberia que 5 heartbeats sumiram, e trataria o intervalo como observado.</dd>
+        </dl>
+<div class="term"><span class="h">aparelho · log-serial-aparelho.txt</span><span class="c">### anomalia armada: duplicata (aplica no proximo heartbeat)</span>
+<span class="y">&gt;&gt;&gt; ADVERSARIAL: reenviando o ultimo heartbeat (mesmo eventId)</span>
+<span class="c">### anomalia armada: fora-de-ordem (aplica no proximo heartbeat)</span>
+<span class="y">&gt;&gt;&gt; ADVERSARIAL: segurando seq=100 para entregar depois de 101</span>
+<span class="y">&gt;&gt;&gt; ADVERSARIAL: entregando agora o heartbeat retido (fora de ordem)</span>
+<span class="c">### anomalia armada: salto (aplica no proximo heartbeat)</span>
+<span class="y">&gt;&gt;&gt; ADVERSARIAL: salto de 106 para 112 (5 numeros nunca enviados)</span></div>
+<div class="term"><span class="h">servidor · log-servidor.txt</span>01:35:06 <span class="k">t=  49.9s</span>  seq=92   ... dentro -&gt; PRESENTE  acum  21.0s
+01:35:07 <span class="y">DUPLICADO</span>      apar-01#a52e#92 ja processado - descartado, nada recalculado
+01:35:17 <span class="r">SALTO</span>          esperado 100, recebido 101 - 1 heartbeat(s) perdido(s); o intervalo fica sem evidencia
+01:35:17 <span class="k">t=  55.1s</span>  seq=101  ... dentro -&gt; PRESENTE  acum  26.2s
+01:35:17 <span class="y">FORA DE ORDEM</span>  seq=100 chegou depois de 101 - inserido na posicao original e sessao recalculada
+01:35:17 <span class="k">t=  54.6s</span>  seq=100  ... dentro -&gt; PRESENTE  acum  26.2s
+01:35:24 <span class="r">SALTO</span>          esperado 107, recebido 112 - 5 heartbeat(s) perdido(s); o intervalo fica sem evidencia
+01:35:24 <span class="k">t=  58.1s</span>  seq=112  ... dentro -&gt; PRESENTE  acum  29.2s</div>
+        <div class="callout warn">
+          <span class="tag">Defeito encontrado neste teste</span>
+          <p>Quando o 101 chega antes do 100, o servidor vê uma lacuna e conta "1 perdido". O 100
+          chega em seguida, mas a contagem não era desfeita: o relatório final dizia
+          <code>6 perdidos</code>, quando só 5 se perderam. Corrigido depois da execução. O servidor
+          agora guarda as lacunas e, quando um atrasado preenche uma, desconta e escreve
+          <code>preenche a lacuna: nao estava perdido, so atrasado</code>. Há um teste para isso. O
+          log acima é o da execução original, com o defeito.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- T4 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T4</span><span class="t">Queda de rede: silêncio, retenção e reentrega</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd><span class="pill v">PRESENTE</span>, t ≈ 68 s, acumulado 39,4 s.</dd>
+          <dt>Entradas</dt><dd>Botão vermelho uma vez; cerca de 25 s reais depois, de novo.</dd>
+          <dt>Valores e tempos</dt><dd>41 heartbeats retidos (seq 133 a 173, t de 68,8 a 88,8 s); a fila chegou a 39/60 na captura. Nenhum descarte por fila cheia.</dd>
+          <dt>Esperado</dt><dd>O aparelho continua medindo e mostra <code>REDE OFF</code> com a fila; LEDs de estado apagados. O servidor acusa silêncio e não decide nada. Na volta, recebe os retidos como atrasados, no tempo original, e o acumulado segue sem buraco.</dd>
+          <dt>Observado</dt><dd><code>SILENCIO</code> 6 s depois do último heartbeat; <code>RETOMADO</code> e 41 linhas <code>ATRASADO … entra no passado e a sessao e recalculada</code>. O acumulado seguiu de 39,9 s a 59,9 s através do trecho retido. O estado continuou <code>PRESENTE</code>.</dd>
+          <dt>Por quê</dt><dd>Silêncio não é ausência. Um servidor ingênuo, vendo o aparelho sumir, poderia abrir uma ausência e cobrar orçamento. Este espera o dado: quando ele chega, mesmo atrasado, a sessão é refeita como se tivesse chegado a tempo.</dd>
+        </dl>
+        <div class="fig-par">
+          <figure><img src="{{img:evidencias/presenca/05-rede-off-fila.jpg}}" alt="Wokwi durante a queda de rede: OLED mostrando REDE OFF e fila 39/60 retidos, todos os LEDs apagados"><figcaption>Rede fora: o aparelho segue medindo e guardando. <b>Todos os LEDs apagados</b>, porque uma decisão velha não é exibida como atual.</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-05-rede-off-fila.jpg}}" alt="Ampliação do OLED: REDE OFF, fila 39/60 retidos, com os três LEDs apagados"><figcaption>OLED e LEDs ampliados.</figcaption></figure>
+        </div>
+<div class="term"><span class="h">aparelho · log-serial-aparelho.txt</span><span class="c">### rede simulada: INDISPONIVEL</span>
+[REDE] indisponivel: heartbeat seq=133 retido (fila 1/60)
+[REDE] indisponivel: heartbeat seq=134 retido (fila 2/60)
+<span class="k">…</span>
+[REDE] indisponivel: heartbeat seq=173 retido (fila 41/60)
+<span class="c">### rede simulada: RESTABELECIDA</span>
+<span class="g">[RETRY] 41 heartbeat(s) retidos entregues com atraso</span></div>
+<div class="term"><span class="h">servidor · log-servidor.txt</span>01:35:47 <span class="k">t=  68.3s</span>  seq=132  ... dentro -&gt; PRESENTE  acum  39.4s
+01:35:53 <span class="m">SILENCIO</span>       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; o que chegar depois entra no passado
+01:36:25 <span class="c">RETOMADO</span>       heartbeats voltaram a chegar
+01:36:25 <span class="c">ATRASADO</span>       seq=133 retido no aparelho, medido em 76335 ms - entra no passado e a sessao e recalculada
+01:36:25 <span class="k">t=  68.8s</span>  seq=133  ... dentro -&gt; PRESENTE  acum  39.9s
+<span class="k">…  (40 linhas ATRASADO)</span>
+01:36:28 <span class="k">t=  88.8s</span>  seq=173  ... dentro -&gt; PRESENTE  acum  59.9s</div>
+      </div>
+    </div>
+
+    <!-- T5 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T5</span><span class="t">Orçamento esgotado: aviso e estorno</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd>Sessão nova <code>sb6a8</code>. <span class="pill v">PRESENTE</span> desde t = 0, acumulado 6,6 s.</dd>
+          <dt>Entradas</dt><dd>Os três potenciômetros em 0: nenhuma âncora ouvida, fora do prédio. Mantidos assim por mais de 30 s.</dd>
+          <dt>Valores e tempos</dt><dd>RSSI <code>--</code> nas três; região <code>FORA_ALCANCE</code>. Ausência a partir de t = 6,6 s; avisos em 26,6 e 32,6 s; orçamento esgotado em t = 36,6 s.</dd>
+          <dt>Esperado</dt><dd>Os dois avisos e, ao fim do orçamento, <code>FORA</code> com LED vermelho, a mensagem de limite e a ausência inteira estornada: o acumulado volta a contar só a presença real.</dd>
+          <dt>Observado</dt><dd><code>LIMITE_ESGOTADO</code> em t = 36,6 s: "O tempo parou de ser contabilizado em t=7 s." Estado <code>FORA</code>, LED vermelho, orçamento 0. Acumulado 6,6 s: nenhum segundo da ausência foi creditado.</dd>
+          <dt>Por quê</dt><dd>§6 do projeto técnico: sem retorno dentro do orçamento, o tempo desde o início real da ausência é estornado. A mensagem aponta esse início (t ≈ 6,6 s, arredondado no texto), e não o momento em que o limite estourou. É o horário que importa para o estudante contestar.</dd>
+        </dl>
+        <div class="fig-par">
+          <figure><img src="{{img:evidencias/presenca/07-limite-esgotado.jpg}}" alt="Wokwi com os três potenciômetros no mínimo: LED vermelho aceso e OLED mostrando FORA e a mensagem de tempo parado"><figcaption>Limite esgotado: <b>FORA</b> e LED vermelho.</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-07-limite-esgotado.jpg}}" alt="Ampliação do OLED: FORA, O tempo parou de ser contabilizado em t=7 s; LED vermelho aceso"><figcaption>OLED e LEDs ampliados.</figcaption></figure>
+        </div>
+<div class="term"><span class="h">servidor · log-servidor.txt</span>01:37:31 <span class="k">t=   7.7s</span>  seq=230  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -&gt; <span class="y">AUSENCIA_TOLERADA</span> acum   6.6s  orc 29.0s
+<span class="y">      &gt;&gt;&gt; PRESENTE -&gt; AUSENCIA_TOLERADA em t=6.6 s (sinal fora da sala sustentado)</span>
+<span class="r">  AVISO AO ESTUDANTE  [LIMITE_ESGOTADO]  t=36.6 s
+  "O tempo parou de ser contabilizado em t=7 s."</span>
+01:38:39 <span class="k">t=  37.2s</span>  seq=288  A  -- B  -- C  --  FORA_ALCANCE   sem posicao fora   -&gt; <span class="r">FORA</span>              acum   6.6s  orc  0.0s</div>
+      </div>
+    </div>
+
+    <!-- T6 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T6</span><span class="t">Fim da aula: o resultado da sessão</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>Estado inicial</dt><dd>Sessão <code>s31a2</code>, depois de T1 a T4.</dd>
+          <dt>Entradas</dt><dd>Nenhuma. A aula termina em t = 100 s.</dd>
+          <dt>Esperado</dt><dd>Aviso <code>FIM_DA_AULA</code> com o percentual; relatório final com o detalhamento; aprovação se ≥ 75 %.</dd>
+          <dt>Observado</dt><dd>"Voce acumulou 99% desta aula." Relatório: 71,1 s de presença + 27,5 s de ausência creditada = 98,6 s (98,6 %), <strong>aprovado</strong>. Orçamento usado 27,5 de 30 s.</dd>
+          <dt>Por quê</dt><dd>A presença perdida está toda no começo: a aula começa em t = 0 e a presença é confirmada em t = 1,4 s. Os outros 98,6 s estão cobertos por presença ou por ausência tolerada que se requalificou.</dd>
+        </dl>
+        <div class="fig-par">
+          <figure><img src="{{img:evidencias/presenca/06-fim-da-aula.jpg}}" alt="Wokwi ao fim da aula: LED verde aceso e OLED com a mensagem Voce acumulou 99% desta aula"><figcaption>O aviso de fim de aula no aparelho.</figcaption></figure>
+          <figure class="oled"><img src="{{img:evidencias/presenca/componentes/oled-06-fim-da-aula.jpg}}" alt="Ampliação do OLED: PRESENTE, Voce acumulou 99% desta aula"><figcaption>OLED ampliado.</figcaption></figure>
+        </div>
+<div class="term"><span class="h">servidor · log-servidor.txt</span><span class="c">------------------------------------------------------------------------
+  RELATORIO FINAL DA SESSAO s31a2
+  estado: PRESENTE   t=100.0 s de 100 s
+  acumulado garantido: 98.6 s (98.6%)   provisorio: 0.0 s   -&gt; APROVADO na aula (minimo 75%)
+  presenca confirmada 71.1 s + ausencia creditada 27.5 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 67.0 s
+    t=   1.4s  FORA -&gt; PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -&gt; AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -&gt; PRESENTE  (retornou dentro do orcamento)
+  aceitos=188 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=41 invalidos=0
+------------------------------------------------------------------------</span></div>
+        <p>O "contador ingênuo" (0,5 s por heartbeat <em>dentro</em>, somado na chegada) daria
+        67,0 s, reprovando um estudante que só saiu com tolerância. Ele não enxerga a ausência
+        tolerada nem os intervalos irregulares entre heartbeats. O "6 perdidos" é o defeito do T3,
+        já corrigido.</p>
+      </div>
+    </div>
+
+    <!-- T7 -->
+    <div class="teste">
+      <div class="teste-h"><span class="id">T7</span><span class="t">Reinício do aparelho: silêncio e boot novo</span><span class="ok">passou</span></div>
+      <div class="teste-b">
+        <dl>
+          <dt>O que aconteceu</dt><dd>Não foi planejado: a simulação foi reiniciada logo depois de abrir a sessão <code>s31a2</code>, e a janela do Wokwi ficou oculta por alguns instantes (o navegador congela a simulação).</dd>
+          <dt>Observado</dt><dd>Dois heartbeats do boot anterior (seq 74, 75), <code>SILENCIO</code>, <code>RETOMADO</code> e o boot novo <code>a52e</code> começando em seq 1, <strong>sem nenhuma duplicata</strong>, encaixado em t = 1,0 s logo depois do último instante conhecido. O primeiro heartbeat do boot novo veio <code>INDETERMINADA</code> (janela da média ainda enchendo) e foi tratado como neutro.</dd>
+          <dt>Por quê</dt><dd>O <code>bootId</code> na identidade do evento e o encaixe da linha do tempo por boot.</dd>
+        </dl>
+<div class="term"><span class="h">servidor · log-servidor.txt</span>01:30:32 <span class="k">t=   0.5s</span>  seq=75   ... DENTRO_ALCANCE (  6.0,  4.4) dentro -&gt; FORA
+01:30:38 <span class="m">SILENCIO</span>       nenhum heartbeat ha 6 s - rede, bateria ou app. Nada e decidido sem dado; ...
+01:30:51 <span class="c">RETOMADO</span>       heartbeats voltaram a chegar
+01:30:51 <span class="k">t=   1.0s</span>  seq=1    ... INDETERMINADA  (  6.0,  4.4) neutro -&gt; FORA</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9 ============ -->
+  <section id="p9">
+    <div class="sec-head"><span class="sec-n">09</span><h2>Testes automatizados</h2></div>
+    <p><code>python -m pytest servidor/testes -q</code> → <strong>34 passed</strong>. Não precisam
+    de Wokwi nem de broker: o servidor é exercitado com um cliente MQTT falso, e cada resposta
+    publicada é validada contra o próprio contrato.</p>
+    <div class="tw"><table>
+      <tr><th>Grupo</th><th>O que garante</th></tr>
+      <tr><td>Parâmetros</td><td>A escala comprime todos os tempos juntos (30 s → 1 s, 15 min → 30 s…)</td></tr>
+      <tr><td>Localização</td><td>A trilateração recupera o ponto em 4 posições; sinal forte na sala vizinha é <em>fora</em>; âncora não ouvida deixa neutro</td></tr>
+      <tr><td>Máquina de estados</td><td>Persistência na entrada; oscilação curta não derruba; neutro interrompe; entrada datada no início real</td></tr>
+      <tr><td>Orçamento</td><td>Ausência curta creditada só depois de requalificar; voltar por instantes não reabre crédito; avisos em 20 s e 26 s, uma vez só; esgotamento estorna tudo; orçamento por sessão; retorno a tempo não é punido pela demora da confirmação</td></tr>
+      <tr><td>Retroativo</td><td>Embaralhar o log não muda o resultado; lote atrasado corrige o passado; o acumulado nunca diminui (verificado a cada heartbeat de uma sessão inteira)</td></tr>
+      <tr><td>Fim da aula</td><td>Quem sai no fim soma o que assistiu</td></tr>
+      <tr><td>Servidor</td><td>Respostas válidas pelos schemas; estado retido e por aluno; campo desconhecido rejeitado; duplicata fora do log; fora de ordem na posição original; salto conta perdidos; atrasado que preenche lacuna não fica perdido; reboot não vira duplicata; lote atrasado recalcula; contador ingênuo infla com duplicatas</td></tr>
+    </table></div>
+    <p>Um desses testes falhou na primeira execução e mostrou um problema real. Durante o
+    segundo de confirmação de uma saída, o acumulado garantido subia meio segundo e depois
+    voltava. A cauda ainda não confirmada passou a ser contada como provisória.</p>
+  </section>
+
+  <!-- ============ 10 ============ -->
+  <section id="p10">
+    <div class="sec-head"><span class="sec-n">10</span><h2>O que só apareceu rodando</h2></div>
+    <div class="tw"><table>
+      <tr><th>Achado</th><th>Consequência</th><th>Tratamento</th></tr>
+      <tr><td>Fora de ordem inflava os perdidos</td><td>Relatório com 6 perdidos quando eram 5</td><td>Lacunas por boot; o atrasado que preenche uma é descontado (T3)</td></tr>
+      <tr><td>O "fora de ordem" do protótipo de CO₂ nunca foi fora de ordem</td><td>Ele reenviava uma sequência <em>já processada</em>, e o gateway a classificava, corretamente, como duplicata. O teste adversarial daquela fronteira não exercitava o que dizia</td><td>A âncora de CO₂ agora segura o evento N e o entrega depois do N+1, como o aparelho. Compilado no Wokwi</td></tr>
+      <tr><td>Acumulado garantido não era monotônico por meio segundo</td><td>Subia e voltava durante a confirmação da saída</td><td>Cauda não confirmada vai para o provisório</td></tr>
+      <tr><td>Janela oculta congela a simulação</td><td>Relógio parado em 14,5 s; apertos de botão feitos nesse intervalo duram 0 ms simulados e não são vistos</td><td>Na apresentação, a janela do Wokwi fica em primeiro plano. O servidor mostrou <code>SILENCIO</code> nas quatro vezes em que isso aconteceu, sem decidir nada</td></tr>
+    </table></div>
+  </section>
+
+  <!-- ============ 11 ============ -->
+  <section id="p11">
+    <div class="sec-head"><span class="sec-n">11</span><h2>O que foi validado e o que não foi</h2></div>
+    <div class="tw"><table>
+      <tr><th>Validado no simulador</th><th>Exigiria hardware e ambiente reais</th></tr>
+      <tr><td>Contrato, sequência, deduplicação, fora de ordem, salto, silêncio</td><td>Propagação de rádio real: multipercurso, corpo humano, parede, orientação do aparelho</td></tr>
+      <tr><td>Histerese de região, trilateração, polígono, persistência</td><td>Calibração dos limiares em dBm por levantamento na sala (cantos, porta, corredor, vizinha)</td></tr>
+      <tr><td>Orçamento, requalificação, estorno, avisos no momento certo</td><td>Cadência real: heartbeat de 60 a 90 s no Android e eventos de região no iOS</td></tr>
+      <tr><td>Retenção local e reentrega com recálculo retroativo</td><td>Fila sobrevivendo a reinício do aparelho (aqui é volátil)</td></tr>
+    </table></div>
+    <div class="callout warn">
+      <span class="tag">Declaração obrigatória sobre a entrada</span>
+      <p>Os potenciômetros <strong>não são rádio</strong>. Não houve aquisição nem validação de
+      RSSI real: o Wokwi não simula propagação, não há BLE, distância nem parede. São fontes de
+      valor controláveis entre −105 e −35 dBm.</p>
+    </div>
+    <p><strong>Fora do escopo deste marco:</strong> token rotativo da âncora, assinatura do
+    heartbeat com a chave do aparelho, pareamento por QR, variância de IMU, motivo da ausência
+    (<code>bateria</code>, <code>app_morto</code>) e <code>PAUSA_PROGRAMADA</code>, que depende da
+    agenda.</p>
+  </section>
+
+  <!-- ============ 12 ============ -->
+  <section id="p12">
+    <div class="sec-head"><span class="sec-n">12</span><h2>Roteiro para a apresentação ao vivo</h2></div>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">Antes</span>Rede com a porta 1883 liberada (na faculdade ela é bloqueada; use rede móvel). <code>python servidor.py</code> rodando. Wokwi aberto e <strong>em primeiro plano</strong>.</div></li>
+      <li><span class="s">2</span><div><span class="who">Contexto, 1 min</span>Seção 02: quem mede, quem decide, o que atravessa a fronteira.</div></li>
+      <li><span class="s">3</span><div><span class="who">Play</span>Em ~10 s o OLED mostra <code>PRESENTE</code> e o LED verde acende. Aponte o <code>eventId</code> no serial e a mesma linha no servidor.</div></li>
+      <li><span class="s">4</span><div><span class="who">Sala vizinha</span>Gire os potenciômetros para 481 / 652 / 531. Mostre que a região continua <code>DENTRO_ALCANCE</code> e o servidor diz <em>fora</em>: é o polígono.</div></li>
+      <li><span class="s">5</span><div><span class="who">Avisos</span>Espere o buzzer (20 s de ausência). Volte ao centro depois do segundo aviso. O LED verde volta.</div></li>
+      <li><span class="s">6</span><div><span class="who">Adversarial</span>Botão azul três vezes, esperando uns segundos entre elas. Mostre <code>DUPLICADO</code>, <code>FORA DE ORDEM</code> e <code>SALTO</code> no servidor.</div></li>
+      <li><span class="s">7</span><div><span class="who">Rede</span>Botão vermelho, espere o <code>SILENCIO</code> no servidor, aperte de novo e mostre as linhas <code>ATRASADO</code>.</div></li>
+      <li><span class="s">8</span><div><span class="who">Alteração ao vivo</span>Uma destas, cada uma de uma linha: mudar <code>escala</code> no config; mudar <code>LIMIAR_ENTRADA</code> no sketch; ou acrescentar <code>"bateria":63</code> ao heartbeat e mostrar o servidor rejeitando pelo contrato.</div></li>
+    </ol>
+    <div class="tw"><table>
+      <tr><th>Cenário</th><th>A</th><th>B</th><th>C</th><th>Resultado</th></tr>
+      <tr><td>Centro da sala</td><td>628</td><td>628</td><td>667</td><td>(6,0; 4,4), dentro</td></tr>
+      <tr><td>Sala vizinha</td><td>481</td><td>652</td><td>531</td><td>(17,1; 4,4), fora com −60 dBm</td></tr>
+      <tr><td>Fora do prédio</td><td>0</td><td>0</td><td>0</td><td>nenhuma âncora ouvida</td></tr>
+    </table></div>
+    <p>Teclas do servidor: <code>p</code> painel · <code>n</code> nova sessão (use antes de cada
+    demonstração) · <code>q</code> sair.</p>
+  </section>
+
+  <!-- ============ 13 ============ -->
+  <section id="p13">
+    <div class="sec-head"><span class="sec-n">13</span><h2>Perguntas prováveis</h2></div>
+    <div class="qa"><p class="q">Por que o ESP32 é o celular, e não a âncora?</p>
+    <p>Porque a âncora nunca escuta aparelhos (decisão fechada nº 3). Quem mede o sinal é o
+    celular. A fronteira que carrega a permanência é, portanto, celular → servidor. A âncora
+    aparece como o sinal que o celular ouve.</p></div>
+    <div class="qa"><p class="q">Se o servidor trilatera, para que a histerese no aparelho?</p>
+    <p>Para não mandar ao servidor a oscilação de quem está na borda do alcance, e porque é assim
+    que o iOS funciona: o sistema decide a entrada e a saída da região e acorda o app. O
+    polígono fica no servidor porque o aparelho não conhece a planta.</p></div>
+    <div class="qa"><p class="q">O que acontece se chegar um heartbeat de 20 s atrás?</p>
+    <p>Ele entra na posição dele no log e a sessão é refeita. Se ele mostra que o estudante
+    estava na sala, o que parecia ausência vira presença. O acumulado garantido nunca cai; o que
+    muda é o provisório.</p></div>
+    <div class="qa"><p class="q">Por que não somar 0,5 s a cada heartbeat?</p>
+    <p>Duplicatas contariam duas vezes, atrasados cairiam fora do lugar, e a regra de que a
+    ausência começa no início real, e não na confirmação, seria impossível. Na sessão gravada,
+    esse contador daria 67 s; o correto é 98,6 s.</p></div>
+    <div class="qa"><p class="q">E se o celular morrer?</p>
+    <p>O servidor vê silêncio e não decide nada sem dado. Distinguir bateria de app morto (o
+    atributo <code>motivo</code>) está fora deste marco.</p></div>
+    <div class="qa"><p class="q">O RSSI de um potenciômetro vale alguma coisa?</p>
+    <p>Como grandeza física, não. Ele exercita a lógica com valores controláveis e repetíveis.
+    Os limiares reais sairiam de um levantamento na sala.</p></div>
+    <div class="qa"><p class="q">Por que o <code>eventTimeMs</code> é a linha do tempo, se o relógio do aparelho não é confiável?</p>
+    <p>Porque aqui o problema é o oposto: o relógio do Wokwi anda a 10 %–80 % do real, e medir 30
+    s pelo relógio do servidor daria outra coisa a cada execução. O aparelho só contribui com
+    diferenças dentro do mesmo boot, e o carimbo do servidor fica gravado em cada linha do log.</p></div>
+  </section>
+
+  <div class="parte" id="parte2">
+    <div class="pn">Parte II · segunda fronteira</div>
+    <div class="pt">Âncora de CO₂ ↔ gateway: a defesa contra o conluio em massa</div>
+    <p>Construída antes da fronteira principal e mantida como complemento. A turma deixa os
+    celulares na sala e vai embora: todas as defesas de rádio confirmam a presença. O CO₂ da sala
+    não. Pastas <code>co2-ancora/</code> e <code>co2-gateway/</code>.</p>
+  </div>

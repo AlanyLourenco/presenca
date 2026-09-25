@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.aviso.v1.schema.json",
+  "title": "presenca.aviso.v1",
+  "description": "Notificação ao estudante. Só existe nos quatro momentos da seção 7 do projeto técnico. É ela que fecha o laço ciber-físico: chega enquanto ainda cabe reação.",
+  "type": "object",
+  "required": ["eventType", "avisoId", "aluno", "tipo", "texto", "emitidoEmMs"],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": { "const": "presenca.aviso.v1" },
+    "avisoId": {
+      "type": "string",
+      "description": "sessao#tipo. Um tipo de aviso só é emitido uma vez por sessão; o aparelho ignora um avisoId já exibido (reentrega QoS 1 não toca o alarme de novo)."
+    },
+    "aluno": { "type": "string" },
+    "tipo": { "enum": ["AVISO_10_MIN", "AVISO_13_MIN", "LIMITE_ESGOTADO", "FIM_DA_AULA"] },
+    "texto": { "type": "string", "maxLength": 120 },
+    "percentual": { "type": "number", "minimum": 0, "maximum": 100 },
+    "emitidoEmMs": { "type": "integer" }
+  }
+}
