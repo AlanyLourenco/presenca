@@ -11,7 +11,7 @@
     <div class="sec-head"><span class="sec-n">G1</span><h2>Checklist do dia</h2></div>
     <div class="tw"><table>
       <tr><th></th><th>O quê</th><th>Como conferir</th></tr>
-      <tr><td>☐</td><td>Rede que alcança o broker (porta 1883, ou 8884 com <code>--ws</code>)</td><td>No terminal: <code>Test-NetConnection broker.hivemq.com -Port 1883</code> tem que dizer <code>TcpTestSucceeded : True</code>. <strong>Na rede da faculdade dá False</strong>: rode o servidor com <code>--ws</code> (seção <a href="#g14">G14</a>) e, se nem assim conectar, use o 4G do celular.</td></tr>
+      <tr><td>☐</td><td>Rede que alcança o broker (porta 1883, ou 8884 com <code>--ws</code>)</td><td>No <strong>PowerShell</strong> (não no Git Bash): <code>Test-NetConnection broker.hivemq.com -Port 1883</code>. Se der <code>True</code>, o servidor é <code>python servidor.py</code>. Se der <code>False</code> (esperado na faculdade), é <code>python servidor.py --ws</code>. Se nem assim conectar, 4G do celular. Passo a passo na <a href="#g3">G3</a>.</td></tr>
       <tr><td>☐</td><td>Python com as bibliotecas</td><td><code>pip install -r requirements.txt</code> dentro de <code>servidor/</code> (seção G3)</td></tr>
       <tr><td>☐</td><td>VS Code aberto em <code>projeto-presenca</code></td><td>Explorador mostrando <code>marco-02</code></td></tr>
       <tr><td>☐</td><td>Dois terminais no VS Code</td><td>Um para o servidor, outro para o validador, os testes e o gateway de CO₂</td></tr>
@@ -52,19 +52,69 @@
   <!-- ============ G3 ============ -->
   <section id="g3">
     <div class="sec-head"><span class="sec-n">G3</span><h2>Preparar o computador (uma vez)</h2></div>
-    <p>No VS Code: menu <b>Terminal → New Terminal</b>. Ele abre um PowerShell embaixo. Digite:</p>
-<div class="term"><span class="h">terminal 1 · instalar</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
-pip install -r requirements.txt</div>
+    <h3>Passo 1 · Abrir um PowerShell</h3>
+    <p>Todos os comandos deste guia são para o <strong>PowerShell</strong>. No VS Code, no painel do
+    terminal (embaixo), clique na setinha <b>˅</b> ao lado do <b>+</b> e escolha <b>PowerShell</b>. Também
+    serve o PowerShell do Windows, aberto pelo menu Iniciar.</p>
+    <div class="callout warn">
+      <span class="tag">Confira qual terminal abriu</span>
+      <p><strong>Certo:</strong> a linha começa com <code>PS</code>, por exemplo
+      <code>PS D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA&gt;</code>.<br>
+      <strong>Errado:</strong> aparece <code>MINGW64</code> e a linha termina em <code>$</code>. Isso é o Git
+      Bash, que é o padrão do seu VS Code. Nele o <code>Test-NetConnection</code> dá
+      <code>command not found</code>. Abra um PowerShell pela setinha <b>˅</b>.</p>
+    </div>
+
+    <h3>Passo 2 · Entrar na pasta do servidor</h3>
+    <p>O PowerShell abre numa pasta qualquer, muitas vezes <code>C:\WINDOWS\System32</code>. Os comandos
+    <code>pip install -r requirements.txt</code> e <code>python servidor.py</code> procuram os arquivos
+    <strong>na pasta atual</strong>. Então, antes de tudo, entre na pasta com o <code>cd</code>:</p>
+<div class="term"><span class="h">PowerShell</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"</div>
+    <p>Confira o começo da linha. Tem que ser:</p>
+<div class="term"><span class="h">certo</span>PS D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor&gt;</div>
+    <div class="callout warn">
+      <span class="tag">Se aparecer “No such file or directory: 'requirements.txt'” ou “can't open file 'servidor.py'”</span>
+      <p>Você está na pasta errada. Se a linha começa com <code>PS C:\WINDOWS\System32&gt;</code>, o
+      <code>cd</code> não foi feito. Rode o <code>cd</code> acima e repita o comando.</p>
+    </div>
+
+    <h3>Passo 3 · Instalar as bibliotecas (só na primeira vez)</h3>
+<div class="term"><span class="h">PowerShell, já dentro da pasta servidor</span>pip install -r requirements.txt</div>
     <p>Isso instala <code>paho-mqtt</code> (fala MQTT) e <code>jsonschema</code> (valida o contrato).
-    O gateway de CO₂ usa as mesmas duas.</p>
-    <p>Confira a rede:</p>
-<div class="term"><span class="h">terminal 1 · rede</span>Test-NetConnection broker.hivemq.com -Port 1883</div>
-    <p>Tem que aparecer <code>TcpTestSucceeded : True</code>. Se aparecer <code>False</code>, a rede bloqueia
-    o MQTT comum. Teste a porta do WebSocket:</p>
-<div class="term"><span class="h">terminal 1 · rede, plano B</span>Test-NetConnection broker.hivemq.com -Port 8884</div>
-    <p>Se a 8884 der <code>True</code>, use <code>python servidor.py --ws</code> no lugar de
-    <code>python servidor.py</code>. Se as duas derem <code>False</code>, troque para o 4G do celular.
-    O porquê disso tudo está na seção <a href="#g14">G14</a>.</p>
+    O gateway de CO₂ usa as mesmas duas. Se aparecer
+    <code>[notice] A new release of pip is available</code>, é só uma sugestão de atualização: pode
+    ignorar.</p>
+
+    <h3>Passo 4 · Testar a rede (sempre, em cada rede nova)</h3>
+<div class="term"><span class="h">PowerShell</span>Test-NetConnection broker.hivemq.com -Port 1883</div>
+    <p>Este comando é <strong>sempre igual</strong>. Ele não conecta nada, só pergunta se a porta 1883 está
+    liberada nesta rede. Olhe a última linha:</p>
+<div class="term"><span class="h">o que apareceu em casa, em 25/09/2026 (saída real)</span>ComputerName     : broker.hivemq.com
+RemoteAddress    : 52.58.200.83
+RemotePort       : 1883
+InterfaceAlias   : Wi-Fi
+SourceAddress    : 192.168.0.8
+<span class="g">TcpTestSucceeded : True</span></div>
+
+    <h3>Passo 5 · Escolher o comando do servidor</h3>
+    <div class="tw"><table>
+      <tr><th>O teste deu</th><th>Para ligar o servidor, digite</th><th>O que significa</th></tr>
+      <tr><td><code>TcpTestSucceeded : True</code></td><td><code>python servidor.py</code></td><td>A rede libera o MQTT comum. Foi o caso em casa.</td></tr>
+      <tr><td><code>TcpTestSucceeded : False</code></td><td><code>python servidor.py --ws</code></td><td>A rede bloqueia a 1883 (esperado na faculdade). O <code>--ws</code> manda o servidor ir pelo WebSocket, na porta 8884.</td></tr>
+      <tr><td>Com <code>--ws</code> também não aparece <code>[MQTT] conectado</code></td><td>Conecte o notebook no 4G do celular e volte ao passo 4</td><td>A rede bloqueia os dois caminhos.</td></tr>
+    </table></div>
+    <div class="callout">
+      <span class="tag">Onde vai o --ws</span>
+      <p>O <code>--ws</code> <strong>não</strong> vai no <code>Test-NetConnection</code> e <strong>não</strong> se digita
+      sozinho. Ele vai no <strong>fim do comando que liga o servidor</strong>, separado por um espaço. É o
+      mesmo comando de sempre com <code> --ws</code> no final:</p>
+      <p><code>python servidor.py</code> &nbsp;→&nbsp; <code>python servidor.py --ws</code></p>
+      <p>O mesmo vale para o gateway de CO₂: <code>python consumidor.py --ws</code>.</p>
+    </div>
+    <p>Se deu <code>False</code> e você quiser conferir antes se o caminho do WebSocket está livre, troque só
+    o número da porta no teste: <code>Test-NetConnection broker.hivemq.com -Port 8884</code>. Se esse der
+    <code>True</code>, o <code>--ws</code> vai funcionar. O porquê de tudo isso está na seção
+    <a href="#g14">G14</a>.</p>
   </section>
 
   <!-- ============ G4 ============ -->
@@ -90,8 +140,10 @@ pip install -r requirements.txt</div>
   <!-- ============ G5 ============ -->
   <section id="g5">
     <div class="sec-head"><span class="sec-n">G5</span><h2>Ligar o servidor</h2></div>
-    <p>No terminal 1:</p>
-<div class="term"><span class="h">terminal 1 · servidor</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+    <p>No PowerShell (G3), depois do teste de rede. Digite <strong>uma</strong> das duas últimas linhas,
+    conforme o resultado do <code>Test-NetConnection</code>: <code>True</code> → sem <code>--ws</code>;
+    <code>False</code> → com <code>--ws</code>.</p>
+<div class="term"><span class="h">PowerShell · servidor</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
 python servidor.py          <span class="k"># rede normal (porta 1883)</span>
 python servidor.py --ws     <span class="k"># rede que bloqueia a 1883, como a da faculdade (G14)</span></div>
     <p>Use <strong>uma</strong> das duas linhas. Com <code>--ws</code>, a linha de conexão vira
@@ -263,8 +315,8 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
   <!-- ============ G10 ============ -->
   <section id="g10">
     <div class="sec-head"><span class="sec-n">G10</span><h2>Mostrar o contrato funcionando</h2></div>
-    <p>No terminal 2:</p>
-<div class="term"><span class="h">terminal 2</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\contrato"
+    <p>Num segundo PowerShell (o primeiro está ocupado com o servidor):</p>
+<div class="term"><span class="h">PowerShell (segundo terminal)</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\contrato"
 python validar.py</div>
 <div class="term"><span class="h">o que aparece (saída real)</span>Validando 10 mensagem(ns) contra contrato/v1/
 
@@ -293,7 +345,7 @@ Agora de proposito: o mesmo heartbeat com um campo que o contrato nao preve
   <!-- ============ G11 ============ -->
   <section id="g11">
     <div class="sec-head"><span class="sec-n">G11</span><h2>Mostrar os testes automáticos</h2></div>
-<div class="term"><span class="h">terminal 2</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
+<div class="term"><span class="h">PowerShell (segundo terminal)</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
 python -m pytest testes -v</div>
     <p>Aparecem os 34 nomes com <code>PASSED</code> e, no fim, <code>34 passed</code>. Com <code>-q</code> no
     lugar de <code>-v</code> sai só o resumo. Destaque três nomes: <code>test_ordem_de_chegada_nao_altera_o_resultado</code>
@@ -305,7 +357,7 @@ python -m pytest testes -v</div>
   <section id="g12">
     <div class="sec-head"><span class="sec-n">G12</span><h2>A fronteira de CO₂ (o “gateway”)</h2></div>
     <p>Pode rodar ao mesmo tempo que o servidor de presença: usam tópicos diferentes.</p>
-<div class="term"><span class="h">terminal 2 · gateway de CO₂</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\co2-gateway"
+<div class="term"><span class="h">PowerShell (segundo terminal) · gateway de CO₂</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\co2-gateway"
 python consumidor.py        <span class="k"># ou: python consumidor.py --ws</span></div>
     <p>Abra <b>wokwi.com/projects/476001394839038977</b> e dê ▶.</p>
     {{anot:wk-co2}}
@@ -341,6 +393,8 @@ python consumidor.py        <span class="k"># ou: python consumidor.py --ws</spa
     <div class="tw"><table>
       <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
       <tr><td>Servidor não mostra <code>[MQTT] conectado</code></td><td>Porta 1883 bloqueada</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> e rode <code>python servidor.py --ws</code>. Se ainda não conectar, 4G do celular. Confira com <code>Test-NetConnection</code> (G3).</td></tr>
+      <tr><td><code>No such file or directory: 'requirements.txt'</code> ou <code>can't open file 'servidor.py'</code></td><td>O PowerShell está em outra pasta (ex. <code>C:\WINDOWS\System32</code>)</td><td>Faça o <code>cd</code> da G3, passo 2, e repita.</td></tr>
+      <tr><td><code>Test-NetConnection: command not found</code></td><td>O terminal aberto é o Git Bash (<code>MINGW64</code>, <code>$</code>)</td><td>Abra um PowerShell: setinha <b>˅</b> ao lado do <b>+</b> no terminal do VS Code (G3, passo 1).</td></tr>
       <tr><td>Com <code>--ws</code>, a primeira resposta demora uns segundos</td><td>O WebSocket passa por mais etapas (TLS, abertura do canal)</td><td>Normal. Depois fica fluido.</td></tr>
       <tr><td>Wokwi mostra “Build Servers Busy” ou fica em “Compiling”</td><td>Fila do plano gratuito</td><td>Espere até 1–2 min. Não é erro de código.</td></tr>
       <tr><td>Relógio do Wokwi parado</td><td>Janela ou aba escondida</td><td>Traga o navegador para frente. O servidor terá escrito <code>SILENCIO</code>, e está certo.</td></tr>
