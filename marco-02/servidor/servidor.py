@@ -16,7 +16,9 @@ Wokwi) e:
 
 Uso:
     pip install -r requirements.txt
-    python servidor.py
+    python servidor.py          # MQTT sobre TCP, porta 1883
+    python servidor.py --ws     # MQTT sobre WebSocket seguro, porta 8884
+                                # (para redes que bloqueiam a 1883)
 
 Durante a execucao:
     p   painel da sessao
@@ -66,6 +68,38 @@ def carregar_config():
                 print(f"{CINZA}configuracao: {nome}{RESET}")
                 return json.load(f)
     raise SystemExit("Nenhum config.json ou config.exemplo.json encontrado.")
+
+
+def usar_websocket(cfg):
+    """--ws na linha de comando, ou "transporte": "websockets" no config."""
+    return "--ws" in sys.argv or cfg.get("transporte") == "websockets"
+
+
+def descrever_transporte(cfg):
+    return "MQTT sobre WebSocket seguro" if usar_websocket(cfg) else "MQTT sobre TCP"
+
+
+def criar_cliente(cfg, client_id):
+    """Cria o cliente MQTT no transporte escolhido.
+
+    TCP na porta 1883 e o padrao. Redes que bloqueiam a 1883 (a da faculdade)
+    costumam deixar passar WebSocket com TLS: o mesmo broker aceita MQTT
+    embrulhado em WebSocket na porta 8884, caminho /mqtt. So o notebook muda;
+    o ESP32 roda na nuvem do Wokwi e continua na 1883. O broker entrega as
+    mensagens entre os dois transportes normalmente.
+    """
+    ws = usar_websocket(cfg)
+    transporte = "websockets" if ws else "tcp"
+    try:                                    # paho-mqtt 2.x
+        cliente = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
+                              client_id=client_id, transport=transporte)
+    except (AttributeError, TypeError):     # paho-mqtt 1.x
+        cliente = mqtt.Client(client_id=client_id, transport=transporte)
+    if ws:
+        cliente.tls_set()                   # wss:// - certificado do broker
+        cliente.ws_set_options(path=cfg.get("caminho_ws", "/mqtt"))
+        return cliente, cfg.get("porta_ws", 8884)
+    return cliente, cfg["porta"]
 
 
 def carregar_validador():
@@ -128,17 +162,14 @@ class Servidor:
         self.parar = threading.Event()
         self.log = open(os.path.join(AQUI, "recebidos.log"), "a", encoding="utf-8")
 
-        try:
-            self.cliente = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
-                                       client_id=cfg.get("client_id", "presenca-servidor"))
-        except (AttributeError, TypeError):
-            self.cliente = mqtt.Client(client_id=cfg.get("client_id", "presenca-servidor"))
+        self.cliente, self.porta = criar_cliente(cfg, cfg.get("client_id", "presenca-servidor"))
         self.cliente.on_connect = self._ao_conectar
         self.cliente.on_message = self._ao_receber
 
     # -- MQTT ----------------------------------------------------------------
     def _ao_conectar(self, cliente, userdata, flags, rc, properties=None):
-        print(f"{VERDE}[MQTT] conectado a {self.cfg['broker']}:{self.cfg['porta']}{RESET}")
+        print(f"{VERDE}[MQTT] conectado a {self.cfg['broker']}:{self.porta} "
+              f"({descrever_transporte(self.cfg)}){RESET}")
         cliente.subscribe(self.cfg["topico_heartbeat"], qos=1)
         print(f"{CINZA}[MQTT] assinando {self.cfg['topico_heartbeat']}{RESET}")
         self._cabecalho_sessao()
@@ -404,7 +435,7 @@ class Servidor:
     def executar(self):
         print(f"\n{CIANO}=== Presenca / servidor de permanencia ==={RESET}")
         print(f"{CINZA}p painel | n nova sessao | q sair{RESET}")
-        self.cliente.connect(self.cfg["broker"], self.cfg["porta"], 60)
+        self.cliente.connect(self.cfg["broker"], self.porta, 60)
         self.cliente.loop_start()
         threading.Thread(target=self._laco_teclado, daemon=True).start()
         threading.Thread(target=self._vigiar_silencio, daemon=True).start()

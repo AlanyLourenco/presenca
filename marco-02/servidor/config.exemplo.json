@@ -1,6 +1,9 @@
 {
   "broker": "broker.hivemq.com",
   "porta": 1883,
+  "transporte": "tcp",
+  "porta_ws": 8884,
+  "caminho_ws": "/mqtt",
   "client_id": "presenca-servidor-204",
   "entity_id": "sala-204",
   "topico_heartbeat": "ufg/ssu/presenca/alany/sala-204/heartbeat",

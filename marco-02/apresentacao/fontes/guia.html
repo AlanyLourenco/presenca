@@ -11,7 +11,7 @@
     <div class="sec-head"><span class="sec-n">G1</span><h2>Checklist do dia</h2></div>
     <div class="tw"><table>
       <tr><th></th><th>O quê</th><th>Como conferir</th></tr>
-      <tr><td>☐</td><td>Rede que libera a porta 1883</td><td>No terminal: <code>Test-NetConnection broker.hivemq.com -Port 1883</code> tem que dizer <code>TcpTestSucceeded : True</code>. <strong>Na rede da faculdade dá False</strong>: use o 4G do celular (roteador).</td></tr>
+      <tr><td>☐</td><td>Rede que alcança o broker (porta 1883, ou 8884 com <code>--ws</code>)</td><td>No terminal: <code>Test-NetConnection broker.hivemq.com -Port 1883</code> tem que dizer <code>TcpTestSucceeded : True</code>. <strong>Na rede da faculdade dá False</strong>: rode o servidor com <code>--ws</code> (seção <a href="#g14">G14</a>) e, se nem assim conectar, use o 4G do celular.</td></tr>
       <tr><td>☐</td><td>Python com as bibliotecas</td><td><code>pip install -r requirements.txt</code> dentro de <code>servidor/</code> (seção G3)</td></tr>
       <tr><td>☐</td><td>VS Code aberto em <code>projeto-presenca</code></td><td>Explorador mostrando <code>marco-02</code></td></tr>
       <tr><td>☐</td><td>Dois terminais no VS Code</td><td>Um para o servidor, outro para o validador, os testes e o gateway de CO₂</td></tr>
@@ -59,7 +59,12 @@ pip install -r requirements.txt</div>
     O gateway de CO₂ usa as mesmas duas.</p>
     <p>Confira a rede:</p>
 <div class="term"><span class="h">terminal 1 · rede</span>Test-NetConnection broker.hivemq.com -Port 1883</div>
-    <p>Tem que aparecer <code>TcpTestSucceeded : True</code>. Se aparecer <code>False</code>, a rede bloqueia o MQTT: troque para o 4G do celular.</p>
+    <p>Tem que aparecer <code>TcpTestSucceeded : True</code>. Se aparecer <code>False</code>, a rede bloqueia
+    o MQTT comum. Teste a porta do WebSocket:</p>
+<div class="term"><span class="h">terminal 1 · rede, plano B</span>Test-NetConnection broker.hivemq.com -Port 8884</div>
+    <p>Se a 8884 der <code>True</code>, use <code>python servidor.py --ws</code> no lugar de
+    <code>python servidor.py</code>. Se as duas derem <code>False</code>, troque para o 4G do celular.
+    O porquê disso tudo está na seção <a href="#g14">G14</a>.</p>
   </section>
 
   <!-- ============ G4 ============ -->
@@ -87,8 +92,12 @@ pip install -r requirements.txt</div>
     <div class="sec-head"><span class="sec-n">G5</span><h2>Ligar o servidor</h2></div>
     <p>No terminal 1:</p>
 <div class="term"><span class="h">terminal 1 · servidor</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\servidor"
-python servidor.py</div>
-    <p>Tem que aparecer (saída real):</p>
+python servidor.py          <span class="k"># rede normal (porta 1883)</span>
+python servidor.py --ws     <span class="k"># rede que bloqueia a 1883, como a da faculdade (G14)</span></div>
+    <p>Use <strong>uma</strong> das duas linhas. Com <code>--ws</code>, a linha de conexão vira
+    <code>[MQTT] conectado a broker.hivemq.com:8884 (MQTT sobre WebSocket seguro)</code>; todo o
+    resto é igual.</p>
+    <p>Tem que aparecer (saída real, sem <code>--ws</code>):</p>
 <div class="term"><span class="h">o que aparece</span><span class="k">configuracao: config.exemplo.json</span>
 
 <span class="c">=== Presenca / servidor de permanencia ===</span>
@@ -297,7 +306,7 @@ python -m pytest testes -v</div>
     <div class="sec-head"><span class="sec-n">G12</span><h2>A fronteira de CO₂ (o “gateway”)</h2></div>
     <p>Pode rodar ao mesmo tempo que o servidor de presença: usam tópicos diferentes.</p>
 <div class="term"><span class="h">terminal 2 · gateway de CO₂</span>cd "D:\SOFTWARE PARA COMPUTAÇÃO UBÍQUA\projeto-presenca\marco-02\co2-gateway"
-python consumidor.py</div>
+python consumidor.py        <span class="k"># ou: python consumidor.py --ws</span></div>
     <p>Abra <b>wokwi.com/projects/476001394839038977</b> e dê ▶.</p>
     {{anot:wk-co2}}
     <div class="tw"><table>
@@ -331,7 +340,8 @@ python consumidor.py</div>
     <div class="sec-head"><span class="sec-n">G13</span><h2>Se algo der errado</h2></div>
     <div class="tw"><table>
       <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
-      <tr><td>Servidor não mostra <code>[MQTT] conectado</code></td><td>Porta 1883 bloqueada</td><td>4G do celular. Confira com <code>Test-NetConnection</code>.</td></tr>
+      <tr><td>Servidor não mostra <code>[MQTT] conectado</code></td><td>Porta 1883 bloqueada</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> e rode <code>python servidor.py --ws</code>. Se ainda não conectar, 4G do celular. Confira com <code>Test-NetConnection</code> (G3).</td></tr>
+      <tr><td>Com <code>--ws</code>, a primeira resposta demora uns segundos</td><td>O WebSocket passa por mais etapas (TLS, abertura do canal)</td><td>Normal. Depois fica fluido.</td></tr>
       <tr><td>Wokwi mostra “Build Servers Busy” ou fica em “Compiling”</td><td>Fila do plano gratuito</td><td>Espere até 1–2 min. Não é erro de código.</td></tr>
       <tr><td>Relógio do Wokwi parado</td><td>Janela ou aba escondida</td><td>Traga o navegador para frente. O servidor terá escrito <code>SILENCIO</code>, e está certo.</td></tr>
       <tr><td>OLED mostra <code>SEM RESP.</code> e LEDs apagados</td><td>Servidor parado ou sem rede</td><td>Rode <code>python servidor.py</code>. É o comportamento seguro em ação.</td></tr>
@@ -350,4 +360,106 @@ python consumidor.py</div>
       <tr><td>“E se a sala fosse maior?”</td><td><code>config.exemplo.json</code>, <code>"poligono"</code></td><td>O corredor pode passar a ser dentro</td></tr>
     </table></div>
     <p><strong>Não clique em SAVE no Wokwi</strong> depois de uma alteração ao vivo, a menos que queira que ela fique no projeto público.</p>
+  </section>
+
+  <!-- ============ G14 ============ -->
+  <section id="g14">
+    <div class="sec-head"><span class="sec-n">G14</span><h2>A rede: porta 1883, MQTT e WebSocket</h2></div>
+    <p>Por que o servidor tem duas formas de conectar, e o que responder se perguntarem.</p>
+
+    <h3>O caminho de uma mensagem</h3>
+    <p>O ESP32 e o servidor nunca falam direto um com o outro. Os dois conversam com um
+    <strong>broker</strong> MQTT, o <code>broker.hivemq.com</code>, que funciona como um correio na
+    internet: o ESP32 deixa o heartbeat num tópico, o broker entrega a quem assinou esse tópico (o
+    servidor), e a resposta faz o caminho inverso.</p>
+    <div class="diag">
+      <svg viewBox="0 0 700 250" role="img" aria-label="O ESP32 na nuvem do Wokwi fala com o broker pela porta 1883. O notebook, na rede da faculdade, tem a porta 1883 bloqueada pelo firewall, mas alcança o broker pela porta 8884 com WebSocket seguro.">
+        <defs><marker id="sw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-2)"/></marker></defs>
+        <g font-size="13" font-weight="700" text-anchor="middle">
+          <rect x="20" y="30" width="170" height="60" rx="10" class="b-acc" style="stroke:var(--accent)"/>
+          <text x="105" y="56" class="s-ink">ESP32</text>
+          <text x="105" y="74" font-size="11" font-weight="400" class="s-mut">na nuvem do Wokwi</text>
+          <rect x="265" y="95" width="170" height="60" rx="10" class="b-surf2" style="stroke:var(--rule-strong)"/>
+          <text x="350" y="121" class="s-ink">broker MQTT</text>
+          <text x="350" y="139" font-size="11" font-weight="400" class="s-mut">broker.hivemq.com</text>
+          <rect x="510" y="160" width="170" height="60" rx="10" class="b-verde" style="stroke:var(--verde)"/>
+          <text x="595" y="186" class="s-ink">servidor.py</text>
+          <text x="595" y="204" font-size="11" font-weight="400" class="s-mut">no seu notebook</text>
+        </g>
+        <path d="M192,60 C240,60 262,88 283,98" fill="none" style="stroke:var(--ink-2)" stroke-width="1.6" marker-start="url(#sw)" marker-end="url(#sw)"/>
+        <text x="205" y="40" font-size="11.5" class="s-ink2">porta 1883 (TCP)</text>
+        <text x="205" y="54" font-size="10.5" class="s-mut">funciona sempre</text>
+        <rect x="470" y="20" width="16" height="115" rx="3" class="b-verm" style="stroke:var(--vermelho)"/>
+        <text x="478" y="14" text-anchor="middle" font-size="11" font-weight="700" class="s-verm">firewall da faculdade</text>
+        <path d="M580,158 C570,125 520,105 490,100" fill="none" style="stroke:var(--vermelho)" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="476" y="102" text-anchor="middle" font-size="16" font-weight="700" class="s-verm">✗</text>
+        <text x="500" y="72" font-size="11.5" class="s-verm">1883 bloqueada</text>
+        <path d="M437,145 C470,188 480,190 507,190" fill="none" style="stroke:var(--verde)" stroke-width="2.2" marker-start="url(#sw)" marker-end="url(#sw)"/>
+        <text x="300" y="205" font-size="11.5" class="s-verde" font-weight="700">8884 · WebSocket seguro ✓</text>
+        <text x="300" y="220" font-size="10.5" class="s-mut">python servidor.py --ws</text>
+      </svg>
+    </div>
+
+    <h3>O que é uma porta</h3>
+    <p>Um computador na internet tem um endereço, e cada serviço dentro dele atende numa
+    <strong>porta</strong>, que é um número. Por convenção, sites usam a 443 (HTTPS) e o MQTT comum
+    usa a <strong>1883</strong>. O <strong>firewall</strong> é o porteiro da rede: decide para quais
+    portas os computadores de dentro podem se conectar. Redes de faculdade e de empresa costumam
+    liberar a web e bloquear o resto, e a 1883 cai no “resto”. Foi o que se viu na rede da
+    faculdade: três brokers diferentes deram tempo esgotado na 1883, enquanto a 443 passava.</p>
+
+    <h3>O que é WebSocket</h3>
+    <p><strong>WebSocket</strong> é um jeito de abrir uma conexão de mão dupla que fica aberta. Ela
+    <strong>começa como um pedido comum de página web</strong> (HTTP) e depois vira um canal por onde
+    os dois lados mandam mensagens quando quiserem. Foi criado para páginas web receberem dados em
+    tempo real, como em chats e placares ao vivo. Como nasce parecendo tráfego web, os firewalls
+    costumam deixá-lo passar.</p>
+    <p>A ideia aqui é <strong>embrulhar</strong>: as mesmas mensagens MQTT, com os mesmos tópicos e o
+    mesmo JSON, viajam dentro de um WebSocket. O MQTT não muda; muda só o envelope por onde ele
+    passa.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>MQTT comum</th><th>MQTT sobre WebSocket seguro</th></tr>
+      <tr><td>Comando</td><td><code>python servidor.py</code></td><td><code>python servidor.py --ws</code></td></tr>
+      <tr><td>Endereço</td><td><code>broker.hivemq.com:1883</code></td><td><code>wss://broker.hivemq.com:8884/mqtt</code></td></tr>
+      <tr><td>Camadas</td><td>MQTT → TCP</td><td>MQTT → WebSocket → TLS → TCP</td></tr>
+      <tr><td>Criptografia</td><td>Não</td><td>Sim (TLS, o mesmo cadeado do HTTPS)</td></tr>
+      <tr><td>Passa no firewall da faculdade?</td><td>Não (testado)</td><td>Costuma passar (não testado lá)</td></tr>
+      <tr><td>Tópicos, JSON, contrato</td><td colspan="2">Idênticos nos dois</td></tr>
+    </table></div>
+    <p>O <strong>wss</strong> do endereço quer dizer “WebSocket seguro”: o WebSocket vai dentro de TLS,
+    a criptografia do cadeado do navegador. O <code>/mqtt</code> no fim é o caminho que o broker usa
+    para esse serviço.</p>
+
+    <h3>E o ESP32?</h3>
+    <p>Não muda nada. Ele roda nos servidores do Wokwi, que ficam na internet, fora da rede da
+    faculdade, e continua na 1883. O broker aceita os dois transportes ao mesmo tempo e entrega as
+    mensagens de um para o outro. Testei assim em 25/09/2026, com o servidor em WebSocket e o aparelho
+    em TCP: os heartbeats chegaram ao servidor e as respostas voltaram ao aparelho.</p>
+
+    <h3>Onde está no código</h3>
+    <p>Em <code>servidor/servidor.py</code>, na função <code>criar_cliente</code>. Com <code>--ws</code>,
+    ela cria o cliente MQTT com <code>transport="websockets"</code>, liga a criptografia com
+    <code>tls_set()</code>, define o caminho com <code>ws_set_options(path="/mqtt")</code> e usa a porta
+    <code>porta_ws</code> (8884) do <code>config.exemplo.json</code>. O gateway de CO₂ tem a mesma função.
+    Para deixar o WebSocket como padrão, sem precisar do <code>--ws</code>, troque
+    <code>"transporte": "tcp"</code> por <code>"websockets"</code> no config.</p>
+
+    <div class="callout warn">
+      <span class="tag">O que ainda não se sabe</span>
+      <p>A 8884 não foi testada <em>dentro</em> da rede da faculdade: os testes de hoje foram em casa.
+      Por isso a ordem no dia é: <code>Test-NetConnection broker.hivemq.com -Port 1883</code>; se der
+      False, o mesmo com <code>-Port 8884</code>; se der True, use <code>--ws</code>; se der False, 4G do
+      celular.</p>
+    </div>
+
+    <h3>Se perguntarem</h3>
+    <div class="qa"><p class="q">Por que não usar WebSocket sempre?</p>
+    <p>O MQTT direto é mais simples e mais leve, e é o que o ESP32 usa. O WebSocket entra para
+    atravessar uma rede que bloqueia o MQTT, sem mexer no protocolo nem no contrato.</p></div>
+    <div class="qa"><p class="q">A mensagem muda?</p>
+    <p>Não. É o mesmo JSON, nos mesmos tópicos, validado pelo mesmo schema. Muda só o transporte.</p></div>
+    <div class="qa"><p class="q">E num sistema real?</p>
+    <p>O aplicativo do celular estaria na rede da faculdade, como o notebook. Por isso faria sentido
+    ele já usar um transporte seguro que passe em qualquer rede (o projeto técnico prevê HTTPS). O
+    <code>--ws</code> mostra que trocar o transporte não mexe em nada acima dele.</p></div>
   </section>

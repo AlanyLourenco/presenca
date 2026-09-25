@@ -145,6 +145,7 @@ def montar():
       <li><a href="#g11"><span class="n">G11</span> Testes automáticos</a></li>
       <li><a href="#g12"><span class="n">G12</span> Gateway de CO₂</a></li>
       <li><a href="#g13"><span class="n">G13</span> Se der errado</a></li>
+      <li><a href="#g14"><span class="n">G14</span> Rede e WebSocket</a></li>
     </ol>
     <div class="toc-h" style="margin-top:22px">Parte I · presença</div>
     <ol>

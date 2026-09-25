@@ -141,6 +141,13 @@ python -m pytest testes -q  # 34 testes
 
 Teclas: `p` painel · `n` nova sessão · `q` sair.
 
+**Rede que bloqueia a porta 1883** (a da faculdade): `python servidor.py --ws`. O servidor
+passa a falar MQTT dentro de um WebSocket seguro (`wss://broker.hivemq.com:8884/mqtt`), que
+atravessa firewalls que só deixam passar tráfego parecido com o da web. O ESP32 não muda: ele
+roda na nuvem do Wokwi e continua na 1883; o broker entrega as mensagens entre os dois
+transportes. Verificado em 25/09/2026: servidor em WebSocket e aparelho em TCP trocando
+heartbeats e estados. Também vale para o gateway de CO₂: `python consumidor.py --ws`.
+
 ### Aparelho (Wokwi)
 
 1. Abra https://wokwi.com/projects/476110187626906625 — ou crie um projeto ESP32 e
