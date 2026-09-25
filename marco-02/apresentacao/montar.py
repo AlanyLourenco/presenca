@@ -139,7 +139,7 @@ def montar():
       <li><a href="#c3"><span class="n">C3</span> As pastas</a></li>
       <li><a href="#c4"><span class="n">C4</span> Circuito e código</a></li>
       <li><a href="#mexer"><span class="n">·</span> Potenciômetros</a></li>
-      <li><a href="#c5"><span class="n">C5</span> Testes ao vivo</a></li>
+      <li><a href="#cenarios"><span class="n">C5</span> Os 7 cenários</a></li>
       <li><a href="#c10"><span class="n">C10</span> Contrato</a></li>
       <li><a href="#c12"><span class="n">C12</span> Gateway de CO₂</a></li>
       <li><a href="#ed"><span class="n">D</span> Se der errado</a></li>

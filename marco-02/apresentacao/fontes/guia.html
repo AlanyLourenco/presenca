@@ -295,7 +295,7 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       <tr><td>C2</td><td>O que foi feito, passo a passo</td><td>1 min</td></tr>
       <tr><td>C3</td><td>As pastas no VS Code</td><td>3 min</td></tr>
       <tr><td>C4</td><td>O circuito e o código no Wokwi</td><td>3 min</td></tr>
-      <tr><td>C5 a C9</td><td>Os testes ao vivo</td><td>8 a 10 min</td></tr>
+      <tr><td>C5 a C9b</td><td>Os sete cenários ao vivo, em duas aulas</td><td>12 a 15 min</td></tr>
       <tr><td>C10 e C11</td><td>O contrato e os testes automáticos</td><td>2 min</td></tr>
       <tr><td>C12</td><td>A fronteira de CO₂ (opcional)</td><td>3 min</td></tr>
     </table></div>
@@ -427,12 +427,38 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       “dentro da sala”, use a receita acima ou recarregue a página (<kbd>F5</kbd>).</p>
     </div>
 
+    <h3 id="cenarios">Os sete cenários: como rodar cada um sozinha</h3>
+    <p>Os sete cenários que eu rodei e cujos prints e logs estão em <code>evidencias/presenca/</code> são
+    os passos abaixo. No dia você refaz todos ao vivo, na frente da banca, seguindo os passos na ordem.
+    Não precisa tirar print nem salvar nada: o servidor já grava tudo sozinho em
+    <code>servidor/recebidos.log</code>, e as evidências da entrega já estão prontas.</p>
+    <div class="tw"><table>
+      <tr><th>Cenário (evidências)</th><th>Passo</th><th>Em uma frase</th><th>Print em <code>evidencias/presenca/</code></th></tr>
+      <tr><td>T1 · Estado normal</td><td><a href="#c5">C5</a></td><td>Na sala, o sistema confirma a presença</td><td><code>01-normal-presente.jpg</code></td></tr>
+      <tr><td>T2 · Sala vizinha, avisos e volta</td><td><a href="#c6">C6</a></td><td>Sinal forte, mas fora do polígono; avisa; quem volta não perde</td><td><code>02</code>, <code>03</code> e <code>04-….jpg</code></td></tr>
+      <tr><td>T3 · Adversarial (repetido, fora de ordem, salto)</td><td><a href="#c7">C7</a></td><td>Botão azul três vezes</td><td>logs</td></tr>
+      <tr><td>T4 · Queda de rede</td><td><a href="#c8">C8</a></td><td>Botão vermelho, silêncio, reentrega</td><td><code>05-rede-off-fila.jpg</code></td></tr>
+      <tr><td>T6 · Fim da aula</td><td><a href="#c8b">C8b</a></td><td>Espera a aula acabar; relatório final</td><td><code>06-fim-da-aula.jpg</code></td></tr>
+      <tr><td>T5 · Orçamento esgotado</td><td><a href="#c9">C9</a></td><td>Sai e não volta; a ausência é descontada</td><td><code>07-limite-esgotado.jpg</code></td></tr>
+      <tr><td>T7 · Reinício do aparelho</td><td><a href="#c9b">C9b</a></td><td>↻ no Wokwi; o boot novo não vira “repetido”</td><td>logs</td></tr>
+    </table></div>
+    <p>A numeração T1…T7 é a da execução registrada (Parte I, seção 8). No dia, a ordem que funciona
+    melhor é a da coluna “Passo”, em <strong>duas aulas</strong>:</p>
+    <ol class="trace">
+      <li><span class="s">1</span><div><span class="who">Aula 1 · digite n</span>C5 normal → C6 corredor e avisos → C7 adversarial → C8 queda de rede → C8b espera o fim da aula.</div></li>
+      <li><span class="s">2</span><div><span class="who">Aula 2 · digite n de novo</span>C9 orçamento esgotado → C9b reinício do aparelho.</div></li>
+    </ol>
+    <p><strong>Por que duas aulas?</strong> A aula da demonstração dura 100 s simulados. Na aula 1, os
+    testes C5 a C8 cabem inteiros e ainda sobra tempo para ver o relatório final. O C9 esgota o
+    orçamento de propósito e o estudante vira FORA: se fosse feito na aula 1, estragaria os testes
+    seguintes. Por isso ele começa uma aula nova.</p>
+
     <div class="callout">
-      <span class="tag">Antes do teste C5</span>
+      <span class="tag">Antes do teste C5 (começo da aula 1)</span>
       <p>Potenciômetros em “dentro da sala”, simulação rodando, OLED em <code>PRESENTE</code>. No terminal do
-      servidor digite <code>n</code> e <kbd>Enter</kbd>: começa uma aula nova, do zero. Os testes C5 a C8
-      acontecem nessa mesma aula, um depois do outro. A aula dura 100 s simulados (uns 4 a 8 minutos
-      reais); se ela acabar no meio, digite <code>n</code> de novo.</p>
+      servidor digite <code>n</code> e <kbd>Enter</kbd>: começa uma aula nova, do zero. Os testes C5 a C8b
+      acontecem nessa mesma aula, um depois do outro, sem parar a simulação. A aula dura 100 s simulados
+      (uns 4 a 8 minutos reais). Acompanhe o <code>t=</code> nas linhas do servidor: é o tempo da aula.</p>
     </div>
 
     <!-- C5 -->
@@ -534,9 +560,49 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       </dl></div>
     </div>
 
+    <!-- C8b -->
+    <div class="teste passo" id="c8b">
+      <div class="teste-h"><span class="id">C8b</span><span class="t">Teste 6 · Fim da aula (fecha a aula 1)</span></div>
+      <div class="teste-b"><dl>
+        <dt>Como fazer</dt><dd>Deixe os potenciômetros em “dentro da sala” e <strong>não mexa em nada</strong>.
+        Acompanhe o <code>t=</code> nas linhas do servidor até passar de <code>t=100</code>.</dd>
+        <dt>Por quê</dt><dd>Mostra o resultado de uma aula inteira: quanto tempo o estudante acumulou,
+        com as ausências toleradas que ele teve no C6, e se isso dá presença (mínimo de 75 %). É o dado
+        que, no sistema real, vai para a lista do professor.</dd>
+        <dt>Tem que aparecer</dt><dd><strong>Wokwi:</strong> buzzer e o OLED com “Voce acumulou N% desta
+        aula.”, com <code>FIM</code> na linha do acumulado.<br>
+        <strong>Servidor:</strong> o <strong>RELATÓRIO FINAL DA SESSAO</strong>, assim (saída real da execução
+        registrada):
+<div class="term"><span class="c">  RELATORIO FINAL DA SESSAO s31a2
+  estado: PRESENTE   t=100.0 s de 100 s
+  acumulado garantido: 98.6 s (98.6%)   provisorio: 0.0 s   -&gt; APROVADO na aula (minimo 75%)
+  presenca confirmada 71.1 s + ausencia creditada 27.5 s   orcamento usado 27.5 de 30 s
+  contador ingenuo (ao vivo, sem dedup): 67.0 s
+    t=   1.4s  FORA -&gt; PRESENTE  (sinal na sala sustentado)
+    t=   8.8s  PRESENTE -&gt; AUSENCIA_TOLERADA  (sinal fora da sala sustentado)
+    t=  36.3s  AUSENCIA_TOLERADA -&gt; PRESENTE  (retornou dentro do orcamento)
+  aceitos=188 duplicados=1 fora de ordem=1 saltos=2 (6 perdidos) atrasados=41 invalidos=0</span></div>
+        Os números do seu dia vão ser parecidos, não iguais: dependem de quando você mexeu em cada coisa.
+        Depois do fim, o servidor ignora os heartbeats seguintes até você digitar <code>n</code>.</dd>
+        <dt>O que falar</dt><dd>“A ausência do corredor foi creditada porque eu voltei a tempo e fiquei
+        o tempo de requalificação. O ‘contador ingênuo’, que só soma meio segundo por heartbeat, daria
+        bem menos e reprovaria quem saiu com tolerância. Por isso a conta é refeita sobre o registro
+        inteiro.”</dd>
+        <dt>Se demorar</dt><dd>A aula tem 100 s simulados; com o Wokwi lento, isso pode levar uns 5 minutos
+        reais. Se estiver sem tempo, pule este passo: o print <code>06-fim-da-aula.jpg</code> mostra o
+        resultado.</dd>
+      </dl></div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">Começo da aula 2</span>
+      <p>O C9 começa com <code>n</code> no servidor: aula nova, orçamento cheio de novo. Os passos C9 e C9b
+      acontecem nesta aula.</p>
+    </div>
+
     <!-- C9 -->
     <div class="teste passo" id="c9">
-      <div class="teste-h"><span class="id">C9</span><span class="t">Teste 5 · Orçamento esgotado (aula nova)</span></div>
+      <div class="teste-h"><span class="id">C9</span><span class="t">Teste 5 · Orçamento esgotado (aula 2)</span></div>
       <div class="teste-b"><dl>
         <dt>Como fazer</dt><dd>
         <ol>
@@ -558,11 +624,40 @@ hora     tempo da aula   sequência  RSSI das 3 âncoras   região (aparelho)  p
       </dl></div>
     </div>
 
+    <!-- C9b -->
+    <div class="teste passo" id="c9b">
+      <div class="teste-h"><span class="id">C9b</span><span class="t">Teste 7 · Reinício do aparelho (ainda na aula 2)</span></div>
+      <div class="teste-b"><dl>
+        <dt>Como fazer</dt><dd>
+        <ol>
+          <li>Volte os três potenciômetros para “dentro da sala” (<kbd>Home</kbd> + <kbd>PageUp</kbd>×7 em cada um).</li>
+          <li>No Wokwi, clique no <b>↻</b> (reiniciar, o botão verde redondo em cima do circuito).</li>
+          <li>Espere uns 15 s: o ESP32 religa, conecta no Wi-Fi e no broker de novo.</li>
+        </ol></dd>
+        <dt>Por quê</dt><dd>Reiniciar é o mesmo que o celular reiniciar ou o aplicativo ser fechado e
+        aberto. A sequência dos heartbeats recomeça em 1. Um servidor ingênuo, que identificasse o
+        heartbeat só por aparelho e sequência, acharia que todos os heartbeats novos são
+        <em>repetidos</em> e jogaria fora o celular inteiro. Aqui cada ligação sorteia um
+        <code>bootId</code> diferente, que faz parte da identidade (<code>aparelho#boot#sequência</code>).</dd>
+        <dt>Tem que aparecer</dt><dd><strong>Wokwi (serial):</strong> de novo o começo
+        (<code>=== Presenca / aparelho do estudante ===</code>), com um <code>boot=</code> diferente do anterior,
+        e depois heartbeats com <code>sequence</code> recomeçando em 1.<br>
+        <strong>Servidor:</strong> enquanto o ESP32 religa, <code>SILENCIO</code>; depois <code>RETOMADO</code> e
+        linhas com <code>seq=1</code>, <code>seq=2</code>… <strong>sem nenhum <code>DUPLICADO</code></strong>. O estado volta a
+        <code>PRESENTE</code> (a presença volta a contar, mas o orçamento continua esgotado: a aula é a mesma).</dd>
+        <dt>O que falar</dt><dd>“Reiniciar o celular não pode fazer o sistema achar que é tudo cópia. Por
+        isso a identidade do heartbeat tem o boot. Esse problema eu só descobri rodando: num protótipo
+        anterior, cada reinício deixava o aparelho mudo.”</dd>
+        <dt>Se der errado</dt><dd>Aparece <code>DUPLICADO</code> em sequência: me avise (não deveria
+        acontecer). O OLED fica em <code>SEM RESP.</code> por uns segundos: normal enquanto reconecta.</dd>
+      </dl></div>
+    </div>
+
     <div class="callout">
-      <span class="tag">Fim da aula (t = 100 s)</span>
-      <p>O OLED mostra “Voce acumulou N% desta aula.” e o servidor imprime o <strong>RELATÓRIO FINAL</strong>:
-      presença, ausência creditada, aprovado ou não, e o “contador ingênuo” para comparar. Use
-      <code>p</code> a qualquer momento para mostrar o painel.</p>
+      <span class="tag">Painel a qualquer momento</span>
+      <p>No terminal do servidor, <code>p</code> e <kbd>Enter</kbd> mostram o resumo da aula: estado, acumulado,
+      orçamento, contadores (repetidos, fora de ordem, saltos, atrasados) e cada mudança de estado com o
+      horário.</p>
     </div>
 
     <!-- C10 -->
