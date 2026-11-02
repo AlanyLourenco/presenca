@@ -1,0 +1,6 @@
+══ Servidor sem rede: 200 celulares × 40 heartbeats (20 s de aula) ══
+  aceitos: 8000 de 8000 · recusados: 0
+  por mensagem (abre envelope, confere assinatura e token, recalcula a aula, assina a resposta):
+     média 0.42 ms · 95 % abaixo de 0.62 ms
+  ≈ 2405 mensagens por segundo num núcleo deste notebook
+  com heartbeat a cada 60 s (aula real): ≈ 144328 celulares

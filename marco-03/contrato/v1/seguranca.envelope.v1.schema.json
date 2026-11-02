@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/seguranca.envelope.v1.schema.json",
+  "title": "seguranca.envelope.v1",
+  "description": "Envelope assinado (Marco 3). Toda mensagem do sistema viaja dentro dele: heartbeat (assinado pelo aparelho), estado e aviso (assinados pelo servidor) e turma (assinada pelo celular do admin). A assinatura Ed25519 cobre o TÓPICO MQTT + '\n' + a carga, então a mensagem não pode ser trocada de tópico.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "de",
+    "chavePublica",
+    "carga",
+    "assinatura"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "seguranca.envelope.v1"
+    },
+    "de": {
+      "type": "string",
+      "description": "Quem diz ser: tok-xxxxxxxx (aluno), servidor, admin. Só um rótulo: o que vale é a chave."
+    },
+    "chavePublica": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Chave pública Ed25519 (32 bytes, hex)."
+    },
+    "carga": {
+      "type": "string",
+      "description": "A mensagem original serializada em JSON, exatamente os bytes assinados."
+    },
+    "assinatura": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$",
+      "description": "Ed25519 de (tópico + '\n' + carga), 64 bytes em hex."
+    }
+  }
+}

@@ -1,0 +1,8 @@
+$ python carga.py 30 --tempo 15
+Simulando 30 celulares, 1 heartbeat a cada 0.5 s, por 15 s…
+
+══ Resultado: 30 celulares ══
+  heartbeats enviados:  930  (62 por segundo)
+  estados de volta:     177  (19.0 %)
+  ida e volta (celular → broker → servidor → broker → celular):
+     mediana 7497 ms · 95 % abaixo de 14234 ms · pior 15114 ms

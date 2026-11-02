@@ -1,0 +1,2 @@
+$ python sonda.py      (um cliente publica 60 msg/s, outro conta; sem servidor no meio)
+enviadas 600 (60/s) · recebidas 157 · nos 10 s: 10.7/s

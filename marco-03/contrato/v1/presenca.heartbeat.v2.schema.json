@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.heartbeat.v2.schema.json",
+  "title": "presenca.heartbeat.v2",
+  "description": "Heartbeat do aparelho do estudante (Marco 3). Igual ao v1 mais o token que cada âncora anunciava quando foi ouvida. Viaja SEMPRE dentro de seguranca.envelope.v1, assinado pela chave do aparelho. Mudança incompatível com v1 (campo novo obrigatório), por isso v2.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "eventId",
+    "deviceId",
+    "entityId",
+    "aluno",
+    "bootId",
+    "eventTimeMs",
+    "sequence",
+    "value",
+    "unit",
+    "state",
+    "ancoras",
+    "medidoEmMs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.heartbeat.v2",
+      "description": "Tipo e versão do contrato."
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]+#[0-9a-f]{4}#[0-9]+$",
+      "description": "Identificação única: deviceId#bootId#sequence. É a chave de deduplicação no servidor. O bootId entra na chave porque a sequência recomeça em 1 a cada reinício: sem ele, o primeiro heartbeat depois de um reboot seria descartado como cópia."
+    },
+    "deviceId": {
+      "type": "string",
+      "pattern": "^cel-[0-9a-f]{4}$",
+      "description": "'cel-' + hex 8..12 do mesmo SHA-256. Também conferido contra a chave."
+    },
+    "entityId": {
+      "type": "string",
+      "description": "Sala cujas âncoras foram ouvidas.",
+      "examples": [
+        "sala-204"
+      ]
+    },
+    "aluno": {
+      "type": "string",
+      "pattern": "^tok-[0-9a-f]{8}$",
+      "description": "Pseudônimo do estudante: 'tok-' + 8 primeiros hex do SHA-256 da chave pública Ed25519 do aparelho. O servidor recalcula a partir da chave do envelope; se não bater, recusa."
+    },
+    "bootId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{4}$",
+      "description": "Sorteado a cada inicialização do aparelho. Separa as sequências de boots diferentes."
+    },
+    "eventTimeMs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Instante da medição em milissegundos desde o boot. LIMITAÇÃO DECLARADA: não é tempo absoluto. O servidor usa este valor só como posição relativa na linha do tempo daquele boot, e grava o próprio carimbo de recepção."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Contador monotônico por boot. Permite detectar repetição, chegada fora de ordem e salto."
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": -100,
+      "maximum": -30,
+      "description": "Melhor RSSI entre as âncoras ouvidas, depois da média móvel. null quando nenhuma âncora foi ouvida."
+    },
+    "unit": {
+      "const": "dBm"
+    },
+    "state": {
+      "enum": [
+        "DENTRO_ALCANCE",
+        "FORA_ALCANCE",
+        "INDETERMINADA"
+      ],
+      "description": "Região de rádio decidida no aparelho. Entra em DENTRO_ALCANCE com melhor RSSI > −70 dBm; volta a FORA_ALCANCE só abaixo de −85 dBm; entre os dois, mantém. INDETERMINADA enquanto a janela de média não encheu."
+    },
+    "ancoras": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "rssi",
+          "token"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "examples": [
+              "anc-204-A"
+            ]
+          },
+          "rssi": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": -100,
+            "maximum": -30,
+            "description": "RSSI filtrado em dBm. null = âncora não ouvida."
+          },
+          "token": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{8}$",
+            "description": "Os 4 bytes de token que a âncora anunciava por Bluetooth (HMAC-SHA256 do segredo da âncora e da janela de 12 s). null quando a âncora não foi ouvida. O servidor confere: token de outra janela = heartbeat inventado ou requentado."
+          }
+        }
+      }
+    },
+    "amostrasInvalidas": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Leituras descartadas na origem por estarem fora da faixa válida."
+    },
+    "bufferizado": {
+      "type": "boolean",
+      "description": "Verdadeiro quando o heartbeat ficou retido na fila local durante a queda de rede e foi entregue depois. eventTimeMs preserva o instante original."
+    },
+    "anomaliaInjetada": {
+      "enum": [
+        "nenhuma",
+        "duplicata",
+        "fora-de-ordem",
+        "salto"
+      ],
+      "description": "Marca o teste adversarial, só para tornar a demonstração legível. O servidor NÃO usa este campo: detecta a anomalia pela sequência."
+    },
+    "medidoEmMs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Relógio de parede do celular (ms desde 1970) no instante da medição. Só informativo: a prova de tempo é o token."
+    }
+  }
+}

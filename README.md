@@ -77,22 +77,39 @@ reconhecimento facial, sensor de pressão no piso — dispensariam aplicativo, b
 cooperação. Ubiquidade máxima, consentimento zero. O grupo optou deliberadamente por não
 maximizar a ubiquidade.
 
-## Documentos
+## Stack
 
-| Arquivo | Conteúdo |
+| Peça | Tecnologia |
+|---|---|
+| Âncora | Bluetooth Low Energy — notebook (Python + API do Windows) e firmware ESP32 (`.ino`) |
+| App do estudante e painel do professor | React Native / Expo (APK com leitura de RSSI real), TypeScript |
+| Servidor de permanência | Python — máquina de estados, orçamento de ausência, validação por JSON Schema |
+| Comunicação | MQTT 3.1.1 no EMQX Cloud, com TLS (8883 / wss 8084) e usuário por papel |
+| Segurança | Envelope assinado com Ed25519 em toda mensagem; token HMAC da âncora renovado a cada 12 s |
+| Testes | pytest no servidor (incluindo os cenários de ataque) e testes do app em TypeScript |
+
+## Estrutura
+
+| Pasta / arquivo | Conteúdo |
 |---|---|
 | [`atividade-01.md`](atividade-01.md) | Análise inicial — os 9 itens da Atividade em Grupo 01 |
-| [`atividade-02.md`](atividade-02.md) | Processamento e distribuição — os 13 itens da Atividade em Grupo 02: contratos de evento, janelas, semântica temporal, eventos atrasados e distribuição dispositivo–borda–nuvem |
-| [`marco-02/README.md`](marco-02/README.md) | Marco 2 — fronteira de comunicação âncora ↔ gateway por MQTT: produtor ESP32, consumidor Python, contrato versionado e condições de falha |
+| [`atividade-02.md`](atividade-02.md) | Processamento e distribuição — contratos de evento, janelas, semântica temporal, eventos atrasados e distribuição dispositivo–borda–nuvem |
+| [`marco-02/`](marco-02/README.md) | Marco 2 — fronteira âncora ↔ gateway por MQTT: produtor ESP32, consumidor Python, contrato versionado, condições de falha e evidências em placa |
+| [`app/`](app/) | App do estudante no Expo Go, com três âncoras simuladas e trilateração no servidor |
+| [`prototipo-1/`](prototipo-1/README.md) | Primeiro protótipo com rádio de verdade: notebook anunciando por BLE e celular medindo RSSI |
+| [`marco-03/`](marco-03/README.md) | **Marco 3 — Segurança (versão atual)**: TLS, autenticação MQTT, assinatura por dispositivo, atuação autenticada, ataques testados e carga com até 200 celulares simulados |
 
 ## Estado atual
 
-Análise concluída (Atividades 01 e 02). Primeiro protótipo executável entregue no
-Marco 2: fronteira âncora ↔ gateway funcionando por MQTT.
+Concluído até o Marco 3, que é o sistema oficial:
 
-Próximos passos previstos:
+- [x] Análise e projeto (Atividades 01 e 02)
+- [x] Fronteira âncora ↔ gateway por MQTT com contrato versionado (Marco 2)
+- [x] Servidor de permanência: máquina de estados, tolerância, avisos e porcentagem da aula
+- [x] App do estudante e painel do professor (React Native / Expo)
+- [x] Âncora BLE real com token rotativo assinado (HMAC) e firmware ESP32
+- [x] Segurança de ponta a ponta: TLS, usuário por papel, Ed25519 em toda mensagem, atuação só com mensagem autêntica
+- [x] Ataques reproduzidos e recusados, com capturas em [`marco-03/documentacao/capturas/`](marco-03/documentacao/capturas/)
 
-- [ ] Trilateração e máquina de estados, com simulador de estudantes para teste
-- [ ] Firmware da âncora (beacon, token rotativo, malha ESP-NOW)
-- [ ] Aplicativo do estudante
-- [ ] Painel do professor
+Limitação declarada: a validação foi feita com **uma** âncora física (o notebook). O servidor
+e o heartbeat já aceitam três âncoras; faltam as placas ESP32 e a malha ESP-NOW entre elas.

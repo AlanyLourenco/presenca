@@ -1,0 +1,11 @@
+
+[36m[1m══ 2. EMQX Cloud — sem TLS, sem senha, senha errada ══[0m
+[33m  atacante tenta:[0m MQTT aberto, sem TLS, em s0e8218a.ala.eu-central-1.emqxsl.com:1883
+  [32m[1mBLOQUEADO[0m — a conexão nem abriu (TimeoutError). Ou o broker não atende nesta porta, ou a REDE bloqueia a porta 1883 (rede da faculdade: use o hotspot do celular)
+[33m  atacante tenta:[0m TLS na porta 8883, mas SEM usuário e senha
+  [32m[1mBLOQUEADO[0m — o broker recusou: Bad user name or password
+[33m  atacante tenta:[0m TLS com o usuário presenca-app e senha ERRADA
+  [32m[1mBLOQUEADO[0m — o broker recusou: Bad user name or password
+[33m  atacante tenta:[0m TLS com usuário e senha certos (para comparar)
+  CONECTOU — conectado
+

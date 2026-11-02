@@ -1,0 +1,17 @@
+
+[36m[1m══ Presença · servidor de permanência ══[0m
+[90mTeclas: n = aula nova · p = resumo · q = sair (sempre com Enter)[0m
+[32mConectado ao s0e8218a.ala.eu-central-1.emqxsl.com, porta 8084 (MQTT sobre WebSocket com TLS, usuário presenca-servidor).[0m
+[90mChave pública do servidor (o app confere o estado e os avisos com ela):
+  da7ed666d373155cc3350fcc6b21c659f0a93abf15735874f4461d44c2d0b4df[0m
+[90mEsperando as mensagens do celular do estudante.[0m
+
+[36m[1m── AULA s557b COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [31mx RECUSADA     [0m SEM ASSINATURA — mensagem fora do envelope assinado
+  [31mx RECUSADA     [0m IDENTIDADE TROCADA — assinou com a chave de tok-4481657a, mas diz ser tok-12345678
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token 1a2b3c4d não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [35m… SILÊNCIO     [0m nada chega há 6 s (rede, bateria ou app); nada é decidido sem mensagem

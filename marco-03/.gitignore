@@ -1,0 +1,9 @@
+# Segredos: senhas do broker, segredo da âncora e chave privada do servidor.
+segredos.json
+servidor/chave-servidor.pem
+app/src/lib/segredos.ts
+servidor/recebidos.log
+*.apk
+
+# Gravações brutas do vídeo do Marco 3 (pesadas; não vão para o git)
+apresentacao/video-gravacoes/

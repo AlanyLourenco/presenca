@@ -1,0 +1,13 @@
+══ Presença · Marco 3 · âncora (este notebook) ══
+Anunciando por Bluetooth como anc-pc-1. Token novo a cada 12 s, assinado com o segredo da âncora (HMAC).
+Deixe esta janela aberta. Ctrl+C para parar.
+
+02:41:05  janela 149344105  token 45cb0d0e
+           rádio: criado
+           rádio: TRANSMITINDO
+02:41:12  janela 149344106  token 42f6d47b
+           rádio: criado
+           rádio: TRANSMITINDO
+02:41:24  janela 149344107  token bf18fee7
+           rádio: criado
+           rádio: TRANSMITINDO

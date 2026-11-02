@@ -188,6 +188,19 @@ def test_quem_sai_no_fim_soma_o_que_assistiu():
     assert tipos(r)[-1] == FIM_DA_AULA
 
 
+def test_saida_nao_confirmada_no_fim_nao_anula_a_ausencia_tolerada():
+    """Caso visto no Wokwi: saiu em 23,6 s, voltou em 47,2 s e ficou ate o
+    fim; um heartbeat 'fora' isolado em 99,9 s (sem persistencia) zerava os
+    23,6 s perdoados e o resultado caia para 76 %."""
+    log = (trajeto((23.6, DENTRO)) + trajeto((23.6, FORA_DA_SALA), inicio=23.6)
+           + trajeto((52.7, DENTRO), inicio=47.2)
+           + [(99.9, FORA_DA_SALA), (100.4, FORA_DA_SALA)])
+    r = calcular(log, P, inicio=0)
+    assert r.encerrada
+    assert r.ausencia_creditada_s == pytest.approx(23.6)
+    assert r.acumulado_s == pytest.approx(100)
+
+
 def test_retorno_a_tempo_nao_e_punido_pela_demora_da_confirmacao():
     """Voltou 0,5 s antes do limite; a confirmacao so vem depois dele."""
     log = trajeto((10, DENTRO), (29.5, FORA_DA_SALA), (5, DENTRO))

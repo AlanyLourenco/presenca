@@ -1,0 +1,50 @@
+{
+  "_comentario": "Broker, portas e senhas ficam em ../segredos.json (fora do git). transporte: 'websockets' = porta 8084 (passa na rede da faculdade); 'tls' = porta 8883.",
+  "transporte": "websockets",
+  "client_id": "presenca-servidor-m3",
+  "entity_id": "sala-pc",
+  "topico_heartbeat": "ufg/ssu/presenca/alany/m3/sala-pc/heartbeat",
+  "topico_estado": "ufg/ssu/presenca/alany/m3/sala-pc/estado",
+  "topico_aviso": "ufg/ssu/presenca/alany/m3/sala-pc/aviso",
+  "parametros": {
+    "escala": 30,
+    "persistencia_s": 30,
+    "orcamento_ausencia_s": 900,
+    "aviso_1_s": 600,
+    "aviso_2_s": 780,
+    "requalificacao_s": 1800,
+    "duracao_aula_s": 3000,
+    "presenca_minima": 0.75
+  },
+  "sala": {
+    "poligono": [
+      [
+        -1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ],
+    "ancoras": {
+      "anc-pc-1": [
+        0,
+        0
+      ]
+    },
+    "rssi_1m": -60.0,
+    "expoente": 2.2
+  },
+  "silencio_s": 6,
+  "intervalo_painel_s": 0,
+  "painel_a_cada": 24
+}

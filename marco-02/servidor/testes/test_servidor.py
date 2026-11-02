@@ -163,3 +163,36 @@ def test_contador_ingenuo_infla_com_duplicatas(s):
         enviar(s, hb(s, i))                              # cada um chega duas vezes
     assert s.sessao.ingenuo_s == pytest.approx(10.0)
     assert s.sessao.ultimo_resultado.acumulado_s == pytest.approx(4.5)
+
+
+def de_outro(s, seq, aluno="tok-c3d4e5f6", device="cel-9a8b", **extra):
+    d = hb(s, seq, **extra)
+    d.update(aluno=aluno, deviceId=device, eventId=f"{device}#{d['bootId']}#{seq}")
+    return d
+
+
+def test_dois_aparelhos_tem_sessoes_separadas(s):
+    """ESP32 e celular na mesma sala: os logs nao se misturam."""
+    for i in range(1, 7):
+        enviar(s, hb(s, i))
+        enviar(s, de_outro(s, i, ponto=(30, 30), regiao="FORA_ALCANCE"))
+    assert set(s.sessoes) == {"tok-7f3a", "tok-c3d4e5f6"}
+    assert s.sessoes["tok-7f3a"].ultimo_resultado.estado == "PRESENTE"
+    assert s.sessoes["tok-c3d4e5f6"].ultimo_resultado.estado == "FORA"
+    estados = {t.rsplit("/", 1)[1]: m["estado"] for t, m, _ in s.cliente.publicados
+               if m["eventType"] == "presenca.estado.v1"}
+    assert estados == {"tok-7f3a": "PRESENTE", "tok-c3d4e5f6": "FORA"}
+
+
+def test_aula_seguinte_abre_sessao_nova_para_o_aluno(s):
+    """Encerrada a aula, um boot novo do mesmo aluno e a aula seguinte."""
+    fim = int(s.p.duracao_aula / 0.5) + 2
+    for i in range(1, fim):
+        enviar(s, hb(s, i))
+    primeira = s.sessoes["tok-7f3a"]
+    assert primeira.encerrada
+    enviar(s, hb(s, fim, boot="a1b2"))                   # mesmo boot: ignorado
+    assert s.sessoes["tok-7f3a"] is primeira
+    enviar(s, hb(s, 1, boot="beef"))
+    nova = s.sessoes["tok-7f3a"]
+    assert nova is not primeira and not nova.encerrada and len(nova.log) == 1

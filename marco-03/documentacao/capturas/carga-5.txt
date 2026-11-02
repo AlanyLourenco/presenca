@@ -1,0 +1,10 @@
+$ python servidor.py --quieto --tls          (outra janela)
+$ python carga.py 5 --tempo 15
+Conectando 1 cliente(s) MQTT ao EMQX Cloud…
+Simulando 5 celulares, 1 heartbeat a cada 0.5 s, por 15 s…
+
+══ Resultado: 5 celulares ══
+  heartbeats enviados:  155  (10 por segundo)
+  estados de volta:     155  (100.0 %)
+  ida e volta (celular → broker → servidor → broker → celular):
+     mediana 502 ms · 95 % abaixo de 1156 ms · pior 1297 ms

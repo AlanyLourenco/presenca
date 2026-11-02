@@ -50,9 +50,9 @@ class Parametros:
     """Valores do projeto em segundos REAIS. `escala` comprime todos juntos."""
     escala: float = 30.0
     persistencia_s: float = 30.0            # entrada e saida sustentadas por 30 s
-    orcamento_ausencia_s: float = 15 * 60   # 15 min por sessao, limite unico
-    aviso_1_s: float = 10 * 60              # 2/3 do orcamento
-    aviso_2_s: float = 13 * 60              # 87 % do orcamento
+    orcamento_ausencia_s: float = 15 * 60  #150  # 15 min por sessao, limite unico
+    aviso_1_s: float = 10 * 60              #90 # 2/3 do orcamento
+    aviso_2_s: float = 13 * 60              #120 # 87 % do orcamento
     requalificacao_s: float = 30 * 60       # min(30 min, tempo restante)
     duracao_aula_s: float = 50 * 60         # aula-hora
     presenca_minima: float = 0.75           # 37,5 de 50 min
@@ -312,7 +312,11 @@ def calcular(log, p, inicio=None):
         # Saida ainda nao confirmada: o trecho depois do inicio dela fica
         # provisorio. Sem isso o garantido subiria e depois voltaria quando
         # a saida se confirmasse - e o acumulador tem de ser monotonico.
-        ate = corrida_inicio if corrida_classe == FORA_DA_SALA else agora
+        # Com a aula encerrada, uma saida que nao chegou a se sustentar nao e
+        # saida: o aluno estava na sala ate o fim, e a requalificacao (que
+        # termina no fim da aula) se completa.
+        saindo = corrida_classe == FORA_DA_SALA and not r.encerrada
+        ate = corrida_inicio if saindo else agora
         r.presenca_s += ate - entrada
         r.provisorio_s += agora - ate
         resolver_pendente(ate)

@@ -21,7 +21,8 @@ Uso:
                                 # (para redes que bloqueiam a 1883)
 
 Durante a execucao:
-    p   painel da sessao
+    p   painel da sessao (ele tambem aparece sozinho a cada `painel_a_cada`
+        mensagens recebidas; 0 desliga)
     n   abre uma nova sessao (zera o log)
     q   encerra
 """
@@ -128,10 +129,11 @@ def carregar_validador():
 
 # ---------------------------------------------------------------------------
 class Sessao:
-    """Uma aula. O log e a unica fonte de verdade; todo o resto e derivado."""
+    """A aula de UM aluno. O log e a unica fonte de verdade; todo o resto e derivado."""
 
-    def __init__(self):
+    def __init__(self, aluno=None):
         self.id = "s" + secrets.token_hex(2)
+        self.aluno = aluno            # pseudonimo; None ate o primeiro heartbeat
         self.log = []                 # heartbeats aceitos: dicts com t e classe
         self.vistos = set()           # eventIds ja processados
         self.maior_seq = {}           # bootId -> maior sequencia vista
@@ -168,10 +170,14 @@ class Servidor:
         self.p = Parametros.de_config(cfg)
         self.sala = Sala.de_config(cfg)
         self.schema, self.validador = carregar_validador()
+        # Uma sessao por aluno: o ESP32 e os celulares podem falar ao mesmo
+        # tempo sem misturar os logs. `sessao` e a do ultimo heartbeat aceito.
+        self.sessoes = {}
         self.sessao = Sessao()
         self.seq_estado = 0
         self.ultimo_hb_real = None
         self.em_silencio = False
+        self.painel_a_cada = cfg.get("painel_a_cada", 24)   # mensagens; 0 = so com a tecla p
         self.trava = threading.Lock()
         self.parar = threading.Event()
         self.log = open(os.path.join(AQUI, "recebidos.log"), "a", encoding="utf-8")
@@ -229,6 +235,9 @@ class Servidor:
             self._aviso_linha(VERMELHO, "x INVÁLIDA", f"fora do contrato ({motivo}); descartada")
             return
 
+        eid, seq, boot = dado["eventId"], dado["sequence"], dado["bootId"]
+        s = self._sessao_do_aluno(dado["aluno"], boot)
+
         # contador ingenuo: soma 0,5 s a cada heartbeat "dentro", do jeito que
         # chegar, sem deduplicar e sem ordenar. Existe so para comparacao.
         classe_ingenua, _ = classificar(dado, self.sala)
@@ -237,8 +246,6 @@ class Servidor:
 
         if s.encerrada:
             return
-
-        eid, seq, boot = dado["eventId"], dado["sequence"], dado["bootId"]
 
         # 1. DUPLICATA - mesma identidade ja processada
         if eid in s.vistos:
@@ -308,6 +315,24 @@ class Servidor:
         if r.encerrada and not s.encerrada:
             s.encerrada = True
             self.painel(final=True)
+        elif self.painel_a_cada and s.contagem["aceitos"] % self.painel_a_cada == 0:
+            self.painel()
+
+    def _sessao_do_aluno(self, aluno, boot):
+        """A sessao deste aluno. Abre uma nova quando a dele ja terminou e chega
+        um boot novo: e o aparelho comecando a aula seguinte. Um boot novo no
+        meio da aula (reinicio) continua a mesma sessao."""
+        s = self.sessoes.get(aluno)
+        if s is None and self.sessao.aluno is None and not self.sessao.log:
+            s = self.sessao                      # a sessao aberta ao conectar
+            s.aluno = aluno
+        elif s is None or (s.encerrada and boot not in s.deslocamento):
+            s = Sessao(aluno)
+            self.sessao = s
+            self._cabecalho_sessao()
+        self.sessoes[aluno] = s
+        self.sessao = s
+        return s
 
     # -- retorno ao aparelho -------------------------------------------------
     def _publicar_estado(self, aluno, r, classe, pos, dentro_pol):
@@ -384,6 +409,8 @@ class Servidor:
         else:
             situacao = r.estado
         cor = COR_ESTADO.get(r.estado, RESET)
+        if len(self.sessoes) > 1:
+            print(f"{CINZA}{self.sessao.aluno}{RESET}", end=" ")
         print(f"{CINZA}{num(t) + ' s':>8}  {'nº ' + str(dado['sequence']):<10}{RESET}{onde:<14}"
               f"{cor}{situacao:<24}{RESET}{num(r.acumulado_s)} s")
         if mudou and r.transicoes:
@@ -402,7 +429,8 @@ class Servidor:
 
     def _cabecalho_sessao(self):
         p = self.p
-        print(f"\n{CIANO}{NEGRITO}── AULA {self.sessao.id} COMEÇOU ──────────────────────────────{RESET}")
+        quem = f" · aluno {self.sessao.aluno}" if self.sessao.aluno else ""
+        print(f"\n{CIANO}{NEGRITO}── AULA {self.sessao.id}{quem} COMEÇOU ──────────────────────────────{RESET}")
         print(f"{CINZA}  dura {num(p.duracao_aula, 0)} s · pode sair por até {num(p.orcamento, 0)} s no total · "
               f"avisos aos {num(p.aviso_1, 0)} s e {num(p.aviso_2, 0)} s fora")
         print(f"  (na demonstração, 1 s = {num(p.escala, 0)} s de uma aula de verdade)")
@@ -413,7 +441,8 @@ class Servidor:
         c = s.contagem
         p = self.p
         titulo = "RESULTADO FINAL DA AULA" if final else "RESUMO DA AULA"
-        print(f"\n{CIANO}{NEGRITO}  ══ {titulo} {s.id} ══════════════════════════{RESET}{CIANO}")
+        quem = f" · {s.aluno}" if s.aluno else ""
+        print(f"\n{CIANO}{NEGRITO}  ══ {titulo} {s.id}{quem} ══════════════════════════{RESET}{CIANO}")
         if r:
             situacao = {"PRESENTE": "PRESENTE", "AUSENCIA_TOLERADA": "FORA, ainda na tolerância",
                         "FORA": "FORA, sem contar"}.get(r.estado, r.estado)
@@ -452,6 +481,7 @@ class Servidor:
                 if t == "p":
                     self.painel()
                 elif t == "n":
+                    self.sessoes = {}
                     self.sessao = Sessao()
                     self._cabecalho_sessao()
                 elif t:

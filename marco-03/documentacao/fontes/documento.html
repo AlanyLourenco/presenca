@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Presença — Marco 3: Segurança (explicação completa)</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 18mm; }
+:root { --navy:#13203A; --creme:#F4F2EC; --laranja:#A1501A; --laranja2:#F2A65A; --azul:#2D5BA8; --texto:#2B3445; --suave:#5B6577; --linha:#D6D2C6; }
+* { box-sizing: border-box; }
+body { font-family: "Segoe UI", Arial, sans-serif; color: var(--texto); font-size: 10.5pt; line-height: 1.55; margin: 0; background: #fff; }
+h1, h2, h3 { color: var(--navy); line-height: 1.2; }
+h2 { font-size: 19pt; margin: 0 0 4mm; padding-top: 2mm; border-bottom: 2px solid var(--navy); padding-bottom: 2mm; }
+h2 .num { color: var(--laranja); margin-right: 3mm; }
+h3 { font-size: 12.5pt; margin: 6mm 0 2mm; }
+p { margin: 0 0 3mm; }
+a { color: var(--azul); }
+.secao { page-break-before: always; }
+.anotacao { background: var(--creme); border-left: 5px solid var(--laranja); padding: 3mm 4mm; margin: 0 0 4mm; font-size: 10pt; }
+.anotacao b { color: var(--laranja); }
+.resposta { background: #EEF3FB; border-left: 5px solid var(--azul); padding: 3mm 4mm; margin: 4mm 0; }
+.resposta b:first-child { color: var(--azul); }
+.aviso { background: #FFF4E5; border-left: 5px solid #C77700; padding: 3mm 4mm; margin: 4mm 0; font-size: 10pt; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0 4mm; font-size: 9.5pt; page-break-inside: avoid; }
+th { background: var(--navy); color: #fff; text-align: left; padding: 2mm 2.5mm; font-weight: 600; }
+td { border-bottom: 1px solid var(--linha); padding: 2mm 2.5mm; vertical-align: top; }
+tr:nth-child(even) td { background: #FAF9F5; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: #F1EEE6; padding: 0 1mm; border-radius: 2px; }
+th code { background: #2B3A5C; color: #FFFFFF; }
+figure { margin: 3mm 0 5mm; page-break-inside: avoid; }
+figure.codigo { border: 1px solid #D9DEE8; border-radius: 4px; overflow: hidden; }
+figure.codigo figcaption { background: #E8EDF5; padding: 1.5mm 3mm; font-size: 8.5pt; display: flex; justify-content: space-between; color: var(--navy); }
+figure.codigo .arq { font-family: Consolas, monospace; font-weight: 600; }
+figure.codigo .lin { color: var(--suave); }
+figure.codigo pre { margin: 0; padding: 2.5mm 3mm; background: #FBFCFE; font-family: Consolas, "Courier New", monospace; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+.ln { color: #687286; display: inline-block; width: 9mm; user-select: none; }
+figure.terminal { background: #0F1729; border-radius: 6px; overflow: hidden; }
+figure.terminal figcaption { background: #1F2A44; color: #C9D2E3; font-size: 8.5pt; padding: 1.5mm 3mm; display: flex; align-items: center; gap: 1.5mm; }
+figure.terminal figcaption i { width: 2.4mm; height: 2.4mm; border-radius: 50%; background: #E06C5A; display: inline-block; }
+figure.terminal figcaption i:nth-child(2) { background: #E2B341; } figure.terminal figcaption i:nth-child(3) { background: #5DB26A; }
+figure.terminal figcaption span { margin-left: 2mm; }
+figure.terminal pre { margin: 0; padding: 3mm; color: #E3E8F2; font-family: Consolas, "Courier New", monospace; font-size: 8pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+.vermelho { color: #FF7A6B; } .verde { color: #6FD38A; } .amarelo { color: #F2C14E; } .ciano { color: #6CCFE6; } .magenta { color: #D99BF0; } .cinza { color: #8A95AB; } .negrito { font-weight: 700; }
+figure.print img { width: 100%; border: 1px solid var(--linha); border-radius: 4px; }
+figure figcaption, .legenda { font-size: 8.8pt; color: var(--suave); margin-top: 1.5mm; }
+figure.diagrama { text-align: center; }
+figure.diagrama svg { width: 100%; height: auto; }
+.capa { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; background: var(--navy); color: #F4F2EC; margin: -16mm -15mm 0; padding: 22mm 20mm; }
+.capa h1 { color: #F4F2EC; font-size: 34pt; margin: 0 0 6mm; }
+.capa .eyebrow { color: var(--laranja2); font-family: Consolas, monospace; letter-spacing: 1.5mm; font-size: 11pt; }
+.capa p { color: #C9D2E3; font-size: 13pt; }
+.capa a { color: var(--laranja2); }
+.capa .rodape { font-size: 10pt; color: #8C9AB3; }
+.sumario td:first-child { width: 48%; }
+.chip { display: inline-block; background: var(--creme); border: 1px solid var(--linha); border-radius: 10px; padding: 0 2mm; font-size: 8.5pt; margin-right: 1mm; }
+.ok { color: #1F7A3A; font-weight: 600; } .nao { color: #B23A2A; font-weight: 600; } .parcial { color: #A1501A; font-weight: 600; }
+.duas { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================================= CAPA -->
+<section class="capa">
+  <div class="eyebrow">MARCO 3 · SEGURANÇA · 16/10/2026</div>
+  <div>
+    <h1>Presença:<br>como cada exigência do Marco 3 foi feita</h1>
+    <p>Explicação completa, com o código de verdade, as saídas reais dos terminais, as telas do broker, diagramas e as medições. Cada seção começa com a anotação da aula e termina com a resposta.</p>
+    <p style="font-size:11pt">Slides: <code style="background:#1F2A44;color:#F4F2EC">marco-03/apresentacao/Marco3-Slides.pdf</code><br>
+    Código: <code style="background:#1F2A44;color:#F4F2EC">projeto-presenca/marco-03/</code></p>
+  </div>
+  <div class="rodape">Software para Sistemas Ubíquos · UFG · Alany<br>Todos os trechos de código são copiados automaticamente dos arquivos (com o número da linha) e todas as saídas de terminal foram capturadas rodando o sistema.</div>
+</section>
+
+<!-- ======================================================================= SUMARIO -->
+<section class="secao">
+<h2>Mapa: anotação da aula → onde está a resposta</h2>
+<table class="sumario">
+<tr><th>O que foi pedido na aula</th><th>Situação</th><th>Seção</th></tr>
+<tr><td>Principal: segurança</td><td class="ok">feito</td><td>1 (visão geral das camadas)</td></tr>
+<tr><td>Canal criptografado</td><td class="ok">feito e testado</td><td>2</td></tr>
+<tr><td>Autenticação MQTT</td><td class="ok">feito e testado</td><td>3</td></tr>
+<tr><td>Todo dispositivo tem que falar quem é</td><td class="ok">feito e testado</td><td>4 e 5</td></tr>
+<tr><td>Fazer atuação e autenticação</td><td class="ok">feito</td><td>6</td></tr>
+<tr><td>Processo inverso: produtor do lado do consumidor e consumidor do lado do produtor</td><td class="ok">feito</td><td>6</td></tr>
+<tr><td>Fazer funcionar redes de sensores</td><td class="parcial">uma âncora real + N celulares; 3 âncoras no contrato</td><td>7</td></tr>
+<tr><td>Verificar quantos dispositivos as âncoras conseguem monitorar ao mesmo tempo; se não, como vamos fazer</td><td class="ok">medido</td><td>8</td></tr>
+<tr><td>Daria para fazer com Arduino? Prova de funcionalidade</td><td class="parcial">sketch pronto, não gravado em placa</td><td>9</td></tr>
+<tr><td>Validar: pelo ESP, a distância do sinal do celular</td><td class="parcial">ferramenta pronta; medição real pendente</td><td>10</td></tr>
+<tr><td>Validar: quantos dispositivos com o mesmo ESP32</td><td class="parcial">ferramenta pronta (notebook e ESP32)</td><td>10</td></tr>
+</table>
+
+<h3>Antes de tudo: o que é o sistema</h3>
+<p>O <b>Presença</b> mede a <b>permanência</b> do estudante na sala ao longo da aula. Por pedido do professor no Marco 2, o <b>protótipo 1</b> virou o sistema oficial: o notebook faz o papel da <b>âncora</b> (um farol Bluetooth na parede), o <b>celular</b> do estudante mede a força do sinal (RSSI) e decide se está perto, e o <b>servidor</b> calcula a permanência e devolve o estado e os avisos. Tudo conversa por <b>MQTT</b>, através de um <b>broker</b>.</p>
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="13">
+  <defs><marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#13203A"/></marker>
+  <marker id="sl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A1501A"/></marker></defs>
+  <rect x="10" y="60" width="150" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="85" y="92" text-anchor="middle" font-weight="700" fill="#13203A">Âncora</text>
+  <text x="85" y="112" text-anchor="middle" fill="#5B6577">notebook (ancora.py)</text>
+  <text x="85" y="130" text-anchor="middle" fill="#5B6577">anuncia Bluetooth</text>
+  <text x="85" y="148" text-anchor="middle" fill="#A1501A">“PRS1”+token</text>
+  <path d="M165 110 Q 190 90 215 110" stroke="#2D5BA8" stroke-width="2" fill="none"/><path d="M160 110 Q 192 70 222 110" stroke="#2D5BA8" stroke-width="2" fill="none" opacity=".5"/>
+  <text x="192" y="60" text-anchor="middle" fill="#2D5BA8" font-size="11">rádio BLE</text>
+  <rect x="225" y="60" width="150" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="300" y="92" text-anchor="middle" font-weight="700" fill="#13203A">Celular</text>
+  <text x="300" y="112" text-anchor="middle" fill="#5B6577">app Presença M3</text>
+  <text x="300" y="130" text-anchor="middle" fill="#5B6577">mede RSSI, decide</text>
+  <text x="300" y="148" text-anchor="middle" fill="#5B6577">perto/longe</text>
+  <rect x="440" y="60" width="140" height="100" rx="12" fill="#13203A"/>
+  <text x="510" y="96" text-anchor="middle" font-weight="700" fill="#F4F2EC">Broker MQTT</text>
+  <text x="510" y="116" text-anchor="middle" fill="#C9D2E3">EMQX Cloud</text>
+  <text x="510" y="134" text-anchor="middle" fill="#F2A65A">TLS + senha</text>
+  <rect x="640" y="60" width="110" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="695" y="96" text-anchor="middle" font-weight="700" fill="#13203A">Servidor</text>
+  <text x="695" y="116" text-anchor="middle" fill="#5B6577">servidor.py</text>
+  <text x="695" y="134" text-anchor="middle" fill="#5B6577">permanência</text>
+  <line x1="377" y1="95" x2="436" y2="95" stroke="#13203A" stroke-width="2" marker-end="url(#s)"/>
+  <line x1="582" y1="95" x2="636" y2="95" stroke="#13203A" stroke-width="2" marker-end="url(#s)"/>
+  <line x1="636" y1="130" x2="584" y2="130" stroke="#A1501A" stroke-width="2" marker-end="url(#sl)"/>
+  <line x1="436" y1="130" x2="379" y2="130" stroke="#A1501A" stroke-width="2" marker-end="url(#sl)"/>
+  <text x="510" y="190" text-anchor="middle" fill="#13203A">→ heartbeat (a cada 0,5 s na demonstração)</text>
+  <text x="510" y="210" text-anchor="middle" fill="#A1501A">← estado e avisos (atuação no celular)</text>
+</svg>
+<figcaption>Figura 1 — As quatro peças. A âncora só transmite; quem mede é o celular; o broker leva as mensagens; o servidor decide e responde.</figcaption>
+</figure>
+
+<p>Onde fica cada coisa (pasta <code>marco-03/</code>, cópia do protótipo 1 — nada do Marco 2 foi alterado):</p>
+<table>
+<tr><th>Pasta / arquivo</th><th>O que faz</th></tr>
+<tr><td><code>ancora/ancora.py</code></td><td>o notebook vira âncora Bluetooth, com token HMAC</td></tr>
+<tr><td><code>ancora/escutar.py</code></td><td>o “processo inverso” só para medir: o notebook ouve e conta aparelhos</td></tr>
+<tr><td><code>app/</code></td><td>o app “Presença M3” (React Native/Expo), APK <code>presenca-m3.apk</code></td></tr>
+<tr><td><code>servidor/servidor.py</code>, <code>servidor/seguranca.py</code></td><td>servidor de permanência e toda a parte de segurança (sem rede, testável)</td></tr>
+<tr><td><code>contrato/v1/</code></td><td>formato das mensagens (JSON Schema): <code>presenca.heartbeat.v2</code>, <code>seguranca.envelope.v1</code></td></tr>
+<tr><td><code>ataques/ataques.py</code>, <code>ataques/carga.py</code></td><td>o intruso (demonstração) e o teste de carga</td></tr>
+<tr><td><code>esp32-ancora/esp32-ancora.ino</code></td><td>a mesma âncora em Arduino (ESP32)</td></tr>
+<tr><td><code>configurar.py</code>, <code>segredos.json</code></td><td>gera e guarda os segredos (fora do git)</td></tr>
+</table>
+</section>
+
+<!-- ======================================================================= 1 -->
+<section class="secao">
+<h2><span class="num">1</span>Segurança: a visão geral</h2>
+<div class="anotacao"><b>Anotação:</b> “marco 03 segurança — principal: segurança”.</div>
+
+<p>Segurança aqui responde a três perguntas, nesta ordem: <b>alguém consegue ler no caminho?</b> (canal cifrado), <b>alguém de fora consegue entrar?</b> (autenticação no broker) e <b>quem está dentro consegue se passar por outro?</b> (identidade de cada dispositivo). Uma quarta pergunta é específica deste sistema: <b>o estudante consegue dizer que está na sala estando em casa?</b> (prova de proximidade).</p>
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="13">
+  <rect x="20" y="10" width="720" height="230" rx="16" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="40" y="36" font-weight="700" fill="#13203A">1 · Canal cifrado (TLS) — ninguém lê no caminho</text>
+  <rect x="50" y="48" width="660" height="182" rx="14" fill="#E8EDF5" stroke="#C3CDDD"/>
+  <text x="70" y="74" font-weight="700" fill="#13203A">2 · Autenticação MQTT — só entra quem tem usuário e senha</text>
+  <rect x="80" y="86" width="600" height="134" rx="12" fill="#D6E1F2" stroke="#9FB3D6"/>
+  <text x="100" y="112" font-weight="700" fill="#13203A">3 · Identidade — cada mensagem assinada por quem a produziu</text>
+  <rect x="110" y="124" width="540" height="86" rx="10" fill="#13203A"/>
+  <text x="130" y="152" font-weight="700" fill="#F2A65A">4 · Prova de proximidade</text>
+  <text x="130" y="174" fill="#F4F2EC">o token da âncora muda a cada 12 s; só a âncora e o servidor sabem gerá-lo</text>
+  <text x="130" y="194" fill="#C9D2E3">heartbeat feito em casa não tem o token de agora</text>
+</svg>
+<figcaption>Figura 2 — As camadas, de fora para dentro. Cada uma cobre o que a anterior não cobre.</figcaption>
+</figure>
+
+<table>
+<tr><th>Camada</th><th>Impede</th><th>Como</th><th>Seção</th></tr>
+<tr><td>1. TLS</td><td>ler ou alterar mensagens no Wi-Fi, no provedor, no caminho</td><td>broker só aceita portas cifradas (8883 e 8084)</td><td>2</td></tr>
+<tr><td>2. Usuário e senha</td><td>qualquer pessoa conectar no broker</td><td>um usuário por papel no EMQX Cloud</td><td>3</td></tr>
+<tr><td>3. Assinatura Ed25519</td><td>quem tem a senha falar em nome de outro (aluno, servidor, admin)</td><td>envelope assinado em toda mensagem</td><td>4</td></tr>
+<tr><td>4. Token HMAC da âncora</td><td>“estou na sala” mandado de casa; repetir mensagem velha</td><td>token que só vale na janela de 12 s atual</td><td>5</td></tr>
+</table>
+
+<div class="resposta"><b>Por que não basta senha no broker?</b> Porque a senha do papel “app” precisa ir <b>dentro do APK</b>: todo celular de estudante conecta com ela. Quem descompilar o APK a obtém. A senha separa “quem é do sistema” de “quem é de fora”, mas não separa um estudante do outro. Quem faz essa separação é a camada 3.</div>
+
+<h3>Por que EMQX e não HiveMQ</h3>
+<p>O professor indicou o HiveMQ. Na prática:</p>
+<ul>
+<li>O broker público <code>broker.hivemq.com</code>, usado até o Marco 2, <b>não tem autenticação nenhuma</b>: qualquer pessoa conecta, lê e publica (seção 3 mostra isso rodando).</li>
+<li>O <b>HiveMQ Cloud</b> deixou de ter plano gratuito para contas novas: o plano “Starter” pede cartão de crédito e custa cerca de US$ 249/mês depois de 15 dias; o “Enterprise” é por contato comercial (pede CNPJ).</li>
+<li>O <b>EMQX Cloud Serverless</b> tem cota gratuita mensal, <b>não pede cartão</b>, só aceita conexão com TLS e tem usuário/senha e ACL por tópico. Foi criado com limite de gasto de US$ 0,00 (“Free quota only”): se a cota acabar, ele suspende em vez de cobrar.</li>
+</ul>
+<p>O protocolo é o mesmo (MQTT 3.1.1); trocar de broker mudou só o endereço e a porta, guardados em <code>segredos.json</code>.</p>
+{{img:emqx-visao-geral.jpg|Print 1 — Console do EMQX Cloud: deployment Serverless “Running”, limite de gasto US$ 0,00. As 2 sessões são o servidor e o celular conectados durante o ensaio.}}
+</section>
+
+<!-- ======================================================================= 2 -->
+<section class="secao">
+<h2><span class="num">2</span>Canal criptografado</h2>
+<div class="anotacao"><b>Anotação:</b> “canal criptografado”.</div>
+
+<h3>O que é</h3>
+<p><b>TLS</b> (o mesmo cadeado do HTTPS) cifra tudo o que passa entre o aparelho e o broker e prova, por certificado, que o broker é mesmo o broker (e não alguém no meio fingindo ser). Sem TLS, qualquer um na mesma rede Wi-Fi lê o MQTT em texto puro — inclusive a senha, que vai na mensagem de conexão.</p>
+
+<h3>Como foi feito</h3>
+<p>No <b>broker</b>: o plano Serverless do EMQX só abre as portas cifradas — <b>8883</b> (MQTT sobre TLS) e <b>8084</b> (MQTT dentro de WebSocket sobre TLS, o “wss://”). As portas abertas 1883 e 8083 nem existem nesse plano.</p>
+{{img:emqx-conexao.jpg|Print 2 — Informação de conexão do broker: só as portas TLS (8883 e 8084), com certificado da autoridade válido até 2031.}}
+
+<p>No <b>servidor</b> (Python, paho-mqtt): <code>tls_set()</code> liga o TLS e confere o certificado do broker contra as autoridades do sistema. Não existe caminho sem TLS no código:</p>
+{{codigo:servidor/servidor.py|def criar_cliente(segredos, papel, client_id, websocket):|return cliente, segredos.get("porta_tls", 8883)}}
+
+<p>No <b>celular</b> (paho-mqtt em JavaScript): a conexão é <code>wss://…:8084/mqtt</code> com <code>useSSL: true</code>. O endereço vem de <code>segredos.ts</code>, gerado por <code>configurar.py</code> e fora do git:</p>
+{{codigo:app/src/lib/mqtt.ts|c.connect({|password: MQTT_SENHA,}}
+
+<h3>Prova</h3>
+<p>O ataque <code>senha</code> tenta primeiro a porta aberta 1883: a conexão nem abre.</p>
+{{terminal:ataque-senha.txt|Janela 3 — python ataques.py senha}}
+
+<div class="resposta"><b>Resposta:</b> todo o tráfego (celular↔broker↔servidor) é cifrado com TLS e o certificado do broker é verificado. Não há porta sem cifra para usar, nem por engano.</div>
+</section>
+
+<!-- ======================================================================= 3 -->
+<section class="secao">
+<h2><span class="num">3</span>Autenticação MQTT</h2>
+<div class="anotacao"><b>Anotação:</b> “autenticação mqtt” · “fazer atuação e autenticação”.</div>
+
+<h3>O problema, rodando</h3>
+<p>No broker público usado até o Marco 2, o “intruso” conecta sem usuário e sem senha, assina todos os tópicos do projeto e ainda <b>publica</b> um heartbeat falso — o broker aceita e entrega:</p>
+{{terminal:ataque-publico.txt|Janela 3 — python ataques.py publico --ws}}
+
+<h3>Como foi feito</h3>
+<p>No EMQX Cloud foram criados <b>dois usuários, um por papel</b> (Access Control → Authentication). Cada papel tem a sua senha forte (20 caracteres aleatórios gerados por <code>secrets</code> do Python), guardada só em <code>segredos.json</code>:</p>
+<table>
+<tr><th>Usuário</th><th>Quem usa</th><th>Onde a senha fica</th></tr>
+<tr><td><code>presenca-servidor</code></td><td>o servidor de permanência</td><td><code>segredos.json</code> no notebook</td></tr>
+<tr><td><code>presenca-app</code></td><td>todos os celulares (app)</td><td><code>segredos.json</code> → <code>app/src/lib/segredos.ts</code> → dentro do APK</td></tr>
+</table>
+{{img:emqx-usuarios.jpg|Print 3 — Os dois usuários cadastrados no broker (as senhas nunca aparecem no console).}}
+{{img:emqx-clientes.jpg|Print 4 — Durante o ensaio: cada conexão aparece com o seu usuário. O servidor entra como presenca-servidor; o celular, como presenca-app.}}
+
+<p>No código, o usuário e a senha entram na conexão (<code>username_pw_set</code> no servidor, linhas acima; <code>userName/password</code> no app, seção 2). Se a senha estiver errada, o servidor avisa em vez de ficar tentando em silêncio:</p>
+{{codigo:servidor/servidor.py|def _ao_conectar(self, cliente, userdata, flags, rc, properties=None):|return}}
+
+<h3>Prova</h3>
+<p>No mesmo ataque <code>senha</code> da seção anterior: com TLS mas <b>sem senha</b>, recusado; com o usuário certo e <b>senha errada</b>, recusado (“Bad user name or password”); com a senha certa, conecta. Testado também pela porta 8084 (WebSocket), com o mesmo resultado.</p>
+
+<div class="resposta"><b>Resposta:</b> o broker só aceita quem apresenta usuário e senha válidos, por TLS. O intruso do broker público, que lia e escrevia tudo, agora não conecta.</div>
+<div class="aviso"><b>Limite assumido:</b> a senha do app está no APK. Por isso a autenticação MQTT sozinha não basta — a seção 4 trata quem tem essa senha. O EMQX ainda permite restringir tópicos por usuário (ACL, em Access Control → Authorization); fica como próximo passo.</div>
+</section>
+
+<!-- ======================================================================= 4 -->
+<section class="secao">
+<h2><span class="num">4</span>Todo dispositivo tem que falar quem é</h2>
+<div class="anotacao"><b>Anotação:</b> “todo dispositivo tem que falar quem é”.</div>
+
+<h3>A ideia</h3>
+<p>Cada dispositivo tem um <b>par de chaves</b>: uma <b>privada</b>, que nunca sai dele, e uma <b>pública</b>, que vai junto de cada mensagem. Com a privada ele <b>assina</b>; com a pública qualquer um <b>confere</b> a assinatura. Mudou um byte da mensagem, a assinatura não confere. Sem a chave privada, não dá para produzir uma assinatura válida. Foi usado <a href="https://www.rfc-editor.org/rfc/rfc8032">Ed25519 (RFC 8032)</a>: chaves de 32 bytes, assinaturas de 64 bytes, rápido e sem depender de número aleatório na hora de assinar.</p>
+
+<h3>O pseudônimo do estudante sai da chave</h3>
+<p>O nome que o servidor vê, <code>tok-xxxxxxxx</code>, é o começo do <b>SHA-256 da chave pública</b>. Consequência: não precisa de cadastro para provar que “tok-10ba682c” é dono de uma chave — basta recalcular o hash e conferir a assinatura. E ninguém consegue assinar como “tok-10ba682c” sem a chave privada que gerou esse nome. Nada de MAC, IMEI ou nome (decisão 5 do projeto).</p>
+{{codigo:app/src/lib/identidade.ts|export async function minhaIdentidade(): Promise<Eu> {|return cache;}}
+{{codigo:app/src/lib/assinatura.ts|export function identidadeDaChave(publicaHex: string) {|return { aluno:}}
+
+<h3>O envelope assinado</h3>
+<p>Toda mensagem do sistema viaja dentro de um <b>envelope</b> (contrato <code>seguranca.envelope.v1</code>): a mensagem original vai intacta, como texto, no campo <code>carga</code>; ao lado vão quem diz ser (<code>de</code>), a chave pública e a assinatura. A assinatura cobre <b>o tópico MQTT + a carga</b>: uma mensagem válida para o aluno A não pode ser recolocada no tópico do aluno B, nem de outra sala.</p>
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12.5">
+  <defs><marker id="s2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#13203A"/></marker></defs>
+  <rect x="10" y="20" width="200" height="170" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="110" y="44" text-anchor="middle" font-weight="700" fill="#13203A">Celular (produz)</text>
+  <text x="25" y="70" fill="#2B3445">1. monta o heartbeat</text>
+  <text x="25" y="92" fill="#2B3445">2. assina com a chave</text>
+  <text x="40" y="110" fill="#5B6577">privada:</text>
+  <text x="40" y="128" fill="#A1501A" font-family="Consolas">Ed25519(tópico+carga)</text>
+  <text x="25" y="152" fill="#2B3445">3. publica o envelope</text>
+  <rect x="270" y="45" width="220" height="120" rx="10" fill="#13203A"/>
+  <text x="380" y="68" text-anchor="middle" fill="#F2A65A" font-family="Consolas">seguranca.envelope.v1</text>
+  <text x="285" y="92" fill="#F4F2EC" font-family="Consolas">de: "tok-10ba682c"</text>
+  <text x="285" y="110" fill="#F4F2EC" font-family="Consolas">chavePublica: d04a…8737</text>
+  <text x="285" y="128" fill="#F4F2EC" font-family="Consolas">carga: "{…heartbeat…}"</text>
+  <text x="285" y="146" fill="#8FC1FF" font-family="Consolas">assinatura: d102…a405</text>
+  <rect x="550" y="20" width="200" height="170" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="650" y="44" text-anchor="middle" font-weight="700" fill="#13203A">Servidor (consome)</text>
+  <text x="562" y="70" fill="#2B3445">1. assinatura confere?</text>
+  <text x="562" y="92" fill="#2B3445">2. carga respeita o contrato?</text>
+  <text x="562" y="114" fill="#2B3445">3. hash(chave) = aluno?</text>
+  <text x="562" y="136" fill="#2B3445">4. token da âncora é de agora?</text>
+  <text x="562" y="166" fill="#A1501A" font-weight="700">qualquer “não” → RECUSADA</text>
+  <line x1="212" y1="105" x2="266" y2="105" stroke="#13203A" stroke-width="2" marker-end="url(#s2)"/>
+  <line x1="492" y1="105" x2="546" y2="105" stroke="#13203A" stroke-width="2" marker-end="url(#s2)"/>
+</svg>
+<figcaption>Figura 3 — O caminho de um heartbeat. O mesmo envelope é usado no sentido contrário: o servidor assina o estado e os avisos, e o celular confere.</figcaption>
+</figure>
+
+<p>Quem assina (no app, TypeScript, biblioteca <a href="https://github.com/paulmillr/noble-ed25519">noble-ed25519</a>):</p>
+{{codigo:app/src/lib/assinatura.ts|const mensagem = (topico: string, carga: string)|return JSON.stringify(env);}}
+
+<p>Quem confere (no servidor, Python, biblioteca <a href="https://cryptography.io">cryptography</a>). A ordem importa: primeiro a assinatura (quem é), depois o contrato, depois se o nome bate com a chave, por fim o token (onde estava):</p>
+{{codigo:servidor/servidor.py|def _conferir(self, topico, payload):|return dado}}
+
+<h3>Os quatro dispositivos e como cada um prova quem é</h3>
+<table>
+<tr><th>Dispositivo</th><th>Prova</th><th>Quem confere</th><th>Se falhar</th></tr>
+<tr><td><b>Celular do estudante</b></td><td>assina cada heartbeat; o nome <code>tok-…</code> é o hash da chave</td><td>servidor</td><td><code>SEM ASSINATURA</code>, <code>ASSINATURA FALSA</code>, <code>IDENTIDADE TROCADA</code></td></tr>
+<tr><td><b>Âncora</b></td><td>anuncia um token HMAC que só ela e o servidor sabem gerar (seção 5)</td><td>servidor (o celular só repassa)</td><td><code>TOKEN VENCIDO</code>, <code>ÂNCORA DESCONHECIDA</code></td></tr>
+<tr><td><b>Servidor</b></td><td>assina estado e avisos; a chave pública dele vem fixada no app</td><td>celular</td><td>o celular ignora e conta como “mensagem falsa”</td></tr>
+<tr><td><b>Celular do administrador</b></td><td>assina a turma (grade e limiar de 1 m); o estudante guarda essa chave no pareamento (código/QR, uma vez)</td><td>celular do estudante</td><td>“Turma recusada: assinada por outro administrador”</td></tr>
+</table>
+
+<h3>Prova</h3>
+<p>Com a senha do app (como se tivesse vazado do APK), o intruso tenta três coisas. Do lado dele:</p>
+{{terminal:ataque-forjar.txt|Janela 3 — python ataques.py forjar}}
+<p>Do lado do servidor, conectado ao EMQX real, as três foram recusadas, cada uma pelo motivo certo:</p>
+{{terminal:servidor-forjar.txt|Janela 2 — python servidor.py}}
+<p>Os mesmos casos (e outros: carga alterada depois de assinada, assinatura de outro tópico) são testes automáticos:</p>
+{{terminal:pytest-seguranca.txt|python -m pytest testes -v -k "…segurança…"}}
+
+<div class="resposta"><b>Resposta:</b> cada mensagem diz quem a produziu e prova com uma assinatura que só aquele dispositivo consegue fazer. O servidor recusa o que não prova; o celular recusa estado, aviso e turma que não venham de quem deveria.</div>
+</section>
+
+<!-- ======================================================================= 5 -->
+<section class="secao">
+<h2><span class="num">5</span>A âncora também diz quem é: o token HMAC</h2>
+<div class="anotacao"><b>Anotação:</b> “todo dispositivo tem que falar quem é” — inclusive a âncora, que é o dispositivo que prova onde o estudante está.</div>
+
+<p>A assinatura da seção 4 prova <b>quem</b> mandou, mas não <b>de onde</b>. Um estudante com o app modificado poderia assinar com a própria chave um heartbeat “estou perto” estando em casa. A âncora fecha essa porta.</p>
+
+<h3>Como foi feito</h3>
+<p>A âncora anuncia por Bluetooth: <code>"PRS1" | nº da âncora | token (4 bytes)</code>. O token deixou de ser sorteado: agora é</p>
+<p style="text-align:center"><code style="font-size:10.5pt">token = HMAC-SHA256( segredo da âncora , "anc-pc-1|" + janela )[0..3]</code>, &nbsp; com &nbsp; <code style="font-size:10.5pt">janela = ⌊ hora atual ÷ 12 s ⌋</code></p>
+<p><a href="https://www.rfc-editor.org/rfc/rfc2104">HMAC (RFC 2104)</a> é um “carimbo” que só quem tem o segredo consegue produzir. O segredo fica só na âncora e no servidor (<code>segredos.json</code>, gerado por <code>configurar.py</code>). Como a janela segue o relógio, a âncora e o servidor calculam <b>o mesmo token sem conversar</b>. O celular não tem o segredo: só <b>repassa</b> no heartbeat o token que ouviu (campo novo <code>ancoras[].token</code> do contrato <code>presenca.heartbeat.v2</code>).</p>
+{{codigo:servidor/seguranca.py|def token_da_ancora(segredo_hex, ancora, num_janela):|for d in range(-atras, 2))}}
+<p>Na âncora (notebook), o token é trocado exatamente na virada de cada janela:</p>
+{{codigo:ancora/ancora.py|# A janela segue o relogio (como no servidor), nao o momento em que|print(f"{time.strftime('%H:%M:%S')}  janela {j}  token {token}")}}
+{{terminal:ancora.txt|Janela 1 — python ancora.py (cada linha, uma janela de 12 s com o seu token)}}
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12">
+  <g font-family="Consolas" font-size="11.5">
+  <rect x="20" y="30" width="135" height="60" fill="#ECE8DD" stroke="#D6D2C6"/><text x="87" y="52" text-anchor="middle" fill="#5B6577">janela −5</text><text x="87" y="74" text-anchor="middle" fill="#B23A2A">recusada</text>
+  <rect x="155" y="30" width="135" height="60" fill="#ECE8DD" stroke="#D6D2C6"/><text x="222" y="52" text-anchor="middle" fill="#5B6577">−4 … −2</text><text x="222" y="74" text-anchor="middle" fill="#A1501A">só se veio da fila</text>
+  <rect x="290" y="30" width="135" height="60" fill="#D6E1F2" stroke="#9FB3D6"/><text x="357" y="52" text-anchor="middle" fill="#13203A">−1 (atraso)</text><text x="357" y="74" text-anchor="middle" fill="#1F7A3A">aceita</text>
+  <rect x="425" y="30" width="135" height="60" fill="#13203A"/><text x="492" y="52" text-anchor="middle" fill="#F2A65A">ATUAL (12 s)</text><text x="492" y="74" text-anchor="middle" fill="#F4F2EC">aceita</text>
+  <rect x="560" y="30" width="135" height="60" fill="#D6E1F2" stroke="#9FB3D6"/><text x="627" y="52" text-anchor="middle" fill="#13203A">+1 (relógio)</text><text x="627" y="74" text-anchor="middle" fill="#1F7A3A">aceita</text>
+  </g>
+  <line x1="20" y1="110" x2="700" y2="110" stroke="#13203A" stroke-width="1.5"/>
+  <text x="20" y="130" fill="#5B6577">passado</text><text x="700" y="130" text-anchor="end" fill="#5B6577">futuro</text>
+  <text x="380" y="140" text-anchor="middle" fill="#13203A">heartbeat ao vivo: janela atual ±1 · heartbeat que ficou na fila sem rede (bufferizado): até 4 janelas (48 s) atrás</text>
+</svg>
+<figcaption>Figura 4 — Quais tokens o servidor aceita. A margem cobre atraso de rede e relógio um pouco adiantado; a fila de 30 s do app cabe em 48 s.</figcaption>
+</figure>
+
+<div class="resposta"><b>Resposta:</b> a âncora prova que é ela por um token que só ela (e o servidor) sabe gerar, e que vale por segundos. Heartbeat inventado em casa não tem o token de agora; heartbeat antigo repetido vence.</div>
+<div class="aviso"><b>Limite assumido (já previsto no projeto):</b> alguém dentro da sala retransmitindo o token ao vivo para quem está em casa (“relay”) continua possível. O token tem 4 bytes. Âncora e servidor precisam de relógio certo (aqui são o mesmo notebook; no ESP32, NTP).</div>
+</section>
+
+<!-- ======================================================================= 6 -->
+<section class="secao">
+<h2><span class="num">6</span>Atuação e o processo inverso (produtor ↔ consumidor)</h2>
+<div class="anotacao"><b>Anotação:</b> “fazer atuação e autenticação” · “processo inverso: produtor do lado do consumidor e consumidor do lado do produtor”.</div>
+
+<h3>O que significa aqui</h3>
+<p>Num fluxo simples de IoT, o sensor só produz e o servidor só consome. No Presença os dois lados fazem os dois papéis: o <b>celular</b> produz o heartbeat <b>e</b> consome o estado e os avisos; o <b>servidor</b> consome o heartbeat <b>e</b> produz o estado e os avisos. A resposta do servidor causa uma <b>atuação</b> no celular — vibração, notificação e o cartão na tela (“notificar antes de punir”). É isso que fecha o laço ciber-físico.</p>
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12.5">
+  <defs><marker id="s3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2D5BA8"/></marker>
+  <marker id="s4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A1501A"/></marker></defs>
+  <rect x="40" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="120" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Celular</text>
+  <rect x="300" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="380" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Broker (EMQX)</text>
+  <rect x="560" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="640" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Servidor</text>
+  <line x1="120" y1="44" x2="120" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/><line x1="380" y1="44" x2="380" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/><line x1="640" y1="44" x2="640" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/>
+  <line x1="122" y1="80" x2="376" y2="80" stroke="#2D5BA8" stroke-width="2" marker-end="url(#s3)"/><text x="250" y="72" text-anchor="middle" fill="#2D5BA8">PRODUZ heartbeat assinado + token</text>
+  <line x1="382" y1="105" x2="636" y2="105" stroke="#2D5BA8" stroke-width="2" marker-end="url(#s3)"/><text x="510" y="97" text-anchor="middle" fill="#2D5BA8">CONSOME e confere</text>
+  <rect x="580" y="120" width="120" height="40" rx="6" fill="#F4F2EC" stroke="#D6D2C6"/><text x="640" y="144" text-anchor="middle" fill="#13203A">calcula a aula</text>
+  <line x1="636" y1="185" x2="384" y2="185" stroke="#A1501A" stroke-width="2" marker-end="url(#s4)"/><text x="510" y="177" text-anchor="middle" fill="#A1501A">PRODUZ estado/aviso assinados</text>
+  <line x1="378" y1="210" x2="124" y2="210" stroke="#A1501A" stroke-width="2" marker-end="url(#s4)"/><text x="250" y="202" text-anchor="middle" fill="#A1501A">CONSOME e confere a chave do servidor</text>
+  <rect x="40" y="225" width="160" height="40" rx="6" fill="#FFF4E5" stroke="#E2B341"/><text x="120" y="249" text-anchor="middle" fill="#13203A" font-weight="700">ATUA: vibra, notifica</text>
+</svg>
+<figcaption>Figura 5 — Os dois lados produzem e consomem. Os dois assinam o que produzem e conferem o que consomem.</figcaption>
+</figure>
+
+<h3>Como foi feito</h3>
+<p>O servidor assina cada estado antes de publicar (publicado como mensagem retida, por aluno):</p>
+{{codigo:servidor/servidor.py|topico = f"{self.cfg['topico_estado']}/{aluno}"|self.cliente.publish(topico, envelopar(self.chave, "servidor", topico, msg), qos=0, retain=True)}}
+<p>O celular só aceita o que o <b>servidor</b> assinou — a chave pública do servidor é fixada no app por <code>configurar.py</code>. E o heartbeat sai assinado com a chave do celular:</p>
+{{codigo:app/src/lib/usar-aparelho.ts|// Só vale o que o SERVIDOR assinou|if (!a.ok) return recusar(`estado: ${a.motivo}`);}}
+{{codigo:app/src/lib/usar-aparelho.ts|// Todo heartbeat sai assinado|envelopar(eu.privada}}
+<p>A atuação, quando chega um aviso válido:</p>
+{{codigo:app/src/app/turma/[codigo].tsx|const aoAviso = useCallback(async (a: AvisoServidor) => {|}, [db, codigo]);}}
+<p>A turma (que traz o limiar de 1 m) também é produzida por um celular — o do administrador — e consumida pelo do estudante; só é aceita se vier assinada pela chave guardada no pareamento:</p>
+{{codigo:app/src/lib/rede-turma.ts|export function acompanharTurma(|aoMudar(r.turma);}}
+
+<h3>Prova</h3>
+<p><code>python ataques.py estado</code> publica no tópico do estudante um estado falso “PRESENTE, 100 %”, sem assinatura e com assinatura de outra chave; o cartão <b>Segurança</b> do app passa a mostrar “Recusei 2 mensagem(ns) falsa(s)” e a tela não muda. <code>python ataques.py turma</code> publica uma turma com limiar −100 dBm (que faria todo mundo parecer perto, até de casa); o app mostra “Turma recusada: turma assinada por outro administrador”.</p>
+{{img:celular-seguranca.png|Print do celular — cartão Segurança da tela da turma.}}
+{{img:celular-recusa.png|Print do celular — mensagens falsas recusadas.}}
+
+<div class="resposta"><b>Resposta:</b> o celular é produtor e consumidor; o servidor também. A atuação acontece no celular e só é disparada por mensagem comprovadamente do servidor.</div>
+</section>
+
+<!-- ======================================================================= 7 -->
+<section class="secao">
+<h2><span class="num">7</span>Rede de sensores funcionando</h2>
+<div class="anotacao"><b>Anotação:</b> “fazer funcionar redes de sensores”.</div>
+
+<p>No Presença, a “rede de sensores” tem dois tipos de nó: as <b>âncoras</b> (faróis fixos na parede) e os <b>celulares</b>, que são os sensores de verdade — cada um mede o RSSI das âncoras com o próprio rádio. O servidor junta as medições de todos e decide a permanência de cada estudante, com uma sessão separada por estudante.</p>
+<table>
+<tr><th>Nó</th><th>No projeto (sala real)</th><th>No Marco 3 (funcionando)</th></tr>
+<tr><td>Âncoras</td><td>3 ESP32 por sala, trilateração + polígono</td><td><b>1 âncora real</b> (o notebook); o ESP32 em Arduino pronto (seção 9)</td></tr>
+<tr><td>Celulares</td><td>todos os estudantes</td><td>o celular real + até centenas simulados pelo <code>carga.py</code>, cada um com a sua chave</td></tr>
+<tr><td>Broker</td><td>—</td><td>EMQX Cloud, TLS + senha</td></tr>
+<tr><td>Servidor</td><td>permanência por estudante</td><td>idem, conferindo assinatura e token de cada nó</td></tr>
+</table>
+<p>O contrato já aceita até 3 âncoras por heartbeat, cada uma com o seu token (<code>ancoras[]</code>), e o servidor confere o token de <b>cada</b> âncora ouvida contra o segredo daquela âncora — acrescentar âncoras é acrescentar segredos em <code>segredos.json</code>. No celular, o token de cada anúncio ouvido entra no heartbeat:</p>
+{{codigo:app/src/lib/aparelho.ts|ancoras: id.ancoras.map((a, i) => (r.rssi[i] === null|: { id: a, rssi: um(r.rssi[i]!), token: r.tokens[i] ?? null })),}}
+<div class="resposta"><b>Resposta:</b> a rede funciona ponta a ponta com uma âncora real, o celular real e celulares simulados; cada nó se identifica (seções 4 e 5). <b>O que não está feito:</b> três âncoras físicas e a malha ESP-NOW entre elas (previstas no projeto).</div>
+</section>
+
+<!-- ======================================================================= 8 -->
+<section class="secao">
+<h2><span class="num">8</span>Quantos dispositivos as âncoras monitoram ao mesmo tempo?</h2>
+<div class="anotacao"><b>Anotação:</b> “verificar quantos dispositivos essas âncoras conseguem monitorar ao mesmo tempo, se não como vamos fazer”.</div>
+
+<h3>A âncora não monitora ninguém: é um farol</h3>
+<p>Pela decisão 3 do projeto, a âncora <b>só transmite</b>. Um anúncio Bluetooth é ouvido por todos os celulares em volta ao mesmo tempo — como uma lâmpada é vista por todos na sala. Quem mede é cada celular, com o próprio rádio. <b>Não existe limite de celulares por âncora.</b> O limite, se houver, está no caminho de volta: broker e servidor. Esse caminho foi medido.</p>
+
+<h3>Medição 1 — o servidor sozinho</h3>
+<p>Sem rede, 200 celulares simulados, cada mensagem passando por tudo (abre envelope, confere assinatura e token, recalcula a aula, assina a resposta):</p>
+{{terminal:carga-sem-rede.txt|python carga.py 200 --tempo 20 --sem-rede}}
+
+<h3>Medição 2 — com o broker de verdade</h3>
+{{terminal:carga-5.txt|python carga.py 5 --tempo 15}}
+{{terminal:carga-30.txt|python carga.py 30 --tempo 15}}
+
+<figure class="diagrama">
+<svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12">
+  <text x="20" y="20" font-weight="700" fill="#13203A">Respostas que voltaram em 15 s (%)</text>
+  <line x1="60" y1="230" x2="360" y2="230" stroke="#9AA3B2"/>
+  <line x1="60" y1="130" x2="360" y2="130" stroke="#ECE8DD"/><line x1="60" y1="30" x2="360" y2="30" stroke="#ECE8DD"/>
+  <text x="52" y="234" text-anchor="end" fill="#5B6577">0</text><text x="52" y="134" text-anchor="end" fill="#5B6577">50</text><text x="52" y="34" text-anchor="end" fill="#5B6577">100</text>
+  <path d="M85 230 V34 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#2D5BA8"/>
+  <path d="M180 230 V156.6 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#2D5BA8"/>
+  <path d="M275 230 V196 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#2D5BA8"/>
+  <text x="115" y="54" text-anchor="middle" fill="#FFFFFF" font-weight="700">100 %</text>
+  <text x="210" y="146" text-anchor="middle" fill="#13203A" font-weight="700">38,7 %</text>
+  <text x="305" y="186" text-anchor="middle" fill="#13203A" font-weight="700">19 %</text>
+  <text x="115" y="250" text-anchor="middle" fill="#2B3445">5 celulares</text><text x="210" y="250" text-anchor="middle" fill="#2B3445">15</text><text x="305" y="250" text-anchor="middle" fill="#2B3445">30</text>
+  <text x="420" y="20" font-weight="700" fill="#13203A">Ida e volta, mediana (segundos)</text>
+  <line x1="460" y1="230" x2="740" y2="230" stroke="#9AA3B2"/>
+  <line x1="460" y1="130" x2="740" y2="130" stroke="#ECE8DD"/><line x1="460" y1="30" x2="740" y2="30" stroke="#ECE8DD"/>
+  <text x="452" y="234" text-anchor="end" fill="#5B6577">0</text><text x="452" y="134" text-anchor="end" fill="#5B6577">4</text><text x="452" y="34" text-anchor="end" fill="#5B6577">8</text>
+  <path d="M485 230 V221.4 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#A1501A"/>
+  <path d="M580 230 V81.3 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#A1501A"/>
+  <path d="M675 230 V46.6 a4 4 0 0 1 4 -4 h52 a4 4 0 0 1 4 4 V230 z" fill="#A1501A"/>
+  <text x="515" y="211" text-anchor="middle" fill="#13203A" font-weight="700">0,5 s</text>
+  <text x="610" y="71" text-anchor="middle" fill="#13203A" font-weight="700">6,1 s</text>
+  <text x="705" y="36" text-anchor="middle" fill="#13203A" font-weight="700">7,5 s</text>
+  <text x="515" y="250" text-anchor="middle" fill="#2B3445">5 celulares</text><text x="610" y="250" text-anchor="middle" fill="#2B3445">15</text><text x="705" y="250" text-anchor="middle" fill="#2B3445">30</text>
+</svg>
+<figcaption>Figura 6 — Teste de carga com o broker EMQX real, heartbeat a cada 0,5 s (ritmo comprimido da demonstração). Até 5 celulares, tudo volta em meio segundo; acima disso forma fila.</figcaption>
+</figure>
+
+<h3>Onde está o gargalo — medição 3</h3>
+<p>O servidor faz ~2.400 mensagens/s, então a fila não vem dele. Uma sonda sem servidor no meio — um cliente publica 60 mensagens/s, outro conta quantas chegam — mostrou que <b>o próprio EMQX gratuito deixa passar ~11 mensagens por segundo por conexão</b>:</p>
+{{terminal:sonda.txt|Sonda do broker}}
+<p>O servidor usa <b>uma</b> conexão para receber e responder tudo, então é nele que o limite aparece. Na aula real o heartbeat é a cada <b>60 s</b> (não 0,5 s): 11 mensagens/s × 60 s ≈ <b>650 celulares por conexão do servidor</b>.</p>
+
+<table>
+<tr><th>Medida</th><th>Resultado</th></tr>
+<tr><td>Celulares por âncora</td><td><b>sem limite</b> (farol)</td></tr>
+<tr><td>Servidor, sem rede</td><td>0,4 ms por mensagem ≈ 2.400/s</td></tr>
+<tr><td>EMQX Serverless gratuito</td><td>~11 mensagens/s por conexão; 1.000 sessões; 1 GB/mês</td></tr>
+<tr><td>Aula real (heartbeat de 60 s), 1 conexão do servidor</td><td>≈ 650 celulares</td></tr>
+</table>
+
+<div class="resposta"><b>Resposta — “se não, como vamos fazer”:</b> a âncora não limita. Para passar de ~650 celulares, o servidor ganha cópias, cada uma com a sua conexão, dividindo os heartbeats por <a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">assinatura compartilhada do MQTT</a> (<code>$share/grupo/…/heartbeat</code>): o broker entrega cada mensagem a uma só cópia. Outra saída é o plano dedicado do broker, sem esse limite por conexão.</div>
+</section>
+
+<!-- ======================================================================= 9 -->
+<section class="secao">
+<h2><span class="num">9</span>Daria para fazer com Arduino? Prova de funcionalidade</h2>
+<div class="anotacao"><b>Anotação:</b> “daria para fazer o que eu quero com arduino — prova de funcionalidade”.</div>
+<p>Sim. <code>esp32-ancora/esp32-ancora.ino</code> é a <b>mesma âncora</b> em Arduino para ESP32 (placa “ESP32 Dev Module”, núcleo Espressif 3.x): anuncia o mesmo formato <code>PRS1 | nº | token</code>, com o <b>mesmo token HMAC</b> da janela de 12 s, e pega a hora certa por NTP no Wi-Fi. O app e o servidor não mudam nada para aceitá-la. Usa só o que já vem no núcleo do ESP32: <code>BLEDevice</code> para o Bluetooth e <code>mbedtls</code> para o HMAC.</p>
+{{codigo:esp32-ancora/esp32-ancora.ino|void tokenDaJanela(uint32_t janela, uint8_t token[4]) {|memcpy(token, h, 4);}}
+{{codigo:esp32-ancora/esp32-ancora.ino|void loop() {|delay(100);}}
+<p>O mesmo sketch tem um <b>modo escuta</b> (<code>MODO_ESCUTA = true</code>): em vez de anunciar, varre os anúncios em volta, conta quantos aparelhos distintos ouve e mostra o RSSI de cada um — usado na seção 10.</p>
+<div class="aviso"><b>Honestidade:</b> o sketch <b>não foi gravado em placa</b> — não havia ESP32 em mãos. Nos testes, o notebook faz o papel do ESP32 com exatamente o mesmo anúncio e o mesmo token. A âncora de parede custaria cerca de R$ 30 e fica na tomada.</div>
+</section>
+
+<!-- ======================================================================= 10 -->
+<section class="secao">
+<h2><span class="num">10</span>Validações: distância do celular e quantos aparelhos por ESP32</h2>
+<div class="anotacao"><b>Anotação (validações):</b> “1. verificar pelo ESP a distância do sinal do celular” · “quantos dispositivos com o mesmo ESP32”.</div>
+
+<h3>A ferramenta: o processo inverso, só para medir</h3>
+<p>No sistema, a âncora não escuta (decisão 3). Para <b>medir</b>, existe o caminho inverso: <code>ancora/escutar.py</code> (no notebook) e o modo escuta do ESP32 varrem os anúncios Bluetooth em volta e, a cada 3 s, mostram <b>quantos aparelhos distintos</b> o rádio ouviu, o RSSI de cada um e a <b>distância estimada</b>.</p>
+{{codigo:ancora/escutar.py|def distancia(rssi, rssi_1m, n):|return 10 **}}
+<p>Para o celular aparecer, ele precisa <b>anunciar</b> (o app Presença não anuncia, por privacidade): no Android, o app gratuito <i>nRF Connect</i> → Advertiser cria um anúncio com nome. Depois: <code>python escutar.py --alvo "nome"</code>.</p>
+
+<h3>Distância a partir do sinal</h3>
+<p>Modelo <a href="https://en.wikipedia.org/wiki/Log-distance_path_loss_model">log-distância</a>, o mesmo usado na tela do app:</p>
+<p style="text-align:center"><code style="font-size:11pt">RSSI(d) = RSSI(1 m) − 10 · n · log₁₀(d)</code> &nbsp;⇒&nbsp; <code style="font-size:11pt">d = 10^((RSSI(1 m) − RSSI) / (10 · n))</code></p>
+<p>O <b>RSSI a 1 m</b> é medido de verdade (calibração do administrador, 8 s parado a 1 m, mediana). O expoente <b>n = 2,2</b> é estimado (típico de ambiente interno). Só a distância <i>mostrada</i> depende de n; a decisão perto/longe vem direto do limiar calibrado.</p>
+<p><b>Próximo passo (medição real):</b> afastar-se 0,5 / 1 / 2 / 3 / 4 / 5 m do notebook, anotar o dBm em <code>medicoes/distancia.csv</code> e rodar <code>python medicoes/ajustar_distancia.py</code>, que ajusta n por mínimos quadrados e mostra a faixa real em que “1 m” cai.</p>
+
+<div class="resposta"><b>Resposta:</b> as duas validações têm ferramenta pronta (notebook e ESP32) e o método está definido. <b>Os números reais dependem do teste presencial</b> — afastando-se do notebook e com vários celulares anunciando.</div>
+<div class="aviso"><b>Limite:</b> Android e iPhone trocam o endereço Bluetooth de tempos em tempos, por privacidade. A contagem é de <i>anunciantes vistos na janela</i>, não de pessoas. RSSI não é régua: mão, bolso e corpo mudam 5 a 10 dB.</div>
+</section>
+
+<!-- ======================================================================= 11 -->
+<section class="secao">
+<h2><span class="num">11</span>Testes automáticos, limites e como reproduzir</h2>
+<h3>Testes</h3>
+{{terminal:pytest.txt|python -m pytest testes -q  (servidor)}}
+<p>O app tem 22 testes, entre eles a prova de que o JavaScript e o Python calculam <b>o mesmo pseudônimo</b> para a mesma chave e de que mensagem alterada, de outro tópico ou com chave que não é a do servidor é recusada (<code>app/src/lib/assinatura.test.ts</code>).</p>
+
+<h3>Limites assumidos</h3>
+<table>
+<tr><th>Limite</th><th>Por quê / mitigação</th></tr>
+<tr><td>Chave do celular no armazenamento seguro, não dentro do chip</td><td>o Keystore não oferece Ed25519 pelo Expo; celular com root a extrai</td></tr>
+<tr><td>Senha do app no APK</td><td>por isso existe a assinatura; ACL por tópico no EMQX é o próximo passo</td></tr>
+<tr><td>Relay do token em tempo real</td><td>residual, já previsto no projeto</td></tr>
+<tr><td>Primeiro pareamento confia na turma que chegar</td><td>é o momento do QR, uma vez por semestre</td></tr>
+<tr><td>~11 mensagens/s por conexão no EMQX gratuito</td><td>≈ 650 celulares por conexão na aula real; assinatura compartilhada para mais</td></tr>
+<tr><td>ESP32 não gravado; 1 âncora física</td><td>notebook faz o papel; sketch pronto</td></tr>
+</table>
+
+<h3>Como reproduzir</h3>
+<table>
+<tr><th>Janela</th><th>Comando (a partir de <code>projeto-presenca\marco-03</code>)</th></tr>
+<tr><td>uma vez</td><td><code>python configurar.py</code> e <code>powershell -ExecutionPolicy Bypass -File .\gerar-apk.ps1</code></td></tr>
+<tr><td>1 · âncora</td><td><code>cd ancora</code> → <code>python ancora.py</code></td></tr>
+<tr><td>2 · servidor</td><td><code>cd servidor</code> → <code>python servidor.py</code></td></tr>
+<tr><td>celular</td><td>Presença M3 → admin publica, calibra a 1 m, inicia a aula → aluno entra pelo código</td></tr>
+<tr><td>3 · ataques</td><td><code>cd ataques</code> → <code>python ataques.py senha | forjar | estado | turma | publico --ws</code></td></tr>
+<tr><td>carga</td><td><code>python carga.py 5</code> (servidor com <code>--quieto --tls</code>) · <code>python carga.py 200 --sem-rede</code></td></tr>
+</table>
+
+<h3>Referências</h3>
+<ul>
+<li>MQTT 3.1.1 (OASIS): <a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">docs.oasis-open.org/mqtt/mqtt/v3.1.1</a></li>
+<li>EMQX Cloud (documentação): <a href="https://docs.emqx.com/en/cloud/latest/">docs.emqx.com/en/cloud/latest</a></li>
+<li>Assinatura compartilhada no EMQX: <a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">docs.emqx.com/…/mqtt-shared-subscription</a></li>
+<li>Broker público da HiveMQ: <a href="https://www.hivemq.com/mqtt/public-mqtt-broker/">hivemq.com/mqtt/public-mqtt-broker</a></li>
+<li>Ed25519 — RFC 8032: <a href="https://www.rfc-editor.org/rfc/rfc8032">rfc-editor.org/rfc/rfc8032</a></li>
+<li>HMAC — RFC 2104: <a href="https://www.rfc-editor.org/rfc/rfc2104">rfc-editor.org/rfc/rfc2104</a></li>
+<li>noble-ed25519 (app): <a href="https://github.com/paulmillr/noble-ed25519">github.com/paulmillr/noble-ed25519</a> · cryptography (servidor): <a href="https://cryptography.io">cryptography.io</a></li>
+<li>Modelo log-distância: <a href="https://en.wikipedia.org/wiki/Log-distance_path_loss_model">en.wikipedia.org/wiki/Log-distance_path_loss_model</a></li>
+<li>Slides do Marco 3: <code>marco-03/apresentacao/Marco3-Slides.pdf</code></li>
+</ul>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="760" viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="13"><rect width="100%" height="100%" fill="#FFFFFF"/>
+  <defs><marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#13203A"/></marker>
+  <marker id="sl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A1501A"/></marker></defs>
+  <rect x="10" y="60" width="150" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="85" y="92" text-anchor="middle" font-weight="700" fill="#13203A">Âncora</text>
+  <text x="85" y="112" text-anchor="middle" fill="#5B6577">notebook (ancora.py)</text>
+  <text x="85" y="130" text-anchor="middle" fill="#5B6577">anuncia Bluetooth</text>
+  <text x="85" y="148" text-anchor="middle" fill="#A1501A">“PRS1”+token</text>
+  <path d="M165 110 Q 190 90 215 110" stroke="#2D5BA8" stroke-width="2" fill="none"/><path d="M160 110 Q 192 70 222 110" stroke="#2D5BA8" stroke-width="2" fill="none" opacity=".5"/>
+  <text x="192" y="60" text-anchor="middle" fill="#2D5BA8" font-size="11">rádio BLE</text>
+  <rect x="225" y="60" width="150" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="300" y="92" text-anchor="middle" font-weight="700" fill="#13203A">Celular</text>
+  <text x="300" y="112" text-anchor="middle" fill="#5B6577">app Presença M3</text>
+  <text x="300" y="130" text-anchor="middle" fill="#5B6577">mede RSSI, decide</text>
+  <text x="300" y="148" text-anchor="middle" fill="#5B6577">perto/longe</text>
+  <rect x="440" y="60" width="140" height="100" rx="12" fill="#13203A"/>
+  <text x="510" y="96" text-anchor="middle" font-weight="700" fill="#F4F2EC">Broker MQTT</text>
+  <text x="510" y="116" text-anchor="middle" fill="#C9D2E3">EMQX Cloud</text>
+  <text x="510" y="134" text-anchor="middle" fill="#F2A65A">TLS + senha</text>
+  <rect x="640" y="60" width="110" height="100" rx="12" fill="#F4F2EC" stroke="#D6D2C6"/>
+  <text x="695" y="96" text-anchor="middle" font-weight="700" fill="#13203A">Servidor</text>
+  <text x="695" y="116" text-anchor="middle" fill="#5B6577">servidor.py</text>
+  <text x="695" y="134" text-anchor="middle" fill="#5B6577">permanência</text>
+  <line x1="377" y1="95" x2="436" y2="95" stroke="#13203A" stroke-width="2" marker-end="url(#s)"/>
+  <line x1="582" y1="95" x2="636" y2="95" stroke="#13203A" stroke-width="2" marker-end="url(#s)"/>
+  <line x1="636" y1="130" x2="584" y2="130" stroke="#A1501A" stroke-width="2" marker-end="url(#sl)"/>
+  <line x1="436" y1="130" x2="379" y2="130" stroke="#A1501A" stroke-width="2" marker-end="url(#sl)"/>
+  <text x="510" y="190" text-anchor="middle" fill="#13203A">→ heartbeat (a cada 0,5 s na demonstração)</text>
+  <text x="510" y="210" text-anchor="middle" fill="#A1501A">← estado e avisos (atuação no celular)</text>
+</svg>

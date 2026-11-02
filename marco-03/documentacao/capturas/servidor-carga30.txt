@@ -1,0 +1,470 @@
+
+[36m[1m══ Presença · servidor de permanência ══[0m
+[90mTeclas: n = aula nova · p = resumo · q = sair (sempre com Enter)[0m
+[32mConectado ao s0e8218a.ala.eu-central-1.emqxsl.com, porta 8084 (MQTT sobre WebSocket com TLS, usuário presenca-servidor).[0m
+[90mChave pública do servidor (o app confere o estado e os avisos com ela):
+  da7ed666d373155cc3350fcc6b21c659f0a93abf15735874f4461d44c2d0b4df[0m
+[90mEsperando as mensagens do celular do estudante.[0m
+
+[36m[1m── AULA sdf76 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-3aa605d4 se identificou (chave 57eb4feedf6bbd8d…)
+  [36m+ APARELHO     [0m tok-6686cff9 se identificou (chave 87d2238ccb31f7e7…)
+
+[36m[1m── AULA s4a0b · aluno tok-6686cff9 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-33bba32e se identificou (chave f9b676bc20c957bc…)
+
+[36m[1m── AULA s120a · aluno tok-33bba32e COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-a73c391f se identificou (chave 4dfb1accba056629…)
+
+[36m[1m── AULA s4af8 · aluno tok-a73c391f COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-fa0889c0 se identificou (chave 27fe60a129f56a6c…)
+
+[36m[1m── AULA s060c · aluno tok-fa0889c0 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-0e8d8535 se identificou (chave 13d47979ab843fae…)
+
+[36m[1m── AULA sddfc · aluno tok-0e8d8535 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-855f182f se identificou (chave e3071fe3948cb0da…)
+
+[36m[1m── AULA s9496 · aluno tok-855f182f COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-d52f9d7c se identificou (chave 08970cced495479f…)
+
+[36m[1m── AULA sa982 · aluno tok-d52f9d7c COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-1f5c9377 se identificou (chave a056edd90abf6739…)
+
+[36m[1m── AULA s56e9 · aluno tok-1f5c9377 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-460af464 se identificou (chave 482e707202f8f74c…)
+
+[36m[1m── AULA s1233 · aluno tok-460af464 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-626af01b se identificou (chave a592d827b23eabdd…)
+
+[36m[1m── AULA s881b · aluno tok-626af01b COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-6789d497 se identificou (chave 27759fea04435675…)
+
+[36m[1m── AULA saa99 · aluno tok-6789d497 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-e73f0b85 se identificou (chave 93b656deb4c98b26…)
+
+[36m[1m── AULA sbb4f · aluno tok-e73f0b85 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-773e456b se identificou (chave 7eab94e00b4a362d…)
+
+[36m[1m── AULA sb50c · aluno tok-773e456b COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-00d93d37 se identificou (chave f255049d253fd8a5…)
+
+[36m[1m── AULA s6642 · aluno tok-00d93d37 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-e7f515ae se identificou (chave 6cd11832911c9a45…)
+
+[36m[1m── AULA s909c · aluno tok-e7f515ae COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-a4a4e890 se identificou (chave 0b6333cd02ffe260…)
+
+[36m[1m── AULA s036f · aluno tok-a4a4e890 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-ad43cf3f se identificou (chave 89371438b329c6a9…)
+
+[36m[1m── AULA sdd2f · aluno tok-ad43cf3f COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-78b4ec9c se identificou (chave ce71fe2fbcfe52eb…)
+
+[36m[1m── AULA sa63d · aluno tok-78b4ec9c COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-d3f36493 se identificou (chave 7bff8ae04cd61501…)
+
+[36m[1m── AULA s895c · aluno tok-d3f36493 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-ab1cd3a0 se identificou (chave df81413cdc892970…)
+
+[36m[1m── AULA s4a71 · aluno tok-ab1cd3a0 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-627f6a5c se identificou (chave 8efe38cce1028661…)
+
+[36m[1m── AULA sd9cc · aluno tok-627f6a5c COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-82d33e22 se identificou (chave badd398460bb6a23…)
+
+[36m[1m── AULA s479f · aluno tok-82d33e22 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-ce2f045f se identificou (chave 716ae36796bcbea3…)
+
+[36m[1m── AULA s69df · aluno tok-ce2f045f COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-035688cd se identificou (chave fc8148f6a5d9b5b6…)
+
+[36m[1m── AULA s102e · aluno tok-035688cd COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-a51d7520 se identificou (chave 36358999523c6147…)
+
+[36m[1m── AULA sec7d · aluno tok-a51d7520 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-9a9f3fae se identificou (chave dee9fd1e92eebdad…)
+
+[36m[1m── AULA sb191 · aluno tok-9a9f3fae COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-bdbad8bc se identificou (chave bc41b0ae7aacb600…)
+
+[36m[1m── AULA se2ed · aluno tok-bdbad8bc COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-b46996dc se identificou (chave 6580b732f7e30049…)
+
+[36m[1m── AULA se915 · aluno tok-b46996dc COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [36m+ APARELHO     [0m tok-19118843 se identificou (chave 3578989b73ec803c…)
+
+[36m[1m── AULA s2e9a · aluno tok-19118843 COMEÇOU ──────────────────────────────[0m
+[90m  dura 100 s · pode sair por até 30 s no total · avisos aos 20 s e 26 s fora
+  (na demonstração, 1 s = 30 s de uma aula de verdade)
+
+   tempo  mensagem  onde          situação                tempo que contou[0m
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)
+  [31mx RECUSADA     [0m TOKEN VENCIDO — o token fe5f664c não é o que a anc-pc-1 anuncia agora (heartbeat inventado ou requentado)

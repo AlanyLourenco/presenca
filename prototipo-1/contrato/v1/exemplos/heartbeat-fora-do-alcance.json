@@ -1,0 +1,30 @@
+{
+  "eventType": "presenca.heartbeat.v1",
+  "eventId": "apar-01#a52e#228",
+  "deviceId": "apar-01",
+  "entityId": "sala-204",
+  "aluno": "tok-7f3a",
+  "bootId": "a52e",
+  "eventTimeMs": 126694,
+  "sequence": 228,
+  "value": null,
+  "unit": "dBm",
+  "state": "FORA_ALCANCE",
+  "ancoras": [
+    {
+      "id": "anc-204-A",
+      "rssi": null
+    },
+    {
+      "id": "anc-204-B",
+      "rssi": null
+    },
+    {
+      "id": "anc-204-C",
+      "rssi": null
+    }
+  ],
+  "amostrasInvalidas": 0,
+  "bufferizado": false,
+  "anomaliaInjetada": "nenhuma"
+}

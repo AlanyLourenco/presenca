@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/sala.ambiente.v1.schema.json",
+  "title": "sala.ambiente.v1",
+  "description": "Evento produzido pela âncora da sala. Reporta a ocupação inferida pela concentração de CO2 e o resultado da verificação cruzada contra a contagem declarada pelo subsistema de rádio.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "deviceId",
+    "entityId",
+    "eventTimeMs",
+    "sequence",
+    "value",
+    "unit",
+    "state",
+    "eventId"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "sala.ambiente.v1",
+      "description": "Tipo e versão do contrato. A versão faz parte do nome: uma mudança incompatível cria sala.ambiente.v2."
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]+#[0-9]+$",
+      "description": "Identificação única do evento, no formato deviceId#sequence. É a chave de deduplicação no consumidor."
+    },
+    "deviceId": {
+      "type": "string",
+      "description": "Âncora que produziu o evento.",
+      "examples": ["anc-204-A"]
+    },
+    "entityId": {
+      "type": "string",
+      "description": "Entidade observada: a sala.",
+      "examples": ["sala-204"]
+    },
+    "eventTimeMs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Tempo do evento em milissegundos desde o início da simulação. LIMITAÇÃO DECLARADA: o ESP32 não possui relógio de tempo real sincronizado neste protótipo, portanto este campo NÃO é tempo absoluto. O carimbo autoritativo é aplicado pelo consumidor no momento da recepção."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Contador monotônico por dispositivo, reiniciado a cada boot. Permite ao consumidor detectar salto, repetição e chegada fora de ordem."
+    },
+    "value": {
+      "type": "number",
+      "minimum": 350,
+      "maximum": 5000,
+      "description": "Concentração de CO2 filtrada por média móvel. Faixa válida do sensor; leituras fora dela são descartadas na origem."
+    },
+    "unit": {
+      "const": "ppm"
+    },
+    "state": {
+      "enum": ["COERENTE", "ATENCAO", "INCOERENTE"],
+      "description": "Resultado da verificação cruzada. COERENTE: CO2 e contagem de rádio concordam. ATENCAO: dados insuficientes, leituras inválidas ou transição em curso. INCOERENTE: o rádio declara ocupação que o CO2 não sustenta — suspeita de conluio."
+    },
+    "ocupacaoCo2": {
+      "enum": ["VAZIA", "OCUPADA", "INDETERMINADA"],
+      "description": "Ocupação inferida apenas pelo CO2, com histerese e persistência."
+    },
+    "contagemRadio": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Última contagem de estudantes declarada pelo consumidor. Segunda entrada da regra."
+    },
+    "amostrasInvalidas": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total de leituras descartadas por estarem fora da faixa ou por variação instantânea incompatível com a física do gás."
+    },
+    "bufferizado": {
+      "type": "boolean",
+      "description": "Verdadeiro quando o evento ficou retido na fila local durante indisponibilidade da rede e foi entregue com atraso. O eventTimeMs preserva o instante original da medição."
+    },
+    "anomaliaInjetada": {
+      "enum": ["nenhuma", "duplicata", "fora-de-ordem", "salto"],
+      "description": "Sinaliza que o evento faz parte do teste adversarial. Presente apenas em modo de teste; o consumidor NÃO usa este campo para detectar a anomalia — ele a detecta pela sequência, como faria em produção."
+    }
+  }
+}

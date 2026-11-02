@@ -1,0 +1,9 @@
+{
+  "broker": "COLE-AQUI.ala.us-east-1.emqxsl.com",
+  "porta_tls": 8883,
+  "porta_wss": 8084,
+  "caminho_ws": "/mqtt",
+  "servidor": { "usuario": "presenca-servidor", "senha": "COLE-AQUI" },
+  "app": { "usuario": "presenca-app", "senha": "COLE-AQUI" },
+  "ancoras": {}
+}

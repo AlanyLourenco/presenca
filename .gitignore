@@ -1,3 +1,9 @@
 # Documentos de trabalho — permanecem apenas no dispositivo local
 CLAUDE.md
 docs/projeto-tecnico.md
+
+# Artefatos gerados e mídia pesada (o GitHub recusa arquivos > 100 MB)
+__pycache__/
+*.pyc
+*.apk
+*.mp4

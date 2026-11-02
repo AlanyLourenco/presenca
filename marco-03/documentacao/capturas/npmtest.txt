@@ -1,0 +1,34 @@
+
+> presenca-app@1.0.0 test
+> node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --experimental-strip-types src/lib/*.test.ts
+
+✔ região fica indeterminada até a janela encher e então entra (2.0236ms)
+✔ histerese: na faixa morta mantém, abaixo de −85 sai (0.3811ms)
+✔ abaixo de −100 a âncora vira não ouvida e nenhuma ouvida é fora (1.443ms)
+✔ heartbeat segue o contrato do ESP32 (1.2597ms)
+✔ anomalias: duplicata reenvia igual, fora de ordem troca, salto pula 5 (0.6443ms)
+✔ sem rede retém, entrega bufferizado e descarta o mais antigo no teto (1.4055ms)
+✔ BLE: acima do limiar de 1 m entra; na histerese mantém; abaixo dela sai (1.2169ms)
+✔ BLE: um pacote isolado não muda a região (mediana) (0.2665ms)
+✔ BLE: âncora calada vira não ouvida e fora do alcance (0.3506ms)
+✔ BLE: calibração é a mediana e a distância a 1 m sai 1 m (1.1271ms)
+✔ BLE: sem calibração não decide dentro nem fora (0.3504ms)
+✔ o pseudônimo é o mesmo que o servidor calcula para a mesma chave (35.1108ms)
+✔ envelope assinado abre e devolve a carga (6.9658ms)
+✔ carga alterada, outro tópico ou mensagem crua são recusados (8.4235ms)
+✔ estado assinado por outra chave que não a do servidor é recusado (8.1596ms)
+✔ heartbeat v2 leva o token ouvido; âncora calada vai sem token (0.7589ms)
+✔ código: gera no alfabeto e aceita as formas digitadas e do QR (2.3125ms)
+✔ aula em andamento pela grade, com fim no horário do período (1.4494ms)
+✔ aula de demonstração vale só na janela dela (0.5102ms)
+✔ próxima aula é a da semana seguinte quando a de hoje já passou (3.0316ms)
+✔ turma recebida da rede é conferida (1.1037ms)
+✔ o limiar de 1 m viaja com a turma; valor absurdo vira "não calibrado" (0.2788ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 488.7466

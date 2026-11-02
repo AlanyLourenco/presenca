@@ -13,9 +13,9 @@
   "parametros": {
     "escala": 30,
     "persistencia_s": 30,
-    "orcamento_ausencia_s": 900,
-    "aviso_1_s": 600,
-    "aviso_2_s": 780,
+    "orcamento_ausencia_s": 150,
+    "aviso_1_s": 90,
+    "aviso_2_s": 120,
     "requalificacao_s": 1800,
     "duracao_aula_s": 3000,
     "presenca_minima": 0.75
@@ -33,5 +33,6 @@
   },
 
   "silencio_s": 6,
-  "intervalo_painel_s": 0
+  "intervalo_painel_s": 0,
+  "painel_a_cada": 24
 }

@@ -1,0 +1,11 @@
+══ 3. Senha do app VAZADA — tentar falar em nome de outro aluno ══
+  A senha do papel 'app' está dentro do APK: quem descompilar consegue.
+  Por isso a segurança não pode parar no broker.
+  (escutando ufg/ssu/presenca/alany/m3/sala-pc/heartbeat por até 15 s para achar um aluno…)
+  nenhum heartbeat no ar; usando um pseudônimo inventado: tok-12345678
+  atacante tenta: a) heartbeat SEM assinatura dizendo que tok-12345678 está na sala
+  onde olhar: terminal do servidor → x RECUSADA  SEM ASSINATURA
+  atacante tenta: b) heartbeat ASSINADO com a chave do atacante, mas dizendo ser tok-12345678
+  onde olhar: servidor → x RECUSADA  IDENTIDADE TROCADA (a chave é de tok-bf200741, não de tok-12345678)
+  atacante tenta: c) heartbeat assinado como ele mesmo (tok-bf200741), de casa, com token inventado
+  onde olhar: servidor → x RECUSADA  TOKEN VENCIDO (não ouviu a âncora)

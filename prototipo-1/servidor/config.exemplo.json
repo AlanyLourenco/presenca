@@ -1,0 +1,36 @@
+{
+  "broker": "broker.hivemq.com",
+  "porta": 1883,
+  "transporte": "websockets",
+  "porta_ws": 8884,
+  "caminho_ws": "/mqtt",
+  "client_id": "presenca-servidor-proto1",
+  "entity_id": "sala-pc",
+  "topico_heartbeat": "ufg/ssu/presenca/alany/proto1/sala-pc/heartbeat",
+  "topico_estado": "ufg/ssu/presenca/alany/proto1/sala-pc/estado",
+  "topico_aviso": "ufg/ssu/presenca/alany/proto1/sala-pc/aviso",
+
+  "parametros": {
+    "escala": 30,
+    "persistencia_s": 30,
+    "orcamento_ausencia_s": 900,
+    "aviso_1_s": 600,
+    "aviso_2_s": 780,
+    "requalificacao_s": 1800,
+    "duracao_aula_s": 3000,
+    "presenca_minima": 0.75
+  },
+
+  "sala": {
+    "poligono": [[-1, -1], [1, -1], [1, 1], [-1, 1]],
+    "ancoras": {
+      "anc-pc-1": [0, 0]
+    },
+    "rssi_1m": -60.0,
+    "expoente": 2.2
+  },
+
+  "silencio_s": 6,
+  "intervalo_painel_s": 0,
+  "painel_a_cada": 24
+}

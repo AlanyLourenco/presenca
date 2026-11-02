@@ -1,0 +1,9 @@
+
+[36m[1m══ 1. Broker PÚBLICO (broker.hivemq.com) — como era até o Marco 2 ══[0m
+[33m  atacante tenta:[0m conectar em broker.hivemq.com:8884 SEM usuário e SEM senha
+  [31m[1mCONSEGUIU[0m — conectado
+[33m  atacante tenta:[0m assinar ufg/ssu/presenca/# e PUBLICAR um heartbeat falso lá dentro, sem senha
+  [31m[1mCONSEGUIU[0m — publicou em ufg/ssu/presenca/alany/proto1/sala-pc/heartbeat e o broker entregou de volta: escrever e ler, sem senha
+  leu também 0 mensagem(ns) de terceiros nesses 8 s
+  [33mQualquer pessoa no mundo pode ler e também PUBLICAR nesses tópicos.[0m
+

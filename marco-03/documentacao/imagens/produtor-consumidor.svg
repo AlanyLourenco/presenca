@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="760" viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="12.5"><rect width="100%" height="100%" fill="#FFFFFF"/>
+  <defs><marker id="s3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2D5BA8"/></marker>
+  <marker id="s4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A1501A"/></marker></defs>
+  <rect x="40" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="120" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Celular</text>
+  <rect x="300" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="380" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Broker (EMQX)</text>
+  <rect x="560" y="10" width="160" height="34" rx="8" fill="#13203A"/><text x="640" y="32" text-anchor="middle" fill="#F4F2EC" font-weight="700">Servidor</text>
+  <line x1="120" y1="44" x2="120" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/><line x1="380" y1="44" x2="380" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/><line x1="640" y1="44" x2="640" y2="270" stroke="#C3CDDD" stroke-dasharray="4 4"/>
+  <line x1="122" y1="80" x2="376" y2="80" stroke="#2D5BA8" stroke-width="2" marker-end="url(#s3)"/><text x="250" y="72" text-anchor="middle" fill="#2D5BA8">PRODUZ heartbeat assinado + token</text>
+  <line x1="382" y1="105" x2="636" y2="105" stroke="#2D5BA8" stroke-width="2" marker-end="url(#s3)"/><text x="510" y="97" text-anchor="middle" fill="#2D5BA8">CONSOME e confere</text>
+  <rect x="580" y="120" width="120" height="40" rx="6" fill="#F4F2EC" stroke="#D6D2C6"/><text x="640" y="144" text-anchor="middle" fill="#13203A">calcula a aula</text>
+  <line x1="636" y1="185" x2="384" y2="185" stroke="#A1501A" stroke-width="2" marker-end="url(#s4)"/><text x="510" y="177" text-anchor="middle" fill="#A1501A">PRODUZ estado/aviso assinados</text>
+  <line x1="378" y1="210" x2="124" y2="210" stroke="#A1501A" stroke-width="2" marker-end="url(#s4)"/><text x="250" y="202" text-anchor="middle" fill="#A1501A">CONSOME e confere a chave do servidor</text>
+  <rect x="40" y="225" width="160" height="40" rx="6" fill="#FFF4E5" stroke="#E2B341"/><text x="120" y="249" text-anchor="middle" fill="#13203A" font-weight="700">ATUA: vibra, notifica</text>
+</svg>

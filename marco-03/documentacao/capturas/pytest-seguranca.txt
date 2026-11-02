@@ -1,0 +1,13 @@
+test_heartbeat_de_exemplo_respeita_o_contrato PASSED [ 15%]
+test_respostas_respeitam_os_contratos PASSED    [ 23%]
+test_campo_desconhecido_e_rejeitado_pelo_contrato PASSED [ 30%]
+test_mensagem_sem_assinatura_e_recusada PASSED  [ 38%]
+test_carga_alterada_depois_de_assinada_e_recusada PASSED [ 46%]
+test_assinatura_de_outro_topico_e_recusada PASSED [ 53%]
+test_falar_em_nome_de_outro_aluno_e_recusado PASSED [ 61%]
+test_token_de_outra_janela_e_recusado PASSED    [ 69%]
+test_token_inventado_e_recusado PASSED          [ 76%]
+test_heartbeat_da_fila_aceita_token_de_ate_48_s PASSED [ 84%]
+test_ancora_nao_ouvida_nao_precisa_de_token PASSED [ 92%]
+test_respostas_saem_assinadas_pelo_servidor PASSED [100%]
+====================== 13 passed, 36 deselected in 0.33s ======================

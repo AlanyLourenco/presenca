@@ -1,0 +1,37 @@
+{
+  "broker": "broker.hivemq.com",
+  "porta": 1883,
+  "transporte": "tcp",
+  "porta_ws": 8884,
+  "caminho_ws": "/mqtt",
+  "client_id": "presenca-servidor-204",
+  "entity_id": "sala-204",
+  "topico_heartbeat": "ufg/ssu/presenca/alany/sala-204/heartbeat",
+  "topico_estado": "ufg/ssu/presenca/alany/sala-204/estado",
+  "topico_aviso": "ufg/ssu/presenca/alany/sala-204/aviso",
+
+  "parametros": {
+    "escala": 30,
+    "persistencia_s": 30,
+    "orcamento_ausencia_s": 900,
+    "aviso_1_s": 600,
+    "aviso_2_s": 780,
+    "requalificacao_s": 1800,
+    "duracao_aula_s": 3000,
+    "presenca_minima": 0.75
+  },
+
+  "sala": {
+    "poligono": [[0, 0], [12, 0], [12, 9], [0, 9]],
+    "ancoras": {
+      "anc-204-A": [0, 4.5],
+      "anc-204-B": [12, 4.5],
+      "anc-204-C": [6, 9]
+    },
+    "rssi_1m": -45.0,
+    "expoente": 2.2
+  },
+
+  "silencio_s": 6,
+  "intervalo_painel_s": 0
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.turma.v1.schema.json",
+  "title": "presenca.turma.v1",
+  "description": "Configuração de uma turma, publicada pelo celular do administrador como mensagem RETIDA em ufg/ssu/presenca/alany/turma/<codigo>. O broker guarda a última versão: o estudante que digita o código ou lê o QR assina o tópico e a recebe na hora, mesmo com o administrador offline. Uma mensagem retida vazia apaga a turma.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "codigo",
+    "nome",
+    "sala",
+    "periodos",
+    "aulaAgora",
+    "publicadoEmMs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.turma.v1"
+    },
+    "codigo": {
+      "type": "string",
+      "pattern": "^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$",
+      "description": "Seis caracteres sem os ambíguos (0/O, 1/I/L). É também o conteúdo do QR, na forma presenca://turma/<codigo>."
+    },
+    "nome": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "sala": {
+      "type": "string",
+      "description": "entityId da sala. O servidor conhece o polígono e a posição das âncoras dela.",
+      "examples": [
+        "sala-204"
+      ]
+    },
+    "periodos": {
+      "type": "array",
+      "description": "Grade semanal. O aparelho do estudante só envia heartbeat dentro de um destes períodos.",
+      "items": {
+        "type": "object",
+        "required": [
+          "dia",
+          "inicio",
+          "fim"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dia": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "description": "0 = domingo … 6 = sábado"
+          },
+          "inicio": {
+            "type": "string",
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          },
+          "fim": {
+            "type": "string",
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          }
+        }
+      }
+    },
+    "aulaAgora": {
+      "description": "Aula de demonstração iniciada pelo administrador fora da grade, ou null.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "inicioMs",
+            "duracaoS"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "inicioMs": {
+              "type": "integer",
+              "description": "Relógio do celular do administrador (epoch ms)."
+            },
+            "duracaoS": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "publicadoEmMs": {
+      "type": "integer"
+    },
+    "limiar1mDbm": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "maximum": 0,
+      "minimum": -127,
+      "description": "PROTÓTIPO 1. RSSI da âncora medido a 1 m pelo administrador. Mais forte que isso é 'na sala'. Faz parte da turma, e não do aparelho, para o estudante não poder recalibrar de longe. null = ainda não calibrado: o aparelho não decide perto nem longe."
+    }
+  }
+}
