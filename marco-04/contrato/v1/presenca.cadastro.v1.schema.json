@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.cadastro.v1.schema.json",
+  "title": "presenca.cadastro.v1",
+  "description": "Identificação do estudante na turma (Marco 4), enviada uma vez no pareamento. O servidor guarda nome e matrícula numa tabela SEPARADA dos eventos (pseudonimização, LGPD art. 13): os eventos só têm o pseudônimo.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "aluno",
+    "turma",
+    "nome",
+    "matricula",
+    "emMs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.cadastro.v1"
+    },
+    "aluno": {
+      "type": "string",
+      "pattern": "^tok-[0-9a-f]{8}$"
+    },
+    "turma": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "nome": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "matricula": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "emMs": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

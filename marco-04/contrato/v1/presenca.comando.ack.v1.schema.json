@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.comando.ack.v1.schema.json",
+  "title": "presenca.comando.ack.v1",
+  "description": "Confirmação do atuador: o celular avisa que executou o comando (e, no 'chamar', que o estudante respondeu). Tópico .../comando-ack/<aluno>, assinada pelo aparelho.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "comandoId",
+    "aluno",
+    "resultado",
+    "emMs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.comando.ack.v1"
+    },
+    "comandoId": {
+      "type": "string"
+    },
+    "aluno": {
+      "type": "string",
+      "pattern": "^tok-[0-9a-f]{8}$"
+    },
+    "resultado": {
+      "enum": [
+        "executado",
+        "respondido",
+        "recusado",
+        "vencido"
+      ]
+    },
+    "detalhe": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "emMs": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

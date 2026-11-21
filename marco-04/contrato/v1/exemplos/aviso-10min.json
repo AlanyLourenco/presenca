@@ -1,0 +1,9 @@
+{
+  "eventType": "presenca.aviso.v1",
+  "avisoId": "s31a2#AVISO_10_MIN",
+  "aluno": "tok-7f3a",
+  "tipo": "AVISO_10_MIN",
+  "texto": "Fora da sala ha 20 s. Seu limite e de 30 s nesta aula.",
+  "percentual": 7.4,
+  "emitidoEmMs": 1790310788000
+}

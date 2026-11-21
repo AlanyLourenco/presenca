@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.sensor.v1.schema.json",
+  "title": "presenca.sensor.v1",
+  "description": "Leitura dos sensores do celular do estudante (Marco 4), publicada a cada heartbeat (5 s) no tópico .../sensor, assinada pela chave do aparelho. Acelerômetro (IMU): variância do movimento — um celular parado a aula inteira é indício de aparelho emprestado/deixado na sala (mitigação prevista no projeto). Bateria: explica um silêncio (motivo 'bateria') sem adivinhar pelo RSSI.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "sensorId",
+    "aluno",
+    "deviceId",
+    "turma",
+    "medidoEmMs",
+    "acelerometro",
+    "bateria"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.sensor.v1"
+    },
+    "sensorId": {
+      "type": "string",
+      "pattern": "^cel-[0-9a-f]{4}#[0-9a-f]{4}#[0-9]+$",
+      "description": "deviceId#bootId#n: chave de deduplicação."
+    },
+    "aluno": {
+      "type": "string",
+      "pattern": "^tok-[0-9a-f]{8}$"
+    },
+    "deviceId": {
+      "type": "string",
+      "pattern": "^cel-[0-9a-f]{4}$"
+    },
+    "turma": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "medidoEmMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "acelerometro": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "movimento",
+        "amostras",
+        "parado"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "movimento": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Desvio-padrão do módulo da aceleração (em g) na janela de 5 s."
+        },
+        "amostras": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parado": {
+          "type": "boolean",
+          "description": "movimento abaixo de 0,01 g: o celular está sobre uma mesa."
+        }
+      }
+    },
+    "bateria": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "nivel",
+        "carregando"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "nivel": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "carregando": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

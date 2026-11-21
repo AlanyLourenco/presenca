@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.comando.v1.schema.json",
+  "title": "presenca.comando.v1",
+  "description": "ATUADOR (Marco 4): operação enviada AO celular do estudante, no tópico .../comando/<aluno>. Assinada pelo servidor ou pelo administrador da turma; o celular só executa se a assinatura for de uma dessas duas chaves e se o comando ainda estiver na validade.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "comandoId",
+    "aluno",
+    "turma",
+    "tipo",
+    "texto",
+    "emitidoEmMs",
+    "validadeS"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.comando.v1"
+    },
+    "comandoId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{4,40}$"
+    },
+    "aluno": {
+      "type": "string",
+      "pattern": "^tok-[0-9a-f]{8}$"
+    },
+    "turma": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "tipo": {
+      "enum": [
+        "vibrar",
+        "chamar",
+        "lanterna"
+      ],
+      "description": "vibrar: vibra e notifica. chamar: vibra, notifica e pede que o estudante toque em 'Estou aqui'. lanterna: pisca o flash do celular (o estudante mostra que está na sala)."
+    },
+    "texto": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "emitidoEmMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "validadeS": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 600
+    }
+  }
+}

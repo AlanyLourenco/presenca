@@ -1,0 +1,20 @@
+{
+  "eventType": "presenca.estado.v1",
+  "estadoId": "srv-204#62",
+  "aluno": "tok-7f3a",
+  "entityId": "sala-204",
+  "estado": "AUSENCIA_TOLERADA",
+  "acumuladoS": 7.4,
+  "provisorioS": 24.5,
+  "percentual": 7.4,
+  "orcamentoRestanteS": 5.5,
+  "tempoAulaS": 33.3,
+  "classe": "fora",
+  "posicao": [
+    17.1,
+    4.4
+  ],
+  "dentroPoligono": false,
+  "encerrada": false,
+  "emitidoEmMs": 1790310798000
+}

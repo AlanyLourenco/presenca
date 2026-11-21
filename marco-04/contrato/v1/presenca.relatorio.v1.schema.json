@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanyLourenco/presenca/contrato/v1/presenca.relatorio.v1.schema.json",
+  "title": "presenca.relatorio.v1",
+  "description": "Relatório de presença da turma (Marco 4), publicado RETIDO e ASSINADO pelo servidor em .../relatorio/<turma>. O app do professor mostra e exporta em CSV.",
+  "type": "object",
+  "required": [
+    "eventType",
+    "turma",
+    "geradoEmMs",
+    "aulas"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "eventType": {
+      "const": "presenca.relatorio.v1"
+    },
+    "turma": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "geradoEmMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "aulas": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [
+          "aulaId",
+          "inicioMs",
+          "alunos"
+        ],
+        "properties": {
+          "aulaId": {
+            "type": "string"
+          },
+          "inicioMs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "emAndamento": {
+            "type": "boolean"
+          },
+          "alunos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "aluno",
+                "estado",
+                "percentual"
+              ],
+              "properties": {
+                "aluno": {
+                  "type": "string",
+                  "pattern": "^tok-[0-9a-f]{8}$"
+                },
+                "nome": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "matricula": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "estado": {
+                  "type": "string"
+                },
+                "percentual": {
+                  "type": "number"
+                },
+                "aprovado": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "dentroS": {
+                  "type": "number"
+                },
+                "perdoadoS": {
+                  "type": "number"
+                },
+                "mensagens": {
+                  "type": "integer"
+                },
+                "celularParado": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "bateria": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "ultimoContatoMs": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
