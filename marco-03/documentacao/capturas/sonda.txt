@@ -1,2 +1,11 @@
+# SONDA: MEDE O LIMITE DO BROKER GRATUITO (sem o servidor no meio)
+# O que faz: sonda.py abre um cliente que publica 60 mensagens por segundo no EMQX
+#   e outro cliente que so conta quantas chegam.
+# Resultado: das 600 enviadas chegaram 157, ~10,7 por segundo.
+# Conclusao: o plano gratuito (Serverless) limita ~11 msg/s por conexao. E isso que
+#   explica a perda no carga-30.txt; nao e defeito do sistema. Para mais celulares:
+#   plano pago, broker proprio (Mosquitto) ou varias copias do servidor com
+#   assinatura compartilhada do MQTT.
+
 $ python sonda.py      (um cliente publica 60 msg/s, outro conta; sem servidor no meio)
 enviadas 600 (60/s) · recebidas 157 · nos 10 s: 10.7/s

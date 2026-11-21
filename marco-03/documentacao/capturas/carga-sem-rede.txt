@@ -1,3 +1,12 @@
+# CAPACIDADE DO SERVIDOR SOZINHO (sem broker, sem rede)
+# O que faz: carga.py --sem-rede entrega as mensagens direto ao servidor, para medir so ele.
+#   200 celulares x 40 heartbeats = 8000 mensagens; em cada uma o servidor abre o envelope,
+#   confere a assinatura Ed25519 e o token da ancora, recalcula a aula e assina a resposta.
+# Resultado: 8000 de 8000 aceitas, 0 recusadas, 0,42 ms por mensagem
+#   = ~2.400 mensagens por segundo usando um nucleo do notebook.
+# Conclusao: o servidor aguenta ~200x mais do que o broker gratuito entrega;
+#   com heartbeat a cada 60 s isso daria ~144 mil celulares (so o servidor).
+
 ══ Servidor sem rede: 200 celulares × 40 heartbeats (20 s de aula) ══
   aceitos: 8000 de 8000 · recusados: 0
   por mensagem (abre envelope, confere assinatura e token, recalcula a aula, assina a resposta):

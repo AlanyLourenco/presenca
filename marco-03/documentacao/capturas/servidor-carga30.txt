@@ -1,3 +1,13 @@
+# O QUE O SERVIDOR MOSTROU DURANTE O TESTE DE 30 CELULARES (lado do servidor)
+# - As 30 linhas "+ APARELHO tok-... se identificou" provam que o servidor reconheceu
+#   30 celulares diferentes, cada um pela propria chave publica, e abriu uma sessao
+#   (aula) separada para cada aluno.
+# - As 253 linhas "x RECUSADA TOKEN VENCIDO" sao heartbeats que ficaram presos na fila do
+#   broker gratuito por mais de 12 s; quando chegaram, o token da ancora ja tinha trocado.
+#   O servidor fez o certo: mensagem com token velho pode ser copia (ataque de repeticao).
+# - Ou seja: a seguranca continuou valendo sob carga; quem atrasou foi o broker (sonda.txt).
+# (Os simbolos [36m, [0m etc. sao as cores do terminal gravadas junto.)
+
 
 [36m[1m══ Presença · servidor de permanência ══[0m
 [90mTeclas: n = aula nova · p = resumo · q = sair (sempre com Enter)[0m

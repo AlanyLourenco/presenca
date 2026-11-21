@@ -1,10 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# TESTE DE CARGA COM 5 CELULARES (broker real, EMQX Cloud com TLS)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# O QUE É ESTE ARQUIVO
+#   É só um "print" do terminal: a saída que apareceu quando o teste rodou, guardada
+#   como prova. O teste de verdade é o programa ataques/carga.py.
+#
+# QUEM ENVIA E PARA ONDE VAI
+#
+#    SEU NOTEBOOK                      NUVEM (EMQX)            SEU NOTEBOOK
+#   ┌───────────────┐  1. heartbeat  ┌──────────┐ 2. repassa ┌──────────────┐
+#   │ carga.py      │ ─────────────► │  broker  │ ─────────► │ servidor.py  │
+#   │ finge ser 5   │                │   MQTT   │            │ confere e    │
+#   │ celulares     │ ◄───────────── │  (TLS)   │ ◄───────── │ responde     │
+#   └───────────────┘  4. resposta   └──────────┘ 3. estado  └──────────────┘
+#
+#   1. O carga.py faz o papel dos celulares: cria 5 alunos falsos, cada um com a
+#      PRÓPRIA chave Ed25519. A cada 0,5 s, cada um manda um heartbeat ("estou aqui,
+#      a âncora está com este sinal") assinado e com o token atual da âncora.
+#      É a mesma mensagem que o app do celular manda.
+#   2. O broker EMQX, na nuvem, é só o correio: recebe e entrega ao servidor.
+#   3. O servidor.py faz o mesmo que faz com o celular real: confere a assinatura e o
+#      token, atualiza a presença do aluno e responde PRESENTE/FORA, também assinado.
+#   4. A resposta volta pelo broker até o carga.py, que anota o tempo de ida e volta.
+#
+# POR QUE SIMULAR: só há um celular físico. A simulação usa o mesmo caminho real
+#   (internet, broker, servidor); só muda quem gera a mensagem (programa em vez do app).
+#   Detalhe: aqui os 5 celulares falsos dividem 1 conexão MQTT; com --conexoes cada um
+#   abre a sua, como celulares de verdade.
+#
+# POR QUE 5: 5 celulares x 2 msg/s = 10 msg/s, logo abaixo do limite de ~11 msg/s por
+#   conexão do broker gratuito (ver sonda.txt). Com 30 o limite aparece (carga-30.txt).
+# ═══════════════════════════════════════════════════════════════════════════════
+
 $ python servidor.py --quieto --tls          (outra janela)
+#  ↑ janela 2: liga o servidor (--quieto = não imprime cada mensagem, para não atrasar)
+
 $ python carga.py 5 --tempo 15
+#  ↑ janela 3: simula 5 celulares durante 15 segundos
+
 Conectando 1 cliente(s) MQTT ao EMQX Cloud…
+#  ↑ abriu a conexão com o broker na nuvem (uma conexão para os 5 celulares)
+
 Simulando 5 celulares, 1 heartbeat a cada 0.5 s, por 15 s…
+#  ↑ começou: cada celular manda 2 mensagens por segundo
 
 ══ Resultado: 5 celulares ══
   heartbeats enviados:  155  (10 por segundo)
+#  ↑ total de mensagens que os 5 celulares mandaram (5 x 2 por segundo = 10/s)
+
   estados de volta:     155  (100.0 %)
+#  ↑ respostas assinadas do servidor que voltaram: TODAS. Nenhuma se perdeu.
+
   ida e volta (celular → broker → servidor → broker → celular):
      mediana 502 ms · 95 % abaixo de 1156 ms · pior 1297 ms
+#  ↑ quanto tempo cada resposta levou para voltar:
+#     mediana 502 ms  = metade voltou em menos de meio segundo
+#     95 % < 1156 ms  = quase todas em pouco mais de 1 segundo
+#     pior 1297 ms    = a mais lenta levou 1,3 s
+#
+# CONCLUSÃO: 5 celulares ao mesmo tempo, cada um com a própria identidade, funcionam
+#   sem perder nenhuma mensagem e com resposta em cerca de meio segundo.

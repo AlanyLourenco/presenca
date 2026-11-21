@@ -1,3 +1,13 @@
+# TESTE DE CARGA COM 30 CELULARES (broker real) - O LIMITE APARECE
+# O que faz: o mesmo teste de carga-5.txt, agora com 30 celulares simulados a cada 0,5 s
+#   = 62 mensagens por segundo, quase 6x o que o broker gratuito deixa passar.
+# Resultado: so 19 % das respostas voltaram e a demora subiu para 7,5 s (mediana).
+# Por que: o EMQX Serverless gratuito deixa passar ~11 msg/s por conexao (sonda.txt).
+#   As mensagens formam fila no broker; quando chegam ao servidor o token da ancora
+#   (valido 12 s) ja venceu, e o servidor as recusa com TOKEN VENCIDO (servidor-carga30.txt).
+# Conclusao: o gargalo e o plano gratuito do broker, NAO o servidor (ver carga-sem-rede.txt).
+#   No ritmo de uma aula real (1 heartbeat a cada 60 s) a conta e 11 x 60 = ~650 celulares.
+
 $ python carga.py 30 --tempo 15
 Simulando 30 celulares, 1 heartbeat a cada 0.5 s, por 15 s…
 
